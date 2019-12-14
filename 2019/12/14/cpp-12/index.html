@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="我们使用类定义自己的数据类型，通过定义新的类型来反映待解决问题中的各种概念">
+<meta name="keywords" content="C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ primer（第七章 类的其他特性）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;14&#x2F;cpp-12&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="我们使用类定义自己的数据类型，通过定义新的类型来反映待解决问题中的各种概念">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-14T14:48:42.782Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/14/cpp-12/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>C++ primer（第七章 类的其他特性） | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/14/cpp-12/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ primer（第七章 类的其他特性）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-14 22:46:16 / 修改时间：22:48:42" itemprop="dateCreated datePublished" datetime="2019-12-14T22:46:16+08:00">2019-12-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/14/cpp-12/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/14/cpp-12/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> 我们使用类定义自己的数据类型，通过定义新的类型来反映待解决问题中的各种概念</p>
+<a id="more"></a>
+
+<p><strong>定义抽象数据类型</strong></p>
+<p>数据抽象：依赖于接口和实现分离的编程技术</p>
+<p>类的接口：包括用户所能执行的操作</p>
+<p>类的实现：包括类的数据成员，负责接口实现的函数体以及定义类所需的各种私有函数</p>
+<p>封装：实现了累的接口和实现的分离，封装后的类隐藏了它的实现细节，类的用户只能使用接口而无法访问实现部分</p>
+<p>定义类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class Sales_data&#123;</span><br><span class="line">	string::isbn() const&#123;return bookNo;&#125;</span><br><span class="line">	Sales_data &amp;combine(const Sales_data&amp;);</span><br><span class="line">	double avg_price() const;</span><br><span class="line">	</span><br><span class="line">	string bookNo;</span><br><span class="line">	ungigned units_sold=0;</span><br><span class="line">	double revenue = 0.0;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>通过成员访问运算符来做到这一点，因为this所指的正是这个对象，任何对类成员的直接访问都被看做this的隐式调用，相当于书写了this-&gt;bookNo</p>
+<p><strong>引入const成员函数</strong></p>
+<p>isbn()函数参数列表后的const关键字，作用是修改隐式this指针的类型</p>
+<p>(默认情况下)，this指针是指向类类型非常量版本的<strong>常量指针</strong>(指针本身是常量)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Sales_data *const</span><br></pre></td></tr></table></figure>
+
+<p>(默认情况下)我们不能把this指针绑定到一个常量对象上，也不能在一个常量对象上调用普通的成员函数</p>
+<p>C++语言允许把const关键字放在成员函数的参数列表之后，此时，紧跟在参数列表后面的const表示this是一个<strong>指向常量的指针</strong>，像这样的成员函数被称为常量成员函数</p>
+<p><strong>类作用域和成员函数</strong></p>
+<p>编译器分两步处理类，首先编译成员的声明，然后才轮到成员函数体，因此，成员函数题可以<em>随意使用类中的其他成员而无须在意这些成员出现的次序</em>。</p>
+<p><strong>定义一个返回this对象的函数</strong></p>
+<p>函数combine的设计初衷类似于复合赋值运算符+=</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Sales_data&amp; Sales_data::combine(const Sales_data &amp;rhs)</span><br><span class="line">&#123;</span><br><span class="line">	unit_sold += rhs.units_sold;</span><br><span class="line">	revenue += rhs.revenue;</span><br><span class="line">	return *this;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>内置的赋值运算符把他的左侧运算对象当成左值返回，因此为了与它保持一致，combine函数必须返回<em>引用类型</em>，返回Sales_data&amp;</p>
+<p>return语句时解引用this指针以获得执行该函数的对象</p>
+<p><strong>定义类相关的非成员函数</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">istream &amp;read(istream &amp;is,Sales_data &amp;item)&#123;</span><br><span class="line">	double price=0;</span><br><span class="line">	is &gt;&gt; item.bookNo &gt;&gt; item.units_sold &gt;&gt;price;</span><br><span class="line">	item.revenue = price *item.units_sold;</span><br><span class="line">	return is;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>read函数从给定流中将数据读到给定的对象里</p>
+<p><strong>构造函数</strong></p>
+<p>构造函数不能声明成const的，当我们创建一个const对象时，直到构造函数完成初始化过程，对象才能真正取得其“常量”属性，因此，构造函数可以在const对象的构造过程中可以向其写值</p>
+<p><strong>默认构造函数</strong></p>
+<p>1.编译器只有在发现类不包含任何构造函数的情况下才会替我们生成一个默认构造函数，<br>2.对于某些类，合成的默认构造函数可能执行错误的操作(比如类內成员变量为数组或指针)<br>3.有时候编译器不能为某些类合成默认构造函数，(如果类中包含一个其他类类型的成员且这个成员的类型没有默认构造函数)</p>
+<p><strong>=default</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Sales_data()=default;</span><br></pre></td></tr></table></figure>
+
+<p>C++11新标准，可以通过在参数列表后面写上=default来要求编译器生成构造函数</p>
+<p><strong>构造函数初始值列表</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Sales_data(const string &amp;s):bookNo(s)&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>友元</strong></p>
+<p>类可以允许其他类或者函数成为他的友元</p>
+<p><strong>类成员</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class Screen&#123;</span><br><span class="line">public:</span><br><span class="line">	typedef string::size_type pos;</span><br><span class="line">private:</span><br><span class="line">	pos cursor=0;</span><br><span class="line">	pos height=0,width=0;</span><br><span class="line">	string contents;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>可变数据成员</strong></p>
+<p>我们希望能修改类的某个数据成员，即使是在一个const成员函数内。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class Screen&#123;</span><br><span class="line">public:</span><br><span class="line">	void some_member()const;</span><br><span class="line">private:</span><br><span class="line">	mutable size_t access_ctr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>一个可变数据成员永远不会是const，即使它是const对象的成员，因此，一个const成员函数可以改变一个可变成员的值</p>
+<p><strong>返回星this的成员函数</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Screen &amp;set(char c)&#123;</span><br><span class="line">	contents[sursor] = c;</span><br><span class="line">	return *this;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">MyScreen.move(4,0).set(&apos;#&apos;);</span><br></pre></td></tr></table></figure>
+
+<p>如果我们令move返回Screen而非Screen&amp;,则上述语句的行为将大不相同</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Screen temp = myScreen.move(4,0);</span><br><span class="line">temp.set(&apos;#&apos;);  //改变的是临时副本对象</span><br></pre></td></tr></table></figure>
+
+<p><strong>从const成员函数返回星this</strong></p>
+<p>添加函数disply，负责打印Screen的内容，不需要修改内容，所以令display为一个const成员，此时this将是一个指向const的指针，而星this是const对象。由此推断，display的返回类型是const Sales_data&amp;，然而这样不能把display嵌入其他动作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myScreen.display(cout).set(&apos;#&apos;);</span><br></pre></td></tr></table></figure>
+
+<p>一个const成员函数如果以引用的形式返回星this，那么它的返回类型将是常量引用</p>
+<p><strong>基于const的重载</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Screen &amp;display(ostream &amp;s)</span><br><span class="line">Screen &amp;display(ostream &amp;s)const</span><br></pre></td></tr></table></figure>
+
+<p>即使两个类的成员列表完全一致，它们也是不同的类型，</p>
+<p><strong>前向声明</strong></p>
+<p>class Screen;</p>
+<p>在它声明之后定义之前是一个不完全类型，不完全类型可以定义指向这种类型的指针或引用，也可以声明以不完全类型作为参数或返回类型的函数</p>
+<p><strong>友元再探</strong></p>
+<p>一个类指定了友元类，则友元类的成员函数可以访问此类包括非公有成员在内的所有成员。</p>
+<p>令某个函数作为友元，则需要仔细组织程序的结构以满足声明和定义的彼此依赖关系</p>
+<p>1.定义Window_mgr类，声明clear函数<br>2.定义Screen，包括对于clear的声明<br>3.定义clear</p>
+<p>如果一个类想把一组重载函数生命成它的友元，它需要对这组函数中的每一个分别声明</p>
+<p><strong>友元声明和作用域</strong></p>
+<p>当一个名字第一次出现在一个友元声明中时，我们隐式的假定该名字在当前作用域中是可见的，然而，友元本身不一定真的声明在当前作用域中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">struct X&#123;</span><br><span class="line">	friend void f()&#123;&#125;	  //友元函数可以定义在类的内部</span><br><span class="line">	X()&#123; f();&#125;            //错误，f还没声明</span><br><span class="line">	void g();</span><br><span class="line">	void h();</span><br><span class="line">&#125;;</span><br><span class="line">void X::g()&#123;return f();&#125;    //错误，f()还没被声明</span><br><span class="line">void f();					//声明那个定义在X中的函数</span><br><span class="line">void X::h()&#123;return f();&#125;     //正确</span><br></pre></td></tr></table></figure>
+
+<p><strong>类的作用域</strong></p>
+<p>一个类就是一个作用域</p>
+<p>在类的外部定义成员函数时必须同时提供类名和函数名，在类的外部，成员的名字被隐藏起来了</p>
+<p>一旦遇到了类名，定义的剩余部分就在类的作用域之内。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">void Window_mgr::clear(ScreenIndex i)&#123;</span><br><span class="line">	Screen &amp;s = screen[i];</span><br><span class="line">	s.contents = string(s.height*s.width,&apos; &apos;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>另一方面，函数的返回类型通常出现在函数名之前，因此需要类名作用域指定</p>
+<p><strong>名字查找与类的作用域</strong></p>
+<p>首先，在名字所在的块中寻找其声明语句，只考虑在名字的使用之前出现的声明<br>如果没找到，继续查找外层作用域<br>如果最终没有找到匹配的声明，则程序报错</p>
+<p><strong>成员定义中普通块作用域的名字查找</strong></p>
+<p>首先，在成员函数内查找该名字的声明，只有在函数使用之前出现的声明才被考虑<br>如果在成员函数内没有找到，则在类内继续查找，这时类內的所有成员都可以被考虑<br>如果类內也没有找到该名字的声明，在成员函数定义之前的作用域内继续查找</p>
+<p><strong>类作用域之后，在外围的作用域中查找</strong></p>
+<p>如果编译器在函数和类的作用域中都没有找到名字，它将接着在外围的作用域中查找</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">void Screen::dummpy(pos height)&#123;</span><br><span class="line">	cursor = width *::height;		//指的是全局的height</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>构造函数再探</strong></p>
+<p>成员初始化的顺序</p>
+<p>第一个成员被初始化，然后第二个，然后第三个…<br>构造函数的初始值列表中初始值的前后位置关系不会影响实际的初始化顺序</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class X&#123;</span><br><span class="line">int i;</span><br><span class="line">int j;</span><br><span class="line">public:</span><br><span class="line">	X(int val):j(val),i(j)&#123;&#125;  //未定义的</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实际上i先被初始化，用j定义了i，所以i未定义</p>
+<p><strong>默认实参和构造函数</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class Sales_data&#123;</span><br><span class="line">public:</span><br><span class="line">	Sales_data(string s=&quot;&quot;):bookNo(s)&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当没有给定实参或者给定一个string实参时，两个版本的类创建的相同的对象</p>
+<p><strong>委托构造函数</strong></p>
+<p>成员初始值列表只有一个唯一入口，就是类名本身<br>类名后面紧跟圆括号括起来的参数列表，参数列表必须与类中另外一个构造函数匹配</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Sales_data(string s,unsigned cnt,double price):bookNo(s),units_sold(cnt),revenue(cnt*price)&#123;&#125;</span><br><span class="line">Sales_data():Sales_data(&quot;&quot;,0,0)&#123;&#125;</span><br><span class="line">Sales_data(string s):Sales_data(s,0,0)&#123;&#125;</span><br><span class="line">Sales_data(istream &amp;s):Sales_data()&#123; read(s,*this);&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个构造函数接收三个实参，使用实参初始化数据成员，然后结束工作<br>第二个构造函数为默认构造函数，委托三参数构造函数<br>第三个构造函数接收一个string实参，委托三参数构造函数<br>第四个构造函数接收一个istream实参，委托<em>默认构造函数</em>，先执行默认构造函数，再执行read()函数</p>
+<p><strong>隐式的类类型转换</strong></p>
+<p>只允许一步类类型转换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">string null_book=&quot;9999&quot;;</span><br><span class="line">item.combine(null_book);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">item.combine(&quot;9999&quot;);  //错误，两步转换了一步转为string，再一步转istream</span><br></pre></td></tr></table></figure>
+
+<p><strong>抑制构造函数的隐式转换</strong></p>
+<p>将构造函数声明为explicit加以阻止</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">explicit Sales_data(const string &amp;s):bookNo(s)&#123; &#125;</span><br></pre></td></tr></table></figure>
+
+<p>关键字explicit只对一个实参的构造函数有效，<br>需要多个实参的构造函数不能用于执行隐式转换，所以无需explicit指定</p>
+<p><strong>explicit只能用于直接初始化</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Sales_data item1(null_book);   //正确</span><br><span class="line">Sales_data item2 = null_book;   //错误</span><br></pre></td></tr></table></figure>
+
+<p>标准库中含显式构造函数的类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">接受一个单参数的const char *string的构造函数不是explicit的</span><br><span class="line">接受一个容量参数的vector的构造函数是ecplicit的</span><br></pre></td></tr></table></figure>
+
+<p><strong>聚合类</strong></p>
+<p>所有成员是public的<br>没有定义任何构造函数<br>没有类内初始值<br>没有基类，也没有virtual函数，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">struct Data&#123;</span><br><span class="line">	int val;</span><br><span class="line">	string s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以提供一个花括号括起来的成员初始值列表，初始值顺序与列表顺序一直</p>
+<p>Data val1 = {0,”Anna”};</p>
+<p><strong>字面值常量类</strong></p>
+<p>数据成员都是字面值类型的聚合类是字面值常量类</p>
+<p>如果不是一个聚合类，需要满足以下条件，才是一个字面值常量类<br>1.数据成员都是字面值类型<br>2.类必须至少含有一个constexpr的构造函数<br>3.如果一个数据成员含有类內初始值，则内置类型成员的初始值必须是一条常量表达式或者如果成员属于某种类类型，则初始值必须使用成员自己的constexpr构造函数<br>4.类必须使用析构函数的默认定义</p>
+<p>尽管构造函数不能是const的，但是字面值常量类的构造函数可以是constexpr函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class Debug&#123;</span><br><span class="line">public:</span><br><span class="line">	constexpr Debug(bool b=true):hw(b),io(b),other(b)&#123;&#125;</span><br><span class="line">private:</span><br><span class="line">	bool hw;</span><br><span class="line">	bool io;</span><br><span class="line">	bool other;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>类的静态成员</strong></p>
+<p>类的静态成员函数不与任何对象绑定在一起，它们不包含this指针，静态成员函数不能声明成const的，而且我们也不能在static函数体内使用this指针。</p>
+<p>静态成员的类內初始化</p>
+<p>即使一个常量静态数据成员在类內被初始化了，通常情况下也应该在类的外部定义一下该成员，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class Bar&#123;</span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">	static Bar mem1;</span><br><span class="line">	Bar *mem2;</span><br><span class="line">	Bar mem3;      //错误，数据成员必须是完全类型</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>静态成员和普通成员的另外一个区别是我们可以使用静态成员作为默认实参</p>
+<p>非静态数据成员不能作为默认实参，因为它的值本身属于对象的一部分</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class Screen&#123;</span><br><span class="line">public:</span><br><span class="line">	Screen &amp;clear(clear=bkgroud);</span><br><span class="line">peivate:</span><br><span class="line">	static const char bkgroud;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>2019-06-29 12:03:24 星期六</p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/14/cpp-11/" rel="prev" title="强制类型转换">
+      <i class="fa fa-chevron-left"></i> 强制类型转换
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/14/cpp-13/" rel="next" title="内联函数与宏">
+      内联函数与宏 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
