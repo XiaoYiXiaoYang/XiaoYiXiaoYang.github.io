@@ -47,14 +47,14 @@
 </script>
 
   <meta name="description" content="成员布局的大小 1.语言本身造成的负担（虚基类指针设置） 2.编译器对于特殊情况的优化处理 3.对齐限制">
-<meta name="keywords" content="C++">
+<meta name="keywords" content="C++对象模型">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++对象模型(Data语意学)">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;14&#x2F;cppObjectModel-3&#x2F;index.html">
 <meta property="og:site_name" content="萧逸小杨的个人博客">
 <meta property="og:description" content="成员布局的大小 1.语言本身造成的负担（虚基类指针设置） 2.编译器对于特殊情况的优化处理 3.对齐限制">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-14T10:56:56.969Z">
+<meta property="og:updated_time" content="2019-12-15T03:25:57.598Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/14/cppObjectModel-3/">
@@ -208,10 +208,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-12-14 10:49:33 / 修改时间：18:56:56" itemprop="dateCreated datePublished" datetime="2019-12-14T10:49:33+08:00">2019-12-14</time>
+              <time title="创建时间：2019-12-14 10:49:33" itemprop="dateCreated datePublished" datetime="2019-12-14T10:49:33+08:00">2019-12-14</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-15 11:25:57" itemprop="dateModified" datetime="2019-12-15T11:25:57+08:00">2019-12-15</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -323,6 +329,128 @@
 <td align="center">A类对齐的大小3字节</td>
 </tr>
 </tbody></table>
+<p>X类为空的虚基类</p>
+<p>这是C++面向对象设计的一个风格，它提供了虚拟接口，没有定义任何数据</p>
+<p>某些新近的编译器对此情况特殊处理（如Visual C++），一个空的虚基类被看做派生类的最开头的部分，也就是它不花费额外的空间，也就省去了上述Y类，Z类开头所占用的1字节</p>
+<hr>
+<h4 id="数据成员的绑定"><a href="#数据成员的绑定" class="headerlink" title="数据成员的绑定"></a>数据成员的绑定</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">float</span> x;  <span class="comment">//声明x</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Point(<span class="keyword">float</span>);</span><br><span class="line">    <span class="function"><span class="keyword">float</span> <span class="title">X</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> x&#125;;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">float</span> x;  <span class="comment">//又一个x</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>函数返回的当然是class内部的x，但是编译器进化过程中不是这样的</p>
+<p>有过两种防御性编程风格</p>
+<p>1.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">float</span> x;	<span class="comment">//将class成员声明放在开头</span></span><br><span class="line"> <span class="keyword">public</span>:</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>2.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">float</span> <span class="title">X</span><span class="params">()</span></span>;   <span class="comment">//将函数定义放在clas声明外</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">float</span> x;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">float</span> Point::X</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>后来演练C++标准，在C++声明完全看见之前，不会评估值，</p>
+<p>也就是将类内定义的函数不分析，在类声明结束之后才开始分析</p>
+<p>但是这对于<strong>参数列表</strong>不为真，类內声明的函数的参数列表还是会被分析</p>
+<h4 id="数据成员的布局"><a href="#数据成员的布局" class="headerlink" title="数据成员的布局"></a>数据成员的布局</h4><p>规则：较晚出现的成员在类对象中有较高的地址</p>
+<p>vptr一般被放在类最后，不过也有一些编译器把vptr放在类开始</p>
+<h4 id="数据成员的存取"><a href="#数据成员的存取" class="headerlink" title="数据成员的存取"></a>数据成员的存取</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Point origin;</span><br><span class="line">Point *pt = &amp;origin;</span><br><span class="line"></span><br><span class="line">origin.x = <span class="number">0.0</span>;</span><br><span class="line">pt-&gt;x = <span class="number">0.0</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>1.static data member</strong></p>
+<p>每一个static data member只有一个实例，存在于程序的数据段之中</p>
+<p>每一个static data member的存取都是一样的效率</p>
+<p>如果有两个类，声明了一样的static member，那么当它们都放在全局静态存储区就会导致命名冲突，解决办法是编译器暗中对每一个static member重命名</p>
+<p><strong>2.nonstatic data member</strong></p>
+<p>想要对一个nonstatic data member 进行存取操作，编译器需把类对象的起始地址加上数据成员的偏移位置(offset)，如果：</p>
+<p>origin.y = 0.0;</p>
+<p>则地址 &amp;origin.y为</p>
+<p>&amp;origin + (&amp;Point::_y -1)</p>
+<p><em>其中-1操作时因为，指向data member的指针，其offset值总是被加上1</em></p>
+<h4 id="继承与data-member"><a href="#继承与data-member" class="headerlink" title="继承与data member"></a>继承与data member</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point2d</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">float</span> x,y;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point3x</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">float</span> z;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>单一继承且不含虚函数</strong></p>
+<p>布局缺陷</p>
+<p>如果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class A</span><br><span class="line">&#123;</span><br><span class="line">	int val;</span><br><span class="line">	char a;</span><br><span class="line">	char b;</span><br><span class="line">	char c;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>分裂成继承结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class A</span><br><span class="line">&#123;</span><br><span class="line">	int val;</span><br><span class="line">&#125;;</span><br><span class="line">class B</span><br><span class="line">&#123;</span><br><span class="line">	char a;</span><br><span class="line">&#125;;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+
+
+<p>则由于对齐可能产生D类对象的成员布局</p>
+<table>
+<thead>
+<tr>
+<th align="center">char c,1字节</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">3字节对齐</td>
+</tr>
+<tr>
+<td align="center">char b,1字节</td>
+</tr>
+<tr>
+<td align="center">3字节对齐</td>
+</tr>
+<tr>
+<td align="center">char a，1字节</td>
+</tr>
+<tr>
+<td align="center">3字节对齐</td>
+</tr>
+<tr>
+<td align="center">int val，4字节</td>
+</tr>
+</tbody></table>
+<p>这些对齐是有必要的，子类和基类指针之间操作需要这样的行为</p>
+<p>假如没有这样的布局，将一个派生类指针赋给基类指针，就会出错，</p>
+<p>这样的存取不会增加空间或者时间上的额外负担</p>
+<p><strong>单一继承含虚函数</strong></p>
+<p>含虚函数会增加空间和时间上的负担</p>
+<ul>
+<li>导入和Point2d有关的虚函数表，用它存放每一个虚函数的地址</li>
+<li>在每一个类对象中导入一个vptr，提供执行期的链接</li>
+<li>加强构造函数，使得正确设定vptr值</li>
+<li>加强析构函数，使得消除vptr值</li>
+</ul>
+<p><strong>vptr放在尾端</strong></p>
+<p>可以保留基类对象布局</p>
+<p><strong>vptr放在开头</strong></p>
+<p>可以省去偏移计算</p>
+<p><strong>多重继承</strong></p>
+<p>多重继承的复杂度在于派生类和第二或后继基类对象之间的转换</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point2d</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point3d</span>:</span><span class="keyword">public</span> Point2d</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vertex</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vertex3d</span>:</span><span class="keyword">public</span> Point3d,<span class="keyword">public</span> Vertex;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>Vertex3d类对象和Point3d类对象之间的转换和单一继承时相同，两者都是相同的起始地址</p>
+<p>而Vertex3d类对象和Vertex类对象之间的转换需要地址指定，加上或者减去介于中间的base class subobjects的大小</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Vertex3d v3d;</span><br><span class="line">Vertex *px;</span><br><span class="line"></span><br><span class="line">px = &amp;v3d;</span><br><span class="line">px = (Vertex *)((char *)&amp;v3d) + sizeof(Point3d));</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>虚拟继承</strong></p>
+<p>虚拟继承会有共同的基类，一种布局策略是先安排好派生类的不变部分，再建立其共享部分</p>
+<p>cfront编译器存取共享部分的策略是在派生类对象中安插一些指针，每个指针指向一个虚基类</p>
+<p>但是缺点是</p>
+<p>1.每个对象必须为其每一个虚基类背负一个额外的指针</p>
+<p>2.虚拟继承串链的加长，导致间接存取层次的增加</p>
+<p>解决办法：</p>
+<p>1.安插一个指针指向虚拟基类表</p>
+<p>2.在虚函数表中放置虚基类的偏移</p>
+<p>如果是正值，索引到虚函数，如果是负值，索引到虚基类偏移</p>
+<h4 id="对象成员的效率"><a href="#对象成员的效率" class="headerlink" title="对象成员的效率"></a>对象成员的效率</h4><p>聚合、封装、继承</p>
+<p>一般继承不会影响效率</p>
+<p>虚拟继承对效率耗费多</p>
+<h4 id="指向data-member的指针"><a href="#指向data-member的指针" class="headerlink" title="指向data member的指针"></a>指向data member的指针</h4><p>为了区分“<strong>没有指向任何数据成员的</strong>”指针 和一个<strong>“指向第一个数据成员的的指针</strong>”</p>
+<p>每一个真正的member offset都被加上1</p>
+<h4 id="指向member的指针的效率问题"><a href="#指向member的指针的效率问题" class="headerlink" title="指向member的指针的效率问题"></a>指向member的指针的效率问题</h4><p>每一层虚拟继承都会导入一个额外的间接性</p>
 
     </div>
 
@@ -341,7 +469,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/C-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/" rel="tag"><i class="fa fa-tag"></i> C++对象模型</a>
           </div>
 
         
@@ -395,6 +523,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据成员的绑定"><span class="nav-number">1.</span> <span class="nav-text">数据成员的绑定</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据成员的布局"><span class="nav-number">2.</span> <span class="nav-text">数据成员的布局</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据成员的存取"><span class="nav-number">3.</span> <span class="nav-text">数据成员的存取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#继承与data-member"><span class="nav-number">4.</span> <span class="nav-text">继承与data member</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象成员的效率"><span class="nav-number">5.</span> <span class="nav-text">对象成员的效率</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指向data-member的指针"><span class="nav-number">6.</span> <span class="nav-text">指向data member的指针</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指向member的指针的效率问题"><span class="nav-number">7.</span> <span class="nav-text">指向member的指针的效率问题</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -423,7 +552,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
