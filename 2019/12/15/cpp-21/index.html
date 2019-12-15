@@ -46,18 +46,18 @@
   };
 </script>
 
-  <meta name="description" content="static 、nonstatic、virtual">
-<meta name="keywords" content="C++对象模型">
+  <meta name="description" content="程序用堆来进行内存动态分配">
+<meta name="keywords" content="C++ Primer">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C++对象模型(Function语意学)">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;14&#x2F;cppObjectModel-4&#x2F;index.html">
+<meta property="og:title" content="C++Primer（第12章 动态内存）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;cpp-21&#x2F;index.html">
 <meta property="og:site_name" content="萧逸小杨的个人博客">
-<meta property="og:description" content="static 、nonstatic、virtual">
+<meta property="og:description" content="程序用堆来进行内存动态分配">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-15T04:05:24.869Z">
+<meta property="og:updated_time" content="2019-12-15T09:17:36.890Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2019/12/14/cppObjectModel-4/">
+<link rel="canonical" href="http://yoursite.com/2019/12/15/cpp-21/">
 
 
 <script id="page-configurations">
@@ -71,7 +71,7 @@
   };
 </script>
 
-  <title>C++对象模型(Function语意学) | 萧逸小杨的个人博客</title>
+  <title>C++Primer（第12章 动态内存） | 萧逸小杨的个人博客</title>
   
 
 
@@ -186,7 +186,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/14/cppObjectModel-4/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/cpp-21/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/yteng.jpg">
@@ -199,7 +199,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          C++对象模型(Function语意学)
+          C++Primer（第12章 动态内存）
         </h1>
 
         <div class="post-meta">
@@ -208,16 +208,10 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-12-14 10:53:47" itemprop="dateCreated datePublished" datetime="2019-12-14T10:53:47+08:00">2019-12-14</time>
+              <time title="创建时间：2019-12-15 15:42:40 / 修改时间：17:17:36" itemprop="dateCreated datePublished" datetime="2019-12-15T15:42:40+08:00">2019-12-15</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-15 12:05:24" itemprop="dateModified" datetime="2019-12-15T12:05:24+08:00">2019-12-15</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -239,8 +233,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2019/12/14/cppObjectModel-4/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/14/cppObjectModel-4/" itemprop="commentCount"></span>
+    <a title="valine" href="/2019/12/15/cpp-21/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/15/cpp-21/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -255,46 +249,106 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>static 、nonstatic、virtual</p>
+        <p>程序用堆来进行内存动态分配</p>
 <a id="more"></a>
 
+<h4 id="动态内存与智能指针"><a href="#动态内存与智能指针" class="headerlink" title="动态内存与智能指针"></a>动态内存与智能指针</h4><p>new运算符，咋动态内存中为对象分配空间并返回一个指向该对象的指针</p>
+<p>delete运算符接收一个动态对象的指针，销毁该对象，并释放与之关联的内存</p>
+<p>shared_ptr允许多个指针指向同一对象</p>
+<p>unique_ptr允许独占指向的对象</p>
+<p>weak_ptr是一种弱引用，指向shared_ptr所管理的对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shared_ptr&lt;int&gt; p1;</span><br><span class="line">shared_ptr&lt;list&gt; p2;</span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Point obj;</span><br><span class="line">Point *pt = &amp;obj;</span><br><span class="line"></span><br><span class="line">obj.foo();</span><br><span class="line">pt-&gt;foo();</span><br></pre></td></tr></table></figure>
+
+<p><strong>make_shared函数</strong></p>
+<p>最安全的分配和使用动态内存的方法是调用一个名为make_shared的标准库函数</p>
+<p>此函数在动态内存中分配一个对象并初始化它，返回此对象的shared_ptr</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shared_ptr&lt;int&gt; p1 = make_shared&lt;int&gt;(42)</span><br></pre></td></tr></table></figure>
 
 
 
-<h4 id="成员函数的各种调用方式"><a href="#成员函数的各种调用方式" class="headerlink" title="成员函数的各种调用方式"></a>成员函数的各种调用方式</h4><p><strong>nonstatic 成员函数</strong></p>
-<p>准则：nonstatic成员函数和一般的函数有相同的效率</p>
-<p>1.改写成员函数，安插this指针到成员函数中去</p>
-<p>2.将每一个对nonstatic数据成员的存取改为经由this指针来存取</p>
-<p>3.将成员函数重新写成一个外部函数，函数名处理一下</p>
-<p><strong>虚成员函数</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ptr-&gt;foo()</span><br><span class="line"></span><br><span class="line">(*ptr-&gt;vptr[1])(ptr);</span><br></pre></td></tr></table></figure>
+<p><strong>shared_ptr拷贝和赋值</strong></p>
+<p>每个shared_ptr都会记录有多少个其他shared_ptr指向相同的对象</p>
+<p>拷贝一个shared_ptr、用一个shared_ptr初始化另一个shared_ptr，将它作为参数传递给另外一个函数，作为函数的返回值，它所<strong>关联的引用计数都会递增</strong></p>
+<p>当引用计数为0时，它就会释放自己管理的对象【析构函数、释放内存】</p>
+<h5 id="直接管理内存"><a href="#直接管理内存" class="headerlink" title="直接管理内存;"></a>直接管理内存;</h5><p>new</p>
+<p>delete</p>
+<p><strong>使用new动态分配和初始化对象</strong></p>
+<p>可以对动态分配的对象进行直接初始化 int *p = new int(5);</p>
+<p>也可以对其值初始化  string a = new string();</p>
+<p><strong>动态分配的const对象</strong></p>
+<p>动态分配的const对象必须进行初始化</p>
+<p><strong>内存耗尽</strong></p>
+<p>内存耗尽，new失败的时候回抛出一个bad_alloc异常</p>
+<p>可以改变使用new的方式来阻止它抛出异常</p>
+<p>int *p =  new (nothrow) int;</p>
+<p><strong>野指针</strong></p>
+<p>delete之后指针值就无效了，需要将其手动置为空</p>
+<p>如果多个指针指向相同的内存，置空只能对这个指针有效，对其他仍然指向内存的指针无效</p>
+<p><strong>shared_ptr和new</strong></p>
+<p>不能将一个内置类型的指针赋给一个智能指针，智能使用直接初始化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shared_ptr&lt;int&gt; p1 = new int(1024);</span><br></pre></td></tr></table></figure>
 
-<p>vptr表示由编译器产生的指针，指向虚函数表</p>
-<p>1是虚函数表的索引，找到foo函数地址</p>
-<p>参数ptr表示this指针</p>
-<p><strong>static成员函数</strong></p>
-<p>独立于类对象之外的存取操作，程序方法上的解决之道是把0强制转换为一个类指针</p>
-<p>foo((Point3d *) 0);</p>
-<p>static成员函数没有this指针，</p>
-<p>它不能直接存取类中的nonstatic成员，</p>
-<p>它不能被声明为const</p>
-<p>它不需要经由类对象才被调用</p>
-<h4 id="虚成员函数"><a href="#虚成员函数" class="headerlink" title="虚成员函数"></a>虚成员函数</h4><p>ptr-&gt;foo()</p>
-<p>需要知道</p>
-<p>1.ptr所指对象的真实类型</p>
-<p>2.foo()函数的真实实例</p>
-<p>1.为了找到该表格，每一个类对象被安插了一个由编译器内部产生的指针</p>
-<p>2.为了找到函数地址，每一个虚函数被指派一个表格索引值</p>
-<p><strong>派生类的行为</strong></p>
-<p>1.他可以继承基类声明的虚函数的实例，基类的虚函数实例会被拷贝到派生类的虚函数表的相应位置</p>
-<p>2.它可以使用自己的函数实例</p>
-<p>3.它可以加入新的虚函数你</p>
-<p><strong>多重继承下的虚函数</strong></p>
-<p>复杂度在第二个基类和之后的基类上</p>
-<p><strong>虚拟继承下的虚函数</strong></p>
+
+
+<p><strong>不要混合使用普通指针和智能指针</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">void process(shared_ptr&lt;int&gt; ptr)</span><br><span class="line">&#123;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>函数参数是值传递的，因此实参会被拷贝到ptr中。拷贝一个shared_ptr会递增其引用计数，在process运行中，引用计数至少为2，process结束时，ptr的引用计数会递减，但不会变为0，因此，当局部变量ptr销毁时，ptr指向的内存不会被释放</p>
+<p>正确的方法是传递给该函数一个shared_ptr</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">shared_ptr&lt;int&gt; p(new int(42));</span><br><span class="line">process(p);</span><br><span class="line">int i = *p; //正确</span><br></pre></td></tr></table></figure>
+
+
+
+<p>错误的方法是传递给该函数一个内置类型的指针</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int *x(new int(42));</span><br><span class="line">process(p);  //错误，不能将内置类型指针赋给智能指针</span><br><span class="line">proces(shared_ptr&lt;int&gt;(x));  //正确，但是不会释放内存</span><br><span class="line">int j = *x;  //错误，x是一个空悬指针</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>智能指针和异常</strong></p>
+<ul>
+<li>如果使用智能指针，即使程序抛出异常，智能指针类也能确保在内存不再需要的时候将其释放</li>
+<li>当发生异常时，我们直接管理的内存不会自动释放的，如果使用内置指针管理内存，且在new之后，delete之前发生异常，则内存不会被释放</li>
+</ul>
+<p><strong>unique_ptr</strong></p>
+<p>某个时刻只能有一个unique_ptr指向一个给定对象</p>
+<p>不能拷贝和赋值unique_ptr</p>
+<p>reset()方法释放智能指针指向的对象</p>
+<p>可以将指针的所有权从一个unique_ptr转移给另一个unique_ptr</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unique_ptr&lt;string&gt; p2(p1.release);  //release将p1置空</span><br></pre></td></tr></table></figure>
+
+
+
+<p>不能拷贝unique_ptr的规则有一个例外，可以拷贝或赋值一个将要被销毁的unique_ptr</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">unique_ptr&lt;int&gt; clone(int p)</span><br><span class="line">&#123;</span><br><span class="line">	return unique_ptr&lt;int&gt;(new int(p));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>weak_ptr</strong></p>
+<p>weak_ptr指向一个shared_ptr指向的对象</p>
+<p>解决shared_ptr相互引用时候的死锁</p>
+<h4 id="动态数组"><a href="#动态数组" class="headerlink" title="动态数组"></a>动态数组</h4><p>标准库allocator类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int *p = new int[10];</span><br><span class="line">delete []p;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>allocator类</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">allocator&lt;string&gt;alloc;</span><br><span class="line">alloc.allocate(10);   //分配n个未初始化的string</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>allocator分配未构造的内存</strong></p>
+<p>allocator分配的内存时未构造的</p>
+<p>在新标准库中，allocator接受一个指针和另个或多个额外参数，在给定位置构造一个元素。额外参数用来初始化构造的对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alloc.construct(q,10,&apos;c&apos;);</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
 
     </div>
 
@@ -313,7 +367,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/C-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/" rel="tag"><i class="fa fa-tag"></i> C++对象模型</a>
+              <a href="/tags/C-Primer/" rel="tag"><i class="fa fa-tag"></i> C++ Primer</a>
           </div>
 
         
@@ -322,12 +376,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/12/14/cppObjectModel-3/" rel="prev" title="C++对象模型(Data语意学)">
-      <i class="fa fa-chevron-left"></i> C++对象模型(Data语意学)
+    <a href="/2019/12/15/cpp-20/" rel="prev" title="C++ Primer(第七章 类)">
+      <i class="fa fa-chevron-left"></i> C++ Primer(第七章 类)
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/12/14/cpp-7/" rel="next" title="C++11（基础）">
-      C++11（基础） <i class="fa fa-chevron-right"></i>
+    <a href="/2019/12/15/cpp-22/" rel="next" title="C++ Primer(第13章 拷贝控制)">
+      C++ Primer(第13章 拷贝控制) <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -367,7 +421,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#成员函数的各种调用方式"><span class="nav-number">1.</span> <span class="nav-text">成员函数的各种调用方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#虚成员函数"><span class="nav-number">2.</span> <span class="nav-text">虚成员函数</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#动态内存与智能指针"><span class="nav-number">1.</span> <span class="nav-text">动态内存与智能指针</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#直接管理内存"><span class="nav-number">1.1.</span> <span class="nav-text">直接管理内存;</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态数组"><span class="nav-number">2.</span> <span class="nav-text">动态数组</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
