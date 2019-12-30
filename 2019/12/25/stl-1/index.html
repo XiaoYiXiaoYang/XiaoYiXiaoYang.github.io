@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="总是隐藏在容器后面默默工作的">
+<meta name="keywords" content="STL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STL-空间配置器">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;25&#x2F;stl-1&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="总是隐藏在容器后面默默工作的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-25T06:05:12.291Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/25/stl-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>STL-空间配置器 | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/25/stl-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          STL-空间配置器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-25 14:04:13 / 修改时间：14:05:12" itemprop="dateCreated datePublished" datetime="2019-12-25T14:04:13+08:00">2019-12-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/25/stl-1/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/25/stl-1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> 总是隐藏在容器后面默默工作的</p>
+<a id="more"></a>
+
+<p>SGI STL在这个项目上逃脱了STL标准规格，使用一个专属的、拥有次层配置能力的、效率优越的特殊配置器。</p>
+<h3 id="SGI的标准空间配置器-std-allocator"><a href="#SGI的标准空间配置器-std-allocator" class="headerlink" title="SGI的标准空间配置器 std::allocator"></a>SGI的标准空间配置器 std::allocator</h3><p>SGI未使用过，原因是效率不佳</p>
+<p>std:allocator只是简单的对 ::operator new 和 operator delete做了一层简单的包装</p>
+<h3 id="SGI的特殊空间配置器-std-alloc"><a href="#SGI的特殊空间配置器-std-alloc" class="headerlink" title="SGI的特殊空间配置器 std::alloc"></a>SGI的特殊空间配置器 std::alloc</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class Foo&#123;...&#125;</span><br><span class="line"></span><br><span class="line">Foo *pf = new Foo;  //配置内存，然后构造对象</span><br><span class="line">delete pf;          //将对象析构，然后释放内存</span><br></pre></td></tr></table></figure>
+
+<p>其中new运算符包含</p>
+<p>1.调用::operator new配置内存</p>
+<p>2.调用Foo::Foo构造对象内容</p>
+<p>delete也包含</p>
+<p>1.调用Foo::~Foo析构对象内容</p>
+<p>2.调用::operator delete配置内存</p>
+<p>SGI STL将内存配置由alloc::allocate()负责，内存释放由alloc::deallocate()负责</p>
+<p>对象构造由::construct()负责 对象析构由::destroy()负责</p>
+<p><strong>插曲</strong></p>
+<p>上述的::operator delete和::operator new是系统提供的全局函数</p>
+<p>new和delete是用户进行动态内存申请和释放的操作符</p>
+<p>new在底层调用operator new全局函数来申请空间，delete在底层通过operator delete全局函数来释放空间。</p>
+<p><strong>construct() 和 destroy()</strong></p>
+<h4 id="construct"><a href="#construct" class="headerlink" title="construct"></a>construct</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">template &lt;class T1, class T2&gt;</span><br><span class="line">inline void _construct(T1* p, const T2&amp; value) &#123;</span><br><span class="line">    new(p) T1(value);           // placement new. 调用T1::T1(value)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述构造又多出一个new</p>
+<p>这个new是placement new</p>
+<p>是重载operator new 的一个标准、全局的版本，它不能够被自定义的版本代替</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void *operator new( size_t, void * p ) throw() &#123; return p; &#125;</span><br></pre></td></tr></table></figure>
+
+<p>placement new的执行忽略了size_t参数，只返还第二个参数。其结果是允许用户把一个对象放到一个特定的地方，达到调用构造函数的效果。</p>
+<p><strong>例：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pi = new (ptr) int; pi = new (ptr) int;     //placement new</span><br></pre></td></tr></table></figure>
+
+<p>括号里的参数ptr是一个指针，它指向一个内存缓冲器，placement new将在这个缓冲器上分配一个对象。Placement new的返回值是这个被构造对象的地址(比如括号中的传递参数)。</p>
+<p><strong>总结</strong></p>
+<p>则 new(p) T1(value) 就是在指针p所指向的内存空间创建一个T1类型的对象，但是对象的内容是从T2类型的对象转换过来的（调用了T1的构造函数，T1::T1(value)）。</p>
+<h4 id="destroy"><a href="#destroy" class="headerlink" title="destroy"></a>destroy</h4><p>多个版本</p>
+<p>1.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">template &lt;class T&gt;</span><br><span class="line">inline void destroy(T* pointer) &#123;</span><br><span class="line">    pointer-&gt;~T();   // 直接调用析构函数</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">template &lt;class ForwardIterator&gt;</span><br><span class="line">inline void destroy(ForwardIterator first, ForwardIterator last) &#123;</span><br><span class="line">  __destroy(first, last, value_type(first));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>版本2调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">template &lt;class ForwardIterator, class T&gt;</span><br><span class="line">inline void __destroy(ForwardIterator first, ForwardIterator last, T*) &#123;</span><br><span class="line">  typedef typename __type_traits&lt;T&gt;::has_trivial_destructor trivial_destructor;     // 这里使用了萃取器</span><br><span class="line">  __destroy_aux(first, last, trivial_destructor());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据对象有无必要析构调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">template &lt;class ForwardIterator&gt;</span><br><span class="line">inline void</span><br><span class="line">__destroy_aux(ForwardIterator first, ForwardIterator last, __false_type) &#123;     // non-trivial destructor</span><br><span class="line">  for ( ; first &lt; last; ++first)</span><br><span class="line">    destroy(&amp;*first);   // 逐个调用析构函数</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">template &lt;class ForwardIterator&gt; </span><br><span class="line">inline void __destroy_aux(ForwardIterator, ForwardIterator, __true_type) &#123;&#125;    // trivial destructor</span><br></pre></td></tr></table></figure>
+
+<p>为了效率</p>
+<p>首先利用value_type获得迭代器所指对象的类型</p>
+<p>再用_type_triaits<T>判断该类型的析构函数是不是无关痛痒</p>
+<p>如果是_true_type，则什么也不做就结束</p>
+<p>如果是_false_type，才以循环方式访问整个范围，对每个对象调用析构函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 两个重载版本，无需析构</span><br><span class="line">inline void destroy(char*, char*) &#123;&#125;</span><br><span class="line">inline void destroy(wchar_t*, wchar_t*) &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="双层级配置器"><a href="#双层级配置器" class="headerlink" title="双层级配置器"></a>双层级配置器</h3><p><strong>第一级</strong></p>
+<p>第一级直接使用malloc() 和 free()</p>
+<p>当第一级 malloc 或者 realloc 调用不成功后，</p>
+<p>改调用 oom_malloc() 和 oom_realloc() 。</p>
+<p>后两者都有内循环，不断调用“内存不足处理例程”，期望在某次调用之后，获得足够的内存。</p>
+<p>但如果“内存不足处理例程”未被客户端设定，则直接抛出 bad_alloc 异常，或者终止程序。</p>
+<p><strong>第二级</strong></p>
+<p>当配置区块超过128bytes时，视之为足够大，移交第一级配置器处理，当区块小于128bytes时候，采用内存池管理（memory pool）。</p>
+<p>每次配置一大块内存，则维护对应的自由链表（free-list），下次若再有相同大小的内存需求，就直接从 free-list 中拨出（没有就继续配置内存，具体后面讲述），</p>
+<p>如果客端释换小额区块，就有配置器回收到 free-list 中</p>
+<p>二级配置器使用内存池+自由链表的形式避免了小块内存带来的碎片化，</p>
+<p>它是用一个16个元素的自由链表（free_list）来管理的，每个位置的内存大小都是8的倍数，分别为：8、16、24、32、40、48、56、64、72、80、88、96、104、112、120、128。</p>
+<p>free_list的节点结构如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">union obj</span><br><span class="line">&#123;</span><br><span class="line">	union obj* free_list_link;</span><br><span class="line">	char client_data[1];</span><br><span class="line">&#125;；</span><br><span class="line">//使用union是为了节省内存，这样每个节点就不需要额外的指针。</span><br></pre></td></tr></table></figure>
+
+<p><strong>二级配置器内存分配</strong></p>
+<p>1、free_list列表中有空余内存。如果申请3个字节的内存，则所需空间大小提升为8的倍数，然后去 free_list 中查找相应的链表，如果 free_list[i] 不为空，则返回第一个元素，然后把头指针往后移。</p>
+<p>2、free_list 列表中没有空余，但内存池不为空。首先检验内存池中的大小是不是比申请的内存大，比如申请20*8的内存，如果足够，则分配相应内存，将其中一个分配给用户使用，其它的挂在相应的 free_list 中。如果内存池不够大，只够几个内存分配，则就分配这几个，把相应的数据返回。如果连一个都不够则执行第三中情况。</p>
+<p>3、free_list列表中没有空余，内存池也不够。调用malloc重新分配内存，分配时会多分配一倍的内存，把相应的内存挂到free_list下，剩余的放到内存池中。</p>
+<p>4、free_list列表中没有空余，内存池也不够，malloc也失败。则调用一级空间配置器，里面会有循环处理，或者抛出异常。</p>
+<p><strong>二级配置器内存回收</strong></p>
+<p>二级空间配置器中申请的内存被释放时，二级空间配置器将回收的内存插入到对应的 free_list 中</p>
+<p><strong>插曲</strong></p>
+<p>simple_alloc</p>
+<p>SGI为alloc包装的接口，使配置器的接口能符合STL规格</p>
+<p>其内部都是单纯的转调用</p>
+<p>2019-10-24 11:55:11 星期四</p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/STL/" rel="tag"><i class="fa fa-tag"></i> STL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/25/network-2/" rel="prev" title="计算机网络----TCP">
+      <i class="fa fa-chevron-left"></i> 计算机网络----TCP
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/30/leetcode-1/" rel="next" title="LeetCode-1 两数之和">
+      LeetCode-1 两数之和 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SGI的标准空间配置器-std-allocator"><span class="nav-number">1.</span> <span class="nav-text">SGI的标准空间配置器 std::allocator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SGI的特殊空间配置器-std-alloc"><span class="nav-number">2.</span> <span class="nav-text">SGI的特殊空间配置器 std::alloc</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#construct"><span class="nav-number">2.1.</span> <span class="nav-text">construct</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#destroy"><span class="nav-number">2.2.</span> <span class="nav-text">destroy</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双层级配置器"><span class="nav-number">3.</span> <span class="nav-text">双层级配置器</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
