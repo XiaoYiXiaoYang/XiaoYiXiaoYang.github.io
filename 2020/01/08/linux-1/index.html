@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="一个好的命令行界面是一种很神奇的人机交互方式">
+<meta name="keywords" content="Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux（学习shell）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;08&#x2F;linux-1&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="一个好的命令行界面是一种很神奇的人机交互方式">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-08T13:30:56.606Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/01/08/linux-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Linux（学习shell） | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/linux-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux（学习shell）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-01-08 21:27:57 / 修改时间：21:30:56" itemprop="dateCreated datePublished" datetime="2020-01-08T21:27:57+08:00">2020-01-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/01/08/linux-1/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/08/linux-1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> 一个好的命令行界面是一种很神奇的人机交互方式</p>
+<a id="more"></a>
+
+<ol>
+<li>KISS:eep it simple，stupid</li>
+<li>Everything is a file</li>
+<li>Do one thing and do it well</li>
+<li>Except the output of one program to be the input to another</li>
+</ol>
+<p>这四句叫Linux Philosophy，很神奇哈</p>
+<p>linux文件：‘.’字符开始的文件是隐藏文件；文件名区分大小写，没有文件扩展名概念，文件名可以使用句号、连字符、下划线</p>
+<p>linux命令分为：</p>
+<ul>
+<li>shell内置命令</li>
+<li>shell函数</li>
+<li>alias命令</li>
+<li>可执行文件</li>
+</ul>
+<h3 id="命令是什么"><a href="#命令是什么" class="headerlink" title="命令是什么"></a>命令是什么</h3><p>shell来自于称之为bash的GNU项目，bash就是Bourne Again Shell<br>shell提示符 username@machinename 后面是工作目录和$符</p>
+<p>绝对路径：从根目录开始<br>相对路径：从当前工作目录开始<br>‘.’:代表工作目录<br>‘..’:代表工作目录的父目录</p>
+<p><strong>硬链接</strong>：和文件本身无区别，删硬链接，文件正常，删文件，硬链接正常，</p>
+<p><strong>符号链接</strong>：类似windows快捷方式，删符号链接，文件正常，删文件，符号链接损坏</p>
+<p>（操作系统中）<br>硬链接：硬连接指通过索引节点来进行连接。在Linux的文件系统中，保存在磁盘分区中的文件不管是什么类型都给它分配一个编号，称为索引节点号(Inode Index)。在Linux中，多个文件名指向同一索引节点是存在的。一般这种连接就是硬连接。硬连接的作用是允许一个文件拥有多个有效路径名，这样用户就可以建立硬连接到重要文件，以防止“误删”的功能。其原因如上所述，因为对应该目录的索引节点有一个以上的连接。只删除一个连接并不影响索引节点本身和其它的连接，只有当最后一个连接被删除后，文件的数据块及目录的连接才会被释放。也就是说，文件真正删除的条件是与之相关的所有硬连接文件均被删除。</p>
+<p>在用户的目录中设置指向共享文件的索引结点指针，此时由任何用户对共享文件进行改变，都将引起其相应结点内容的改变。</p>
+<p>符号链接：由系统为创建一个link类型的新文件，取名和共享文件名一样，在新文件中只包含共享文件的路径名</p>
+<p>ls -l 命令 ，以长格式显示结果</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-rw-r–r–</td>
+<td>第一个字符表示文件类型，剩下的三个一组，第一组表示文件所有者的访问权限，第二组表示文件所属组成员的访问权限，第三组表示其他所有人的访问权限</td>
+</tr>
+<tr>
+<td>1</td>
+<td>文件的硬链接数目</td>
+</tr>
+<tr>
+<td>root</td>
+<td>文件所有者的用户名</td>
+</tr>
+<tr>
+<td>root</td>
+<td>文件所属群组的名称</td>
+</tr>
+<tr>
+<td>32059</td>
+<td>文件大小字节数</td>
+</tr>
+<tr>
+<td>2018-04-03 11：05</td>
+<td>上次修改文件的日期时间</td>
+</tr>
+<tr>
+<td>a.txt</td>
+<td>文件名</td>
+</tr>
+</tbody></table>
+<h3 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;   从文件开头部分重新改写</span><br><span class="line">&gt;&gt;  追加到文件尾部</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>文件描述符</th>
+<th>默认</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>标准输入stdin</td>
+<td>0</td>
+<td>键盘</td>
+</tr>
+<tr>
+<td>标准输出stdout</td>
+<td>1</td>
+<td>屏幕</td>
+</tr>
+<tr>
+<td>标准错误stderr</td>
+<td>2</td>
+<td>屏幕</td>
+</tr>
+</tbody></table>
+<p>标准错误重定向</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -l /bin 2 &gt; out.txt</span><br></pre></td></tr></table></figure>
+
+<p>标准输出和标准错误都重定向</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -l /bin  &gt; out.txt 2&gt;&amp;1  //首先重定向标准输出到out.txt，然后使用标记 2&gt;&amp;1把文件描述符2（标准错误）重定向到文件描述符1（标准输出）中</span><br></pre></td></tr></table></figure>
+
+<p>管道：管道操作符‘|’ ，将一个命令的标准输出传送到另一个命令的标准输入</p>
+<p>过滤器：对输入进行改变</p>
+<table>
+<thead>
+<tr>
+<th>通配符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>*</td>
+<td>匹配任意多个字符</td>
+</tr>
+<tr>
+<td>?</td>
+<td>匹配任一单个字符</td>
+</tr>
+<tr>
+<td>[characters]</td>
+<td>匹配任意一个属于字符集中的字符</td>
+</tr>
+<tr>
+<td>[!characters]</td>
+<td>匹配任意一个不属于字符集中的字符</td>
+</tr>
+<tr>
+<td>[[:class:]]</td>
+<td>匹配任意一个属于指定字符类中的字符</td>
+</tr>
+</tbody></table>
+<h4 id="常用字符类"><a href="#常用字符类" class="headerlink" title="常用字符类"></a>常用字符类</h4><table>
+<thead>
+<tr>
+<th>字符类</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>[:alnum:]</td>
+<td>匹配任意一个字母或数字</td>
+</tr>
+<tr>
+<td>[:alpha:]</td>
+<td>匹配任意一个字母</td>
+</tr>
+<tr>
+<td>[:digit]</td>
+<td>匹配任意一个数字</td>
+</tr>
+<tr>
+<td>[:lower:]</td>
+<td>匹配任意一个小写字母</td>
+</tr>
+<tr>
+<td>[:upper:]</td>
+<td>匹配任意一个大写字母</td>
+</tr>
+</tbody></table>
+<h4 id="扩展："><a href="#扩展：" class="headerlink" title="扩展："></a>扩展：</h4><p>路径名扩展：<br>波浪线扩展： ~被指定为用户的主目录名  echo ~  结果/home/me<br>算术扩展：  $((2+2))  中间是算术表达式<br>花括号扩展： {A,B,C}  {A..Z}<br>参数扩展：<br>命令替换：   ls -l ${which cp}</p>
+<p>双引号：在双引号中的特殊字符失去含义，除了”$”,”&quot;,反引号“’”不扩展<br>单引号：单引号抑制所有扩展，都会失去特殊含义<br>转义字符：想要引用单个字符，或者消除字符串中某个字符的特殊含义</p>
+<h2 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h2><p>相对来说比较重要的一章</p>
+<p>所有者：一个用户可以拥有文件和目录，对拥有的文件和目录的访问权限具有控制权<br>组成员：用户又归属于一个群组，该群组由一个或多个用户组成<br>其他所有用户：所有用户指的整个世界，其他所有用户指的不是上面的其他用户</p>
+<p>当创建用户账户时，用户将被分配一个用户id，uid，同时被分配一个有效组id，gid</p>
+<h4 id="文件类型"><a href="#文件类型" class="headerlink" title="文件类型"></a>文件类型</h4><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-</td>
+<td>普通文件</td>
+</tr>
+<tr>
+<td>d</td>
+<td>目录文件</td>
+</tr>
+<tr>
+<td>l</td>
+<td>符号链接</td>
+</tr>
+<tr>
+<td>c</td>
+<td>字符设备文件</td>
+</tr>
+<tr>
+<td>b</td>
+<td>块设备文件</td>
+</tr>
+</tbody></table>
+<h4 id="权限属性"><a href="#权限属性" class="headerlink" title="权限属性"></a>权限属性</h4><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>r</td>
+<td>允许打开和读取文件</td>
+</tr>
+<tr>
+<td>w</td>
+<td>允许写入和截断文件，如果也设置了执行权限，那么目录中的文件允许被创建被删除以及被重命名</td>
+</tr>
+<tr>
+<td>x</td>
+<td>允许把文件当做程序一样被执行</td>
+</tr>
+</tbody></table>
+<p><strong>chmod</strong></p>
+<p>chmod number file<br>八进制数字表示法：—对应000；rwx对应111<br>符号表示法：u，g，o，a，对应user，group，others，all<br>r，w，x对应读，写，执行</p>
+<p><strong>chown</strong></p>
+<p>chown owner:group file</p>
+<h4 id="更改文件所有者和所属群组"><a href="#更改文件所有者和所属群组" class="headerlink" title="更改文件所有者和所属群组"></a>更改文件所有者和所属群组</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>bob</td>
+<td>把文件所有者更改为bob</td>
+</tr>
+<tr>
+<td>bob:users</td>
+<td>文件所有者更改为bob，所属群组更改为users</td>
+</tr>
+<tr>
+<td>:admins</td>
+<td>所属群组改为admin，所有者不变</td>
+</tr>
+<tr>
+<td>bob:</td>
+<td>文件所有者更改为bob，所属群组改为bob登录系统时所属的群组</td>
+</tr>
+</tbody></table>
+<p><strong>chgrp</strong></p>
+<p>早起chown命令只能更改文件所有者不能改变文件所属群组，所以增加了chgrp命令</p>
+<p><strong>umask</strong></p>
+<p>设置默认权限，执行umask命令，输出当前掩码值，再设置掩码值，便会修改文件权限</p>
+<p><strong>更改身份</strong></p>
+<ul>
+<li>注销系统并且以其他用户的身份重新登录系统</li>
+<li>su</li>
+<li>sudo</li>
+</ul>
+<p>su命令用来以另一个用户的是身份启动shell<br>su -l user 则是用于指定用户的登录shell<br>su -   则是使用超级用户的身份登录shell，需要输入超级用户的密码</p>
+<p>也可以使用su -c ‘command’  执行单条命令</p>
+<p>sudo命令允许一个普通用户以一个不同的用户身份执行命令，使用sudo命令不需要输入超级用户的密码，只需要输入自己的密码<br>sudo命令不需要启动一个新的shell环境，也不需要加载另一个用户的运行环境</p>
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><p>每个进程将被分配一个进程id</p>
+<table>
+<thead>
+<tr>
+<th align="center">参数</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">ps</td>
+<td align="center">显示进程运行pid，时间，以及程序名</td>
+</tr>
+<tr>
+<td align="center">ps x</td>
+<td align="center">显示所有的进程，不管是哪个终端的</td>
+</tr>
+<tr>
+<td align="center">ps  aux</td>
+<td align="center">显示更多的信息，显示属于每个用户的进程信息</td>
+</tr>
+</tbody></table>
+<p>top 以列表的形式持续更新显示系统进程的当前信息，默认3秒更新一次，按CPU活动时间排序</p>
+<p><strong>kill 发送信号</strong></p>
+<table>
+<thead>
+<tr>
+<th>信号编号</th>
+<th>信号名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>HUP</td>
+<td>挂起信号</td>
+</tr>
+<tr>
+<td>2</td>
+<td>INT</td>
+<td>中断信号</td>
+</tr>
+<tr>
+<td>9</td>
+<td>KILL</td>
+<td>杀死信号</td>
+</tr>
+<tr>
+<td>15</td>
+<td>TERM</td>
+<td>终止信号</td>
+</tr>
+<tr>
+<td>18</td>
+<td>CONT</td>
+<td>继续运行信号</td>
+</tr>
+<tr>
+<td>19</td>
+<td>STOP</td>
+<td>暂停信号</td>
+</tr>
+</tbody></table>
+<p><strong>killall发送信号</strong></p>
+<p>killall -u user [-singal]  name</p>
+<p>可以给指定程序或指定用户名的多个用户发送信号</p>
+<table>
+<thead>
+<tr>
+<th>比较</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>图形化</td>
+<td>命令行</td>
+</tr>
+<tr>
+<td></td>
+<td>运行的程序不在窗口管理器菜单中</td>
+</tr>
+<tr>
+<td></td>
+<td>从图形化启动错误，从命令行启动会看到更多的错误信息</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>命令大全</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>*<em>常用 *</em></td>
+<td></td>
+</tr>
+<tr>
+<td>date</td>
+<td>显示当前系统时间日期</td>
+</tr>
+<tr>
+<td>cal</td>
+<td>显示日历</td>
+</tr>
+<tr>
+<td>df</td>
+<td>显示当前磁盘驱动器的可用空间</td>
+</tr>
+<tr>
+<td>free</td>
+<td>显示可用内存</td>
+</tr>
+<tr>
+<td>exit</td>
+<td>退出终端会话</td>
+</tr>
+<tr>
+<td>pwd</td>
+<td>显示当前工作目录</td>
+</tr>
+<tr>
+<td>ls</td>
+<td>列出当前工作目录的文件和目录</td>
+</tr>
+<tr>
+<td>** 操作文件与目录**</td>
+<td></td>
+</tr>
+<tr>
+<td>cd</td>
+<td>改变工作目录</td>
+</tr>
+<tr>
+<td>file</td>
+<td>确定文件类型</td>
+</tr>
+<tr>
+<td>less</td>
+<td>查看文件内容</td>
+</tr>
+<tr>
+<td>cp</td>
+<td>复制文件和目录</td>
+</tr>
+<tr>
+<td>mv</td>
+<td>移动或重命名文件和目录</td>
+</tr>
+<tr>
+<td>mkdir</td>
+<td>创建目录</td>
+</tr>
+<tr>
+<td>touch</td>
+<td>创建文件</td>
+</tr>
+<tr>
+<td>rm</td>
+<td>删除文件或目录</td>
+</tr>
+<tr>
+<td>ln</td>
+<td>创建硬链接和符号链接</td>
+</tr>
+<tr>
+<td><strong>命令的使用</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>type</td>
+<td>显示命令的类型</td>
+</tr>
+<tr>
+<td>which</td>
+<td>显示可执行程序的位置</td>
+</tr>
+<tr>
+<td>help</td>
+<td>获得命令的帮助文档</td>
+</tr>
+<tr>
+<td>man</td>
+<td>显示命令的使用手册</td>
+</tr>
+<tr>
+<td>apropos</td>
+<td>显示合适的命令</td>
+</tr>
+<tr>
+<td>whatis</td>
+<td>显示命令的简要描述</td>
+</tr>
+<tr>
+<td>info</td>
+<td>显示命令的info条目</td>
+</tr>
+<tr>
+<td>alias</td>
+<td>创建一条命令的别名</td>
+</tr>
+<tr>
+<td>unalias</td>
+<td>删除别名</td>
+</tr>
+<tr>
+<td><strong>重定向</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>cat</td>
+<td>合并文件</td>
+</tr>
+<tr>
+<td>sort</td>
+<td>对文本行进行排序</td>
+</tr>
+<tr>
+<td>uniq</td>
+<td>报告或删除文件中重复的行</td>
+</tr>
+<tr>
+<td>wc</td>
+<td>打印文件中的换行符、字、字节的个数</td>
+</tr>
+<tr>
+<td>grep</td>
+<td>匹配行</td>
+</tr>
+<tr>
+<td>head</td>
+<td>打印文件的开头部分</td>
+</tr>
+<tr>
+<td>tail</td>
+<td>打印文件的末尾部分内容</td>
+</tr>
+<tr>
+<td>tee</td>
+<td>从stdin读取数据，并同时输出到stdout和文件</td>
+</tr>
+<tr>
+<td>echo</td>
+<td>显示一行文本</td>
+</tr>
+<tr>
+<td>clear</td>
+<td>清屏</td>
+</tr>
+<tr>
+<td>history</td>
+<td>显示历史列表的记录</td>
+</tr>
+<tr>
+<td><strong>权限</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>id</td>
+<td>显示用户身份标识</td>
+</tr>
+<tr>
+<td>passwd</td>
+<td>更改用户密码</td>
+</tr>
+<tr>
+<td>umask</td>
+<td>设置文件的默认权限</td>
+</tr>
+<tr>
+<td>su</td>
+<td>以另一个用户的身份运行shell</td>
+</tr>
+<tr>
+<td>sudo</td>
+<td>以另一个用户的身份执行命令</td>
+</tr>
+<tr>
+<td>chmod</td>
+<td>更改文件模式</td>
+</tr>
+<tr>
+<td>chown</td>
+<td>更改文件所有者</td>
+</tr>
+<tr>
+<td>chgrp</td>
+<td>更改文件所属群组</td>
+</tr>
+<tr>
+<td><strong>进程</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>ps</td>
+<td>显示当前所有进程的运行情况</td>
+</tr>
+<tr>
+<td>top</td>
+<td>实时显示当前所有任务的资源占用情况</td>
+</tr>
+<tr>
+<td>jobs</td>
+<td>列出所有活动作业的状态信息</td>
+</tr>
+<tr>
+<td>bg</td>
+<td>设置在后台运行作业</td>
+</tr>
+<tr>
+<td>fg</td>
+<td>设置在前台运行作业</td>
+</tr>
+<tr>
+<td>kill</td>
+<td>发送信号给某个进程</td>
+</tr>
+<tr>
+<td>killall</td>
+<td>杀死指定名字的进程</td>
+</tr>
+<tr>
+<td>shutdown</td>
+<td>关机或者重启系统</td>
+</tr>
+<tr>
+<td>pstree</td>
+<td>以进程树的形式输出进程列表，展示进程间的父子关系</td>
+</tr>
+</tbody></table>
+<p><em>2019-05-01 17:16:40 星期三<br>萧逸小杨</em></p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/01/08/git-2/" rel="prev" title="使用Git将项目上传至gihub（方法2）">
+      <i class="fa fa-chevron-left"></i> 使用Git将项目上传至gihub（方法2）
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#命令是什么"><span class="nav-number">1.</span> <span class="nav-text">命令是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重定向"><span class="nav-number">2.</span> <span class="nav-text">重定向</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常用字符类"><span class="nav-number">2.1.</span> <span class="nav-text">常用字符类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展："><span class="nav-number">2.2.</span> <span class="nav-text">扩展：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#权限"><span class="nav-number"></span> <span class="nav-text">权限</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件类型"><span class="nav-number">0.1.</span> <span class="nav-text">文件类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#权限属性"><span class="nav-number">0.2.</span> <span class="nav-text">权限属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更改文件所有者和所属群组"><span class="nav-number">0.3.</span> <span class="nav-text">更改文件所有者和所属群组</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程"><span class="nav-number"></span> <span class="nav-text">进程</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

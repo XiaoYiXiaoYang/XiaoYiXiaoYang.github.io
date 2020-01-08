@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="一本偏向于管理学与计算机学科结合性的课，也是内容贼多贼难记却又闭卷考试的科目">
+<meta name="keywords" content="软件工程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="软件工程复习（第一章 软件与软件工程）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;08&#x2F;softwareengineer-1&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="一本偏向于管理学与计算机学科结合性的课，也是内容贼多贼难记却又闭卷考试的科目">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;www.yteng3456.xyz&#x2F;public&#x2F;static&#x2F;blog_img&#x2F;river.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;www.yteng3456.xyz&#x2F;public&#x2F;static&#x2F;blog_img&#x2F;river1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;www.yteng3456.xyz&#x2F;public&#x2F;static&#x2F;blog_img&#x2F;vriver.png">
+<meta property="og:updated_time" content="2020-01-08T12:49:20.632Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;www.yteng3456.xyz&#x2F;public&#x2F;static&#x2F;blog_img&#x2F;river.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/01/08/softwareengineer-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>软件工程复习（第一章 软件与软件工程） | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/softwareengineer-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          软件工程复习（第一章 软件与软件工程）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-01-08 20:46:29 / 修改时间：20:49:20" itemprop="dateCreated datePublished" datetime="2020-01-08T20:46:29+08:00">2020-01-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/01/08/softwareengineer-1/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/08/softwareengineer-1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> 一本偏向于管理学与计算机学科结合性的课，也是内容贼多贼难记却又闭卷考试的科目</p>
+<a id="more"></a>
+
+<h3 id="软件工程"><a href="#软件工程" class="headerlink" title="软件工程"></a>软件工程</h3><h4 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h4><p>1.1 软件</p>
+<p>1.1.1 软件概念</p>
+<p>软件是计算机系统的重要部分；软件是逻辑产品，需要计算机硬件的支撑；软件是计算机控制系统的指挥中枢，软件是信息转换器，它能对信息进行加工、处理或变换；软件是科学、技术、知识和文化的载体；软件是工具，在社会的经济、军事、政治、文化、科学技术、教育和人们的生活、工作中发挥着巨大的作用。</p>
+<p>计算机科学对软件的定义：软件是在计算机系统支持下，能够完成特定功能和性能的程序、数据和相关的文档。<br>    软件=知识+程序+数据+文档</p>
+<p>程序：是计算机程序设计语言描述的，低级语言，高级语言<br>数据：程序加工的对象和结果<br>文档：文档记录软件开发的活动和中间制品，记录软件的配置和变更，用于专业人员和用户的交流</p>
+<p>软件虽然由程序、数据和文档组成，但软件蕴含着完成特定功能和性能的知识和经验，软件具有技术和文化双重属性。</p>
+<p>从软件的获取渠道看，可分为通用软件和定制软件两类</p>
+<p>1.1.2 软件特点</p>
+<p>软件是抽象的逻辑产品，而不是物理产品<br>    不受物理定律或加工过程的制约，具有极大的灵活性，硬件开发的错误一般是能够排除的，但是软件开发依赖于开发人员的业务素质、人员的组织管理</p>
+<p>软件使用过程不会磨损或老化<br>    但是其维护工作却比硬件复杂的多，软件缺陷可能在运行期间暴露，需要“纠错性维护”；有时用户需要提高和完善软件性能，需要“完善性维”护；由于支撑软件运行的硬件或软件环境的改变和更新，也需要对软件制品修改，进行“适应性维护”，而且维护过程中可能产生新的错误。</p>
+<p>1.1.3 软件分类<br>系统软件、个人计算机软件、实时嵌入式软件、科学和工程计算软件、事务处理软件、人工智能软件、WEB应用软件、实时软件、商务软件</p>
+<p>1.1.4 软件的发展（p12）<br>    第一阶段<br>    第二阶段<br>    第三阶段<br>    第四阶段</p>
+<p>1.1.5 软件的危机<br>    软件开发成本过高<br>    软件质量得不到保证<br>    软件开发效率低<br>    难以控制开发进度，工作量估计困难</p>
+<p>1.2 软件工程</p>
+<p>1.2.1 软件工程的定义<br>北大西洋公约（NATO）提出“软件工程”概念，<strong>试图建立并使用正确的方法，按时开发出成本低、可靠性好并在机器上高效运行的软件，从而解决或缓解令人担忧的软件危机问题</strong></p>
+<p>软件工程：IEE93定义：1.*<em>将系统的、规范的、可量化的方法应用于软件的开发、运行和维护的过程 *</em>2.及上述方法的研究</p>
+<p>系统性：软件工程的目标、原则，软件开发的过程模型、过程活动，软件开发的方法和技术，软件开发的工具和环境，软件项目管理，软件过程改进，软件人才培训和软件工程学科建设</p>
+<p>规范性：国际标准化组织（ISO），美国电子电器工程师协会（IEEE）等政府制定了软件工程的名词解释</p>
+<p>可量化性：软件的规模度量、软件结构的复杂性度量、可靠性度量、软件质量度量、软件项目计划、软件成本估算、软件风险度量、软件安全性度量</p>
+<p>1.2.2 软件工程目标</p>
+<p>…</p>
+<p>1.2.3 软件工程原则</p>
+<p>抽象：抽取事物最基本的特性和行为，忽略非基本的细节，采用分层次抽象的办法可以控制软件开发过程的复杂性</p>
+<p>信息隐藏：将模块中的软件设计决策封装起来的技术，模块接口尽量简洁，不要罗列可有可无的内部操作和对象</p>
+<p>模块化：是程序中逻辑上相对独立的成分，他是一个独立的编程单位，应有良好的接口定义，模块有助于信息的隐藏和抽象，有助于表示复杂的软件系统。</p>
+<p>局部化：要求在一个物理块内集中逻辑上相互关联的计算机资源，从物理和逻辑两个方面保证系统中模块之间具有松散的耦合关系，而在模块内部有较强的内聚度。</p>
+<p>一致性：整个软件系统的各个模块均应使用一致的概念，符号和术语，程序内部接口应是接口保持一致，软件与硬件接口保持一致</p>
+<p>完全性：软件系统完全实现系统所需功能，不遗漏任何重要成分的程序。</p>
+<p>可验证性：开发大型软件系统需要对系统进行分解，然后“分而治之”，系统的分解应遵循系统可验证的原则。即容易检查、测试、评审，以保证系统的正确性。</p>
+<p>1.3 软件生存周期</p>
+<p>软件生存周期是软件从概念形成、进化、运行到退役的全过程，<br>概念形成：定义<br>形成：开发<br>进化：开发和维护</p>
+<p>1.3.1 ..？</p>
+<p>需求分析</p>
+<p>需求分析人员需要与用户不断，反复的交流和商讨，使用户需求逐步分解，一致，完全</p>
+<p>方法：面向数据流方法，面向对象方法</p>
+<p>阶段性产品：<strong>软件需求规格说明书（SRS）</strong>，软件开发的依据，数据验收的标准，用软件需求规格说明书语言描述软件系统的功能需求、性能需求、接口需求、设计需求、软件产品的基本结构、采用的开发标准和验收原则等。<br><strong>用户概要手册</strong></p>
+<p>1.3.2 软件开发</p>
+<p>（1）概要设计<br>任务：根据SRS建立目标软件系统的总体结构，设计全局数据库和数据结构<br>方法：根据SRS自顶向下、逐步求精、抽象、模块化、局部化、信息隐藏…<br>坚持功能模块紧内聚、松耦合的原则，保持与SRS一致<br>工具：面向数据流的方法—-》结构图<br>    面向对象的设计方法—-》Rational Rose<br>阶段性产品：<strong>概要设计说明书（HLD）、数据库或数据结构说明书、组装测试计划</strong></p>
+<p>（2）详细设计<br>任务：根据概要设计生成的各个模块，并详细描述程序模块的内部细节（算法，数据结构）形成可编程的程序模型，制定单元测试计划<br>阶段性产品：<strong>详细设计规格说明书（LLD）、单元测试计划</strong></p>
+<p>（3）实现<br>任务：根据详细规格说明书编写源程序，并对程序进行调试（单元测试）<br>方法：以LLD为依据，基于某种程序设计语言进行编码，（结构化程序设计、面向对象程序设计）<br>工具：VC++、Java<br>阶段性产品：源程序代码</p>
+<p>（4）组装测试<br>任务：组装测试应满足<strong>概要设计</strong>的要求<br>途径：测试模块连接的正确性、测试系统或子程序的I/O、测试系统的功能或性能<br>阶段性产品：满足概要设计要求的程序、组装测试报告</p>
+<p>（5）确认测试<br>任务：根据<strong>SRS</strong>测试软件系统是否满足用户的需求<br>方法：用户参与，以SRS为依据进行确认测试<br>工具：专用测试工具<br>阶段性产品：可供用户使用的软件产品（文档、源程序）</p>
+<p>1.3.3 软件的使用维护退役</p>
+<p>使用：确认测试后安装在要求的环境中进行运行，使用过程中收集软件错误，撰写软件问题报告和软件维护报告</p>
+<p>维护：软件的工作环境变化，软件也需要跟着变化（占软件开发60%以上的工作量）<br>（正确性维护、扩充性维护、适应性维护–》软件新版本）</p>
+<p>1.4 软件开发模型</p>
+<p>为了描述、规范软件开发的管理和技术活动，需要建立软件过程模型，对软件开发过程的结构和属性进行抽象。</p>
+<p>1.4.1 瀑布模型</p>
+<p>瀑布模型（下图）</p>
+<p><img src="http://www.yteng3456.xyz/public/static/blog_img/river.png" alt=""></p>
+<p>缺点：实际开发中，对某一阶段软件产品的评审会经常发现缺陷和疏漏，这时需要暂停这一阶段活动，反馈到前面的有关活动进行修改。所以有了改进的瀑布模型—-带反馈的瀑布模型</p>
+<p>带反馈的瀑布模型</p>
+<p><img src="http://www.yteng3456.xyz/public/static/blog_img/river1.png" alt=""></p>
+<p>V字形瀑布模型<br>其特点是软件的分析、设计过程和软件测试过程一一对应，强化了软件设计和测试的关系</p>
+<p><img src="http://www.yteng3456.xyz/public/static/blog_img/vriver.png" alt=""></p>
+<p>优点：使软件开发过程具有系统性、可控性、克服了软件开发的随意性</p>
+<p>缺点：（1）在项目开始阶段很难精确地提出产品需求<br>（2）项目开发晚期才能得到程序的运行版本<br>（3）开发人员在瀑布模型上游出现过失，会为软件带来缺陷，潜伏到下游才暴露，误导下游开发</p>
+<p>适用：需求明确、每个阶段及时评审测试，妥善处理才进入下一阶段、开发周期尽量短、一次开发的软件规模不宜大</p>
+<p>1.4.2 原型模型（迭代模型）</p>
+<p>用户/客户给出产品的一般需求<br>开发小组和客户共同定义软件总体目标，标识已知需求<br>对界面、功能、人机交互方式等进行设计并建造原型<br>强调“快速”，尽量缩短软件开发周期，不宜采用过多新技术<br>用户/客户对原型进行评估<br>快速修改、更新、完善</p>
+<p>业务建模：建立业务功能的信息流模型<br>数据建模：精华信息流，形成一组支持业务所需的数据对象<br>过程建模：对定义的数据对象进行变换，实现一个业务功能所需的信息流，创建过程描述对数据对象增删改查<br>应用生成：创建软件，重用已有的程序构件，或创建可重用的软件<br>测试修正：<br>（没画图，这几个过程依次箭头）</p>
+<p>1.4.3 螺旋模型</p>
+<p>从螺旋模型中心开始，沿顺时针方向前进<br>第一圈 产生SRS<br>第二圈 产生用于开发的模型<br>第三圈 软件产品的初始版本<br>第四圈 产生软件产品比较完善的新版本</p>
+<p>优：符合认识现实世界和软件开发的客观规律<br>支持软件整个生命周期<br>保持瀑布模型的系统性、阶段性<br>利用原型评估降低开发风险<br>开发者和用户共同参与软件开发，尽早发现软件中的错误</p>
+<p>具有：边学习、边建模、边开发、边使用、边改进</p>
+<p>第一章考点：感觉只能是软件开发模型，具体考啥额…</p>
+<p>2019-05-11 20:04:12 星期六</p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 软件工程</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/01/08/designpattern-1/" rel="prev" title="设计模式----单例模式">
+      <i class="fa fa-chevron-left"></i> 设计模式----单例模式
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/01/08/softwareengineer-2/" rel="next" title="软件工程复习（第二章 软件项目管理）">
+      软件工程复习（第二章 软件项目管理） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#软件工程"><span class="nav-number">1.</span> <span class="nav-text">软件工程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一章"><span class="nav-number">1.1.</span> <span class="nav-text">第一章</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="设计、编码、测试，“设计”是获取该质量、低耗费、易维护软件的最重要的一个环节">
+<meta name="keywords" content="软件工程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="软件工程复习（第五章 软件设计基础）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;08&#x2F;softwareengineer-5&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="设计、编码、测试，“设计”是获取该质量、低耗费、易维护软件的最重要的一个环节">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-08T12:54:23.517Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/01/08/softwareengineer-5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>软件工程复习（第五章 软件设计基础） | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/softwareengineer-5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          软件工程复习（第五章 软件设计基础）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-01-08 20:53:25 / 修改时间：20:54:23" itemprop="dateCreated datePublished" datetime="2020-01-08T20:53:25+08:00">2020-01-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/01/08/softwareengineer-5/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/08/softwareengineer-5/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> 设计、编码、测试，“设计”是获取该质量、低耗费、易维护软件的最重要的一个环节</p>
+<a id="more"></a>
+
+<p>5.1 软件设计</p>
+<p>设计：根据SRS，采用任何一种设计方法都能产生系统的总体结构设计、数据设计、过程设计</p>
+<p><strong>总体结构设计</strong>：确定程序各主要部件之间的关系<br><strong>数据设计</strong>：把信息描述转换为相应的数据结构<br><strong>过程设计</strong>：完成两个部件的过程化描述</p>
+<p>5.2 软件设计基本概念</p>
+<p>5.2.1 抽象与逐步求精</p>
+<p>抽象：将注意力集中在某一层面考虑问题<br>逐步求精：自顶向下一系列抽象级别从高到低的设计，后续阶段在前一阶段基础上引进更接近软件实现的元素，这一过程就叫逐步求精</p>
+<p>从高级抽象到低级抽象的转换过程中，伴随着一系列过程抽象和数据抽象</p>
+<p><strong>过程抽象</strong>：把完成一个特定功能的动作序列抽象为一个过程名和参数<br><strong>数据抽象</strong>：把一个数据对象的定义或描述抽象为一个数据类型</p>
+<p>5.2.2 模块化与信息隐藏</p>
+<p>将软件系统划分为若干个相对独立的部件</p>
+<p>为什么要分解？</p>
+<p>C(x)表示问题的复杂性，E(x)表示求解问题x需要的工作量，对问题P1和问题P2</p>
+<p>如果  C(p1) &gt; C(p2)<br>则    E(p1) &gt; E(p2)<br>因为解决复杂问题总比解决简单问题耗费多</p>
+<p>另一组 C(p1+p2) &gt; C(p1) + C(p2)<br>       E(p1+p2) &gt;E(p1) + E(p2)</p>
+<p>p1,p2组合问题的复杂性比单个问题的复杂性之和更大</p>
+<p>导致“分治法”，将一个复杂问题分解为若干可管理的子问题后更易于求解。</p>
+<p>但是不可无限分解，因为分解的过程伴随着接口的开销，模块间斜接需要的代价随着模块数增多而增大，就会产生一个最小成本区域，这块区域限制了最多分解的模块数</p>
+<p><strong>内聚度</strong></p>
+<p>初级：<br>偶然性内聚：模块内为完成一组功能而组合在一起，他们之间有关系也很松散</p>
+<p>逻辑性内聚：模块完成多项功能，这些功能在逻辑上具有某种相关性</p>
+<p>时间性内聚：模块完成的诸任务必须在同一时间段内执行</p>
+<p>中级：<br>过程性内聚：在逻辑性内聚的基础上，进一步要求模块内个功能必须按特定的次序执行</p>
+<p>通信性内聚：模块中各成分对数据结构的同一区域进行操作以达到通信的目的</p>
+<p>高级：<br>顺序性内聚：模块内各处理成分均与同一功能相关，且这些处理需顺序执行</p>
+<p>功能性内聚：模块内各成分协同完成单一功能</p>
+<p>偶然性内聚度最低，功能性内聚度最高，但是如果功能的规模过小，实现该功能的粒度势必太小，所以不能要求设计模型中所有模块均具有功能性内聚度，除偶然性内聚外的其他内聚形式都是可以接受的</p>
+<p><strong>耦合度</strong></p>
+<p>非直接耦合：两模块中任意一个都不依赖于另一个而独立工作</p>
+<p>数据耦合：如果两模块通过参数交换传递信息，并且这些信息仅参与计算而不直接影响模块的功能或者执行路径，则这两个模块为数据耦合</p>
+<p>控制耦合：如果模块间交换的参数会因为取值的不同而导致模块功能或执行路径的变化，则称他们为控制耦合</p>
+<p>特征耦合：模块间传数据结构</p>
+<p>外部耦合：当若干模块均与同一外部设备或外部环境相关联，这些模块存在外部耦合</p>
+<p>公共耦合：当若干模块通过公共的数据环境相互作用时，它们之间即存在公共耦合，公共数据环境包括全局变量、被多个模块共用的内存区域或存储介质上的文件等</p>
+<p>内容耦合：两模块间的业务逻辑处理线索相互交织，或者它们之间交互关系的复杂度高于前面所有的耦合形式，则称他们为内容耦合。例a.一个模块使用另一个模块内部的数据或控制信息；b.一个模块不使用另一模块的接口而直接跳转到其内部；c.两个模块共享一部分代码</p>
+<p><strong>原则：</strong>尽量使用费直接耦合和数据耦合，减少控制耦合，限制外部耦合和公共耦合，杜绝内容耦合</p>
+<p>5.2.3 总体结构设计</p>
+<p>程序结构<br>数据结构</p>
+<p>依据任一种设计方法总能推导出一个软件结构；内聚度和耦合度是判断软件结构好坏的标准</p>
+<p>表示程序结构的工具<br>类树图：（深度控制层数，宽度控制跨数，扇出率表示模块直接控制的其他模块数，扇入率表示模块直接被控制的模块数）<br>Warnior-Orr图<br>Jackson图</p>
+<p>5.2.4 数据结构设计</p>
+<p>数据结构对程序结构和过程复杂性有直接影响在很大程度上决定软件的质量</p>
+<p>5.2.5 软件过程设计</p>
+<p>程序结构考虑软件总体结构中模块间关系，不关心模块内各处理元素和判断元素的顺序，过程设计描述这方面信息</p>
+<p>5.3 过程设计技术和工具</p>
+<p>5.3.1 结构化程序设计</p>
+<p>结构化过程设计（SP）<br>任务：描述算法的细节<br>定义：采用自顶向下逐步求精的设计方法和单入口单出口的控制构件</p>
+<p>5.3.2 图形表示法</p>
+<p>流程图、盒图是描述过程细节的工具</p>
+<p>流程图：直观描述控制流程<br>盒图：把流程图中每个构件用边框圈起来，边界间不出现交叉，则说用所有控制构件都是单入口单出口的</p>
+<p>5.3.3 判定表</p>
+<p>左上：所有条件<br>左下：所有可能的动作</p>
+<p>5.3.4 过程设计语言PDL</p>
+<p>PDL（结构英语或者伪码，是所有正文形式的过程设计工具的统称）</p>
+<p>PDL特点：<br>关键字采用固定语法并支持结构化构件及数据说明等机制<br>处理部分使用自然语言进行描述<br>允许说明简单和复杂的数据结构<br>支持子程序定义和调用</p>
+<p>5.3.5 过程设计工具比较</p>
+<p>a.所产生的过程描述是否易于理解、复审、维护<br>b.能否自然的转换代码，并保证设计与代码保持一致</p>
+<p>设计工具的属性：<br>模块化<br>整体简洁性<br>便于编辑<br>机器可读性<br>可维护性<br>强制结构化<br>自动产生报告<br>逻辑验证<br>可编码能力</p>
+<p>PDL较好的组合了上述特性<br>PDL可嵌在源码中作为设计文档和注释<br>PDL可用一般正文编辑器或文字处理软件编辑<br>PDL自助处理器已经面世，有可能开发出“代码自动产生器”</p>
+<p>流程图和盒图可直观表示控制流程<br>判定表精确描述组合条件与动作之间的关系，适用于表格驱动类软件开发</p>
+<p>5.4 设计规格与评审</p>
+<p>作用范围<br>文档<br>设计模式<br>模块描述<br>文件结构全局data<br>需求交叉访问矩阵<br>测试准备<br>软件设计的约束条件影响<br>特别注释</p>
+<hr>
+<p>2019-05-14 15:50:40 星期二</p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 软件工程</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/01/08/softwareengineer-4/" rel="prev" title="软件工程复习（第四章 需求分析基础）">
+      <i class="fa fa-chevron-left"></i> 软件工程复习（第四章 需求分析基础）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/01/08/softwareengineer-6/" rel="next" title="软件工程复习（第六章 程序设计语言和编码）">
+      软件工程复习（第六章 程序设计语言和编码） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

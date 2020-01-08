@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="任务是把词法分析得到的词法记号流分析输出分析树的某种中间表示">
+<meta name="keywords" content="编译原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编译原理（第三章 语法分析）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;08&#x2F;compilerprinciple-3&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="任务是把词法分析得到的词法记号流分析输出分析树的某种中间表示">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-08T13:03:20.026Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/01/08/compilerprinciple-3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>编译原理（第三章 语法分析） | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/compilerprinciple-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          编译原理（第三章 语法分析）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-01-08 21:02:15 / 修改时间：21:03:20" itemprop="dateCreated datePublished" datetime="2020-01-08T21:02:15+08:00">2020-01-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/01/08/compilerprinciple-3/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/08/compilerprinciple-3/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> 任务是把词法分析得到的词法记号流分析输出分析树的某种中间表示</p>
+<a id="more"></a>
+
+<h4 id="第三章-语法分析"><a href="#第三章-语法分析" class="headerlink" title="第三章 语法分析"></a>第三章 语法分析</h4><p><strong>上下文无关文法</strong></p>
+<p>四元组   G（Vt,Vn,S,P）<br>Vt终结符集合<br>Vn是非终结符集合<br>S是一个非终结符，称为开始符号<br>P是产生式的有限集合</p>
+<p><strong>推导</strong>：将产生式看成是重写规则，把符号串中的非终结符用其产生式右部的串来代替</p>
+<p><strong>分析树</strong>：分析树是推导的图形表示</p>
+<p><strong>二义性</strong>：一些句子存在不止一棵分析树，或者说这些句子存在不止一种最左推导</p>
+<p>文法 E -&gt; E + E | E * E | (E) | -E | id<br>句子：id * id + id</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">推导1：E =》 E * E  =》id * E  =》 id * E + E =》 id * id + id </span><br><span class="line"></span><br><span class="line">推导2：E =》 E + E =》 E * E + E =》 id * E +E =&gt; id *id + id</span><br></pre></td></tr></table></figure>
+
+<p><strong>正规式到上下文无关文法</strong></p>
+<p>机械的把一个NFA变换成一个上下文无关文法，为NFA的每个状态i引入非终结符Ai，其中A0是开始符号，<br>如果状态i有一个a转换到状态j，则Ai—-&gt;aAj;<br>如果是空串 € 转换，则引入Ai—–&gt;Aj；<br>如果i是接收状态，则引入Ai—–&gt; €</p>
+<p><strong>消除二义性</strong></p>
+<p>通过重写文法消除二义性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">stmt -&gt; if expr then stmt</span><br><span class="line">      | if expr then stmt else stmt</span><br><span class="line">	  | other</span><br><span class="line"></span><br><span class="line">重新改写为</span><br><span class="line"></span><br><span class="line">stmt -&gt; matched_stmt</span><br><span class="line">      | unmatched_stmt</span><br><span class="line"></span><br><span class="line">matched_stmt -&gt;if expr then matched_stmt else  matched_stmt</span><br><span class="line">				| other</span><br><span class="line">unmatched_stmt -&gt; if expr then stmt</span><br><span class="line">				| if expr then matched_stmt else unmatched_stmt</span><br></pre></td></tr></table></figure>
+
+<p><strong>消除左递归</strong></p>
+<p>直接左递归    A-&gt;A@     </p>
+<p>左递归产生式 A-&gt; A@ | &amp;    (阿尔法  贝塔？？)</p>
+<p>A -&gt; &amp;A’<br>A’-&gt;@ |A’|€</p>
+<p>非直接左递归<br>S -&gt; Aa | b<br>A-&gt; Sd  | €</p>
+<p><strong>提左因子</strong></p>
+<p>当不清楚应该用哪个选择来替换他时，可以通过重写文A产生式来推迟这种决定</p>
+<p>A -&gt; @&amp;1 | @&amp;2</p>
+<p>A-&gt;@A’<br>A’-&gt;&amp;1 | &amp;2</p>
+<p><strong>LL1文法</strong></p>
+<p>FIRST(A)集从左边找到非终结符A,再去看右边</p>
+<ul>
+<li>产生式以终结符开头，直接加入FIRST集合</li>
+<li>以非终结符C开头，则把非终结符的FIRST集加入A的FIRST集</li>
+<li>如果C的FIRST集有空，则把C后面的D的FIRST集加入A的FIRST集</li>
+</ul>
+<p>FOLLOW(A)集从产生式找到非终结符A，再去看A的后面</p>
+<ul>
+<li>A是开始文法符号，则将‘$’加入FOLLOW(A)</li>
+<li>A的后面是终结符，则直接加入FOLLOW(A)</li>
+<li>A的后面是非终结符，则把这个非终结符的FIRST集去空，加入FOLLOW(A)</li>
+<li>A处在末尾，则“-&gt;”左边符号的FOLLOW集称为A的FOLLOW</li>
+</ul>
+<p>满足这俩个条件的<strong>叫LL(1)文法</strong><br>对任何两个产生式 A -&gt; @ | &amp;<br>FIRST(@) 交 FIRST (&amp;) =空<br>如果&amp; 能零步或多步推导出 € 则 FIRST(@) 交 FOLLOW(A) = 空</p>
+<p><strong>构造LL(1)分析表</strong></p>
+<p>对文法的每个产生式A—&gt;@,执行1和2<br>1.对FIRST(@)的每个终结符a，把A-&gt;@加入M[A,@]<br>2.如果  € 在FIRST(@)中，对FOLLOW(A)的每个终结符b(包括$)，把A-&gt;@加入M[A,b]</p>
+<p><strong>SLR、LR、LALR</strong></p>
+<p>圈圈关系：</p>
+<p><strong>构造SLR分析表</strong></p>
+<p>构造文法G’的LR(0)项目集规范族 C={I0,I1…}<br>状态i从Ii构造，Action函数在状态i的值这么确定<br>    (a)如果【A-&gt;@.a&amp;】在Ii中，并且goto(Ii,a) =  Ij,那么置action[i,a]为sj，其含义是把a和状态j移入栈，此时a必须是终结符<br>    (b)如果【A-&gt;@.】在Ii中，那么对FOLLOW(A)中的所有a，置action[i,a]为rj，j是产生式A-&gt;@的编号，<br>    (c)如果【S’-&gt;S.】在Ii中，那么置action[i,$]为接受acc</p>
+<p>goto函数这么确定</p>
+<p>对所有的非终结符A，如果goto(Ii,A)=Ij,那么goto[i,A]=j</p>
+<p><strong>构造LR分析表</strong></p>
+<p>加入了搜索符</p>
+<p>构造文法G’的LR(0)项目集规范族 C={I0,I1…}<br>状态i从Ii构造，Action函数在状态i的值这么确定<br>    (a)如果【A-&gt;@.a&amp;,b】在Ii中，并且goto(Ii,a) =  Ij,那么置action[i,a]为sj，其含义是把a和状态j移入栈，此时a必须是终结符<br>    (b)如果【A-&gt;@.,a】在Ii中，那么对FOLLOW(A)中的所有a，置action[i,a]为rj，j是产生式A-&gt;@的编号，<br>    (c)如果【S’-&gt;S.,$】在Ii中，那么置action[i,$]为接受acc</p>
+<p>goto函数这么确定</p>
+<p>对所有的非终结符A，如果goto(Ii,A)=Ij,那么goto[i,A]=j</p>
+<p><strong>构造LALR分析表</strong></p>
+<p>能力在SLR和LR之间，LR状态太多，合并同心的项目集</p>
+<p><strong>多说无益，刷题</strong></p>
+<p>3.1<br>    S-&gt;(L) |a<br>    L-&gt; L,S | S<br>建立句子的分析树<br>为两个句子构造最左推导和最右推导<br>这个文法产生的语言是什么？(产生由a和括号匹配产生的一系列句子)</p>
+<p>3.2<br>S-&gt; aSbS | bSaS | €</p>
+<p>构造两个不同的最左推导<br>为abab构建最右推导<br>为abab构建对应的分析树<br>这个文法产生的语言是什么?(产生a和b个数相等的串)</p>
+<p>3.3<br>S -&gt; S and S | S or S | not S | true | false | (S)</p>
+<p>为他写一个等价的非二义文法<br>【E-&gt; E and T | T<br>  T-&gt; T or F | F<br>  F-&gt; not F | p | q | (E)<br>】[注意最后是(E)]</p>
+<p>3.10 构造LL1分析表<br>D-&gt; TL<br>T-&gt; int | real<br>L-&gt;id R<br>R-&gt;,id R | €</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>FIRST集</th>
+<th>FOLLOW集合</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>D</td>
+<td>int,real</td>
+<td>$</td>
+</tr>
+<tr>
+<td>T</td>
+<td>int,real</td>
+<td>id</td>
+</tr>
+<tr>
+<td>L</td>
+<td>id</td>
+<td>$</td>
+</tr>
+<tr>
+<td>R</td>
+<td>,,  €</td>
+<td>$</td>
+</tr>
+</tbody></table>
+<p>填LL1分析表</p>
+<p>3.11 类似</p>
+<p>S-&gt;aBS | bAS | €<br>A-&gt;bAA | a<br>B-&gt; aBB | b</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>FIRST</th>
+<th>FOLLOW</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S</td>
+<td>a,b, €</td>
+<td>$</td>
+</tr>
+<tr>
+<td>A</td>
+<td>a,b</td>
+<td>a,b,$</td>
+</tr>
+<tr>
+<td>B</td>
+<td>a,b</td>
+<td>a,b,$</td>
+</tr>
+</tbody></table>
+<p>3.12，证明不是LL1文法，找两个|的，求FIRST交集不为空则不是LL1</p>
+<p>3.17 慢慢做 构造项目同心集，，，<br>S-&gt;(L) |a<br>L-&gt;L,S |S</p>
+<p>3.19 SLR分析表，慢慢做(填表的时候也需要FIRST,FOLLOW)<br>E-&gt;E+T |T<br>T-&gt;TF | F<br>F-&gt;F* |a | b</p>
+<p>3.20 证明不是LL1，证明是SLR，<br>S-&gt;SA | A<br>A-&gt;a</p>
+<p>不是LL1，常规思路，或者含有左递归，不是LL1</p>
+<p>是SLR，构造SLR分析表（分析表不大的情况下）；分析语法产生的句子，是一连串a，对第一个输入a，规约为A，再规约为S;对之后的输入a，规约为A，SA再规约为S，没有冲突是SLR</p>
+<p>3.21 是LL1，但不是SLR</p>
+<p>S-&gt;AaAb | BbBa<br>A-&gt; €<br>B-&gt; €</p>
+<p>是LL1，对|的求first，求交集不为空则是LL1；第二条基本用不上</p>
+<p>不是SLR，产生句子ab，ba，在面临第一个输入符号进行空规约，但是FOLLOW(A)和FOLLOW(B)都是{a,b}，所以不知道规约成A还是B，规约规约冲突</p>
+<p>3.22 是LALR(1),但不是SLR(1)</p>
+<p>S-&gt;Aa |bAc |dc |bda<br>A-&gt;d</p>
+<p>不是SLR，对FOLLOW(A)={a，c}，面临c时，不知道移进还是dc规约，移进–规约冲突</p>
+<p>是LALR，构造LR分析表就没有上述冲突，只有在面临a时，才进行d到A的规约，所以该文法是LR文法，没有同心的项目集，所以该文法也是LALR文法</p>
+<p>3.24 是LR(1),但不是LALR(1)</p>
+<p>S-&gt;Aa | bAc |Bc |bBa<br>A-&gt;d<br>B-&gt;d</p>
+<p>是LR1:该文法只产生da，bdc，dc，bda句子，所d在什么情况下规约成A，d在什么情况下规约成B，可以分清，是LR1文法</p>
+<p>在LR1项目集中，对活前缀d有效的项目集是[A-&gt;d.,a][B-&gt;d.,c]<br>对活前缀bd有效的项目集是[A-&gt;d.,c][B-&gt;d.,a]</p>
+<p>合并之后[A-&gt;d.,a|c][B-&gt;d.,a|c]出现规约规约冲突，不是LALR1</p>
+<p>好像都有可能手撕</p>
+<p>那就再写一遍，当是押题</p>
+<hr>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" rel="tag"><i class="fa fa-tag"></i> 编译原理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/01/08/compilerprinciple-2/" rel="prev" title="编译原理（第二章 词法分析）">
+      <i class="fa fa-chevron-left"></i> 编译原理（第二章 词法分析）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/01/08/compilerprinciple-4/" rel="next" title="编译原理（第四章 语法制导的翻译）">
+      编译原理（第四章 语法制导的翻译） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#第三章-语法分析"><span class="nav-number">1.</span> <span class="nav-text">第三章 语法分析</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

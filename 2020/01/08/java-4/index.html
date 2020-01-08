@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="基本网页编程技术">
+<meta name="keywords" content="JavaWeb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaWeb（html+css+js）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;08&#x2F;java-4&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="基本网页编程技术">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-08T08:27:05.794Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/01/08/java-4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>JavaWeb（html+css+js） | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/java-4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaWeb（html+css+js）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-01-08 16:25:59 / 修改时间：16:27:05" itemprop="dateCreated datePublished" datetime="2020-01-08T16:25:59+08:00">2020-01-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/01/08/java-4/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/08/java-4/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> 基本网页编程技术</p>
+<a id="more"></a>
+
+<p><strong>JavaWeb程序的开发与部署</strong></p>
+<p>建立JavaWeb项目，编写代码<br>部署（将myeclipse下的项目文件夹移动到服务器TomCat的webapps目录下）<br>启动TomCat服务器<br>若需要部署到其他服务器还要生成并发布war文件</p>
+<p><strong>Web应用的目录结构</strong></p>
+<p>WEB-INF目录</p>
+<p>WEB-INF目录是一个专用区域，该目录下的文件只供容器使用，Web容器要求在应用程序中必须有WEB-INF目录。</p>
+<p>WEB-INF中包含：<br>WEB-INF/web.xml文件：配置信息文件。<br>一个classes目录：WEB-INF/classes目录，编译后的Java类文件。<br>一个lib目录：WEB-INF/lib目录，Java类库文件（*.jar）。</p>
+<p>src：java源文件。</p>
+<p>公开目录（WebRoot）：公开目录存放所有可被的访问的资源： .html、.jsp、.gif、.jpg、.css、.js等。</p>
+<p><strong>Tomcat目录结构</strong></p>
+<p>/bin 启动和关闭tomcat的命令文件</p>
+<p>/lib web应用及tomcat都可以访问的Jar文件</p>
+<p>/conf 配置文件</p>
+<p>/logs 日志文件</p>
+<p>/temp 临时文件</p>
+<p>/webapps web应用都放在该目录下</p>
+<p><strong>/work</strong> Tomcat将JSP生成的Servlet源文件和字节码文件自动存放在这个目录下</p>
+<p>导出，file-》export-》…</p>
+<p>导入file-》import-》General-》existing projects-》copy into workspace</p>
+<p>可以将打包后的web工程部署到另外一台计算机的Tomcat服务器下，放在Tomcat下的webapps目录下，在浏览器地址栏访问war工程，服务器会自动解压</p>
+<p><strong>HTML、CSS、JS重点</strong></p>
+<p><strong>HTML标签</strong></p>
+<p>单标签   <code>&lt;br/&gt;</code></p>
+<p>双标签 <code>&lt;h1&gt;&lt;/h1&gt;</code></p>
+<p>结构标签</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;&lt;/html&gt;</span><br><span class="line">&lt;title&gt;&lt;/title&gt;</span><br><span class="line">&lt;head&gt;&lt;/head&gt;</span><br><span class="line">&lt;body&gt;&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+
+<p>注释标签 <code>&lt;!--  注释内容 --&gt;</code></p>
+<p>列表标签   </p>
+<pre><code>有序列表 &lt;ol&gt; 
+无序列表 &lt;ul&gt;  </code></pre><p>属性type指定列表项前的项目符号的样式，disc：实心圆点（默认），circle（空心圆点），square（实心方块）  若要不显示可设置type=none</p>
+<p>超链接    <code>&lt;a&gt;</code>  </p>
+<p>链接资源：本web应用使用相对路径跳转，其他web应用带协议跳转</p>
+<p>资源定位：在网页顶部先定义一个位置：<code>&lt;a  name =“top”&gt;&lt;/a&gt;</code></p>
+<p>在网页底部回到这个位置   <code>&lt;a  href=“#top”&gt;回到顶部&lt;/a&gt;</code></p>
+<p>target：设置链接打开方式，默认在当前页打开。<br>                     _blank:在一个新窗口打开<br>                     _self:在当前页打开           </p>
+<p>图片标记 （重点）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;url&quot; height=&quot;&quot; width =&quot;&quot;  alt=&quot;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>其中：<br>        属性src：指定图像源的URL路径<br>               height：图片的高度；<br>               width：图片的宽度；<br>               alt：替代文本（鼠标移动到图片上显示的内容，当图片出错或路径不对，会直接显示一个×和alt中的内容</p>
+<p>表格标签：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;table&gt;     </span><br><span class="line">&lt;th&gt;  表头单元格，包含表头信息，（会自动加粗居中）</span><br><span class="line">&lt;tr&gt;  标准单元格，包含数据</span><br><span class="line">&lt;td&gt;</span><br></pre></td></tr></table></figure>
+
+<p>表单标签</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;form name=&quot;表单名&quot; method=&quot;提交方法&quot; action=&quot;处理程序&quot;&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+
+<p>input标记</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;input&gt;表示输入域，是个单标记，必须嵌套在表单中使用</span><br><span class="line"></span><br><span class="line">&lt;input name=&quot;输入域名称&quot; type=&quot;输入域类型&quot;&gt;</span><br><span class="line"></span><br><span class="line">type主要的name属性和type属性必选</span><br></pre></td></tr></table></figure>
+
+<p>下拉列表框</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;select name=&quot;&quot; size=&quot;&quot; multiple&gt;</span><br><span class="line">	&lt;option&gt;&lt;/option&gt;</span><br><span class="line">	&lt;option&gt;&lt;/option&gt;</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure>
+
+<p>多行文本框标签</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">textarea name=&quot;&quot; rows=&quot;&quot; </span><br><span class="line">				cols=&quot;&quot;</span><br><span class="line">				wrap=&quot;off | virtual |physical&quot;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">/textarea</span><br><span class="line">    textarea  wrap=</span><br><span class="line">    	wrap设置是否自动换行（</span><br><span class="line">    	off：不自动换行； </span><br><span class="line">    	virtual： 将实现文本区内的自动换行，以改善对用户的显示，但在传输给服务器时，文本只在用户按下 Enter 键的地方进行换行，其他地方没有换行的效果；</span><br><span class="line">    	physical： 将实现文本区内的自动换行，并以这种形式传送给服务器，所见即所得。）</span><br></pre></td></tr></table></figure>
+
+
+<p>定时刷新</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">meta：设置页面的一些相关内容</span><br><span class="line">1s刷新一次：&lt;meta http-equiv=“refresh” content=“1” /&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>CSS样式</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">行内式 &lt;p style=&quot;&quot;&gt;</span><br><span class="line">内嵌式 &lt;style type = &quot;text/css&quot;&gt;   &lt;/</span><br><span class="line">链接式	&lt;link href=&quot;&quot; type=&quot;&quot; rel=&quot;stylesheet&quot;&gt;</span><br><span class="line">导入式	&lt;style type=&quot;&quot;&gt; @import url(*.css文件路径);</span><br></pre></td></tr></table></figure>
+
+<p>优先级（就近）</p>
+<p>标记选择器 标签名{}<br>类别选择器 .类名{}<br>ID选择器   #ID名{}</p>
+<p><strong>JavaScript技术</strong></p>
+<p><strong>JS与HTML结合的两种方式</strong></p>
+<p>第一种：使用script标签在html文件中写js代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>第二种：使用script标签引入js文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;js文件&quot;&gt;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>数据类型：number   string   boolean   null</p>
+<p>字符串与数字相加，是字符串链接，如果相减，字符串直接转换成数字再相减</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">	var st1=&quot;12&quot;;</span><br><span class="line">	var st2=&quot;34&quot;;</span><br><span class="line">	alert(st1+st2);   //1234</span><br><span class="line">	alert(st1-st2);	//-22</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>boolean类型可以进行运算，false—0，true—1，其他类型转为boolean型规则：非零非空—true，0或空—false</p>
+<p>== 和===的区别，==是判断值是否相等，===不但判断值还判断数据类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">var a=5;</span><br><span class="line">if(a==5)&#123; //结果输出a=5</span><br><span class="line">	alert(&quot;a=5&quot;);</span><br><span class="line">&#125;else&#123;</span><br><span class="line">	alert(&quot;other&quot;);</span><br><span class="line">&#125;</span><br><span class="line">var b=&quot;5&apos;;</span><br><span class="line">if(b==5)&#123; //结果输出b=5</span><br><span class="line">	alert(&quot;b=5&quot;);</span><br><span class="line">&#125;else&#123;</span><br><span class="line">	alert(&quot;other&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var c=&quot;5&quot;;</span><br><span class="line">if(c==5)&#123; //结果输出other</span><br><span class="line">	alert(&quot;c=5&quot;);</span><br><span class="line">&#125;else&#123;</span><br><span class="line">	alert(&quot;other&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>JS函数定义和调用</p>
+<p>JS形参前不需要写数据类型或var</p>
+<p>（匿名函数）：<br>var  变量名 = function(参数列表) {<br>    函数体；<br>    返回值根据需要可有可无；<br>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var add=function(a,b)&#123;  //函数声明</span><br><span class="line">	var c=a+b;</span><br><span class="line">	alert(c);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">add(2,3);  //函数调用</span><br></pre></td></tr></table></figure>
+<p>JS全局变量和局部变量</p>
+<p>全局变量：在script标签里定义的变量是全局变量，这个变量可以在整个页面的js部分都可以使用，即使相同页面的不同script标签，（但是注意先定义后使用）</p>
+<p>局部变量：方法内部定义的变量是局部变量，只能在方法内部使用</p>
+<p>script标签的位置</p>
+<p>1.一般放在head标签中<br>2.如果没有任何参数的影响，可以放在html页面的任何位置</p>
+<p><strong>JS事件</strong></p>
+<p>onBlur  元素或窗口本身失去焦点时触发<br>onChange  当表单元素获取焦点，且内容值发生改变时触发<br>onClick   单击鼠标左键时触发<br>onFocus   任何元素或窗口本身获得焦点时触发<br>onKeydown  键盘键被按下时触发，如果一直按着某键，则会不断触发</p>
+<p>内置对象 String，Date，Array，Math<br>浏览器的文档对象：window ，navigator， screen，history，location，document</p>
+<p>window对象</p>
+<p>alert(message)   弹出警告对话框<br>confirm(meaasge)  显示一个确认对话框，点击“确认”返回true，否则返回false</p>
+<p>location对象</p>
+<p>网页之间跳转<br>window.location.href=””</p>
+<p>history对象</p>
+<p>go(index)  从浏览历史加载url，index为负数，表示当前地址之前的浏览记录，index正数表示当前地址之后的浏览记录<br>forward()   加载下一个，相当于history.go(1)<br>back()       加载上一个，相当于history.go(-1)</p>
+<p>document对象</p>
+<p>document每个HTML文档被加载后都会在内存中初始化一个document对象，该对象存放整个网页HTML内容<br>getElementById：通过id得到元素（标签）<br><em>getElementsByName</em>：通过标签name属性获得标签     ，返回带有指定名称的对象的集合。<br><em>getElementsByTagName</em>：通过标签名得到元素，返回带有指定标签名的对象的集合，返回元素的顺序是它们在文档中的顺序。</p>
+<hr>
+<p>2019-06-23 10:01:20 星期日</p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaWeb/" rel="tag"><i class="fa fa-tag"></i> JavaWeb</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/01/08/java-3/" rel="prev" title="Java基础（集合类、异常处理）">
+      <i class="fa fa-chevron-left"></i> Java基础（集合类、异常处理）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/01/08/java-5/" rel="next" title="JavaWeb（jsp）">
+      JavaWeb（jsp） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="用过Qt，十分友好。与MFC不同，QT是跨平台的的开发类库，还支持移动和嵌入式操作系统">
+<meta name="keywords" content="Qt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QT---信号槽">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;08&#x2F;qt-1&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="用过Qt，十分友好。与MFC不同，QT是跨平台的的开发类库，还支持移动和嵌入式操作系统">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-08T08:22:06.209Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/01/08/qt-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>QT---信号槽 | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/qt-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          QT---信号槽
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-01-08 11:46:13 / 修改时间：16:22:06" itemprop="dateCreated datePublished" datetime="2020-01-08T11:46:13+08:00">2020-01-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/01/08/qt-1/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/08/qt-1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>用过Qt，十分友好。与MFC不同，QT是跨平台的的开发类库，还支持移动和嵌入式操作系统</p>
+<a id="more"></a>
+
+<h3 id="工程"><a href="#工程" class="headerlink" title="工程"></a>工程</h3><p>新建项目</p>
+<ul>
+<li><p>Qt Widgets Application  支持桌面级平台的图形用户界面</p>
+</li>
+<li><p>Qt Console Application  控制台应用程序</p>
+</li>
+<li><p>Qt Quick Application 创建可部署的QT Quick2应用程序</p>
+</li>
+<li><p>Qt Quick Controls Application 创建基于Qt Quick Controls 2 的 可部署的QT Quick2应用程序</p>
+</li>
+<li><p>Qt Canvas 3D Application 创建QT Canvas 3D QML 项目</p>
+</li>
+</ul>
+<p>选择创建界面的基类</p>
+<ul>
+<li><p>QMainWindow 类是主窗口类，主窗口具有主菜单栏，工具栏和状态栏</p>
+</li>
+<li><p>QWidget 是所有具有可视界面类的基类</p>
+</li>
+<li><p>QDialog 是对话框类，可建立一个基于对话框的界面</p>
+</li>
+</ul>
+<h3 id="文件组成"><a href="#文件组成" class="headerlink" title="文件组成"></a>文件组成</h3><p>工程名.pro文件   项目管理文件</p>
+<p>Headers文件夹    头文件</p>
+<pre><code>dialog.h文件</code></pre><p>Sources文件夹   源文件</p>
+<pre><code>dislog.cpp
+main.cpp</code></pre><p>Forms文件夹  界面文件</p>
+<pre><code>dialog.ui</code></pre><h3 id="界面UI设计"><a href="#界面UI设计" class="headerlink" title="界面UI设计"></a>界面UI设计</h3><ul>
+<li><p>组件面板</p>
+</li>
+<li><p>待设计窗体</p>
+</li>
+<li><p>Signals 和 Slots 编辑器与Action编辑器是位于待设计窗体下的两个编辑</p>
+</li>
+<li><p>对象浏览器    Object Inspector</p>
+</li>
+<li><p>属性编辑器  Property Editor</p>
+</li>
+</ul>
+<h3 id="信号与槽机制"><a href="#信号与槽机制" class="headerlink" title="信号与槽机制"></a>信号与槽机制</h3><p>信号与槽（Signal and Slot）</p>
+<p>信号就是在特定情况下被发射的事件</p>
+<p>槽就是对信号响应的函数</p>
+<p>信号与槽通过QObject::connect()函数实现的，connect是一个static函数</p>
+<p>connect(发出信号的对象，发出的信号，接收信号的对象，接收信号后调用的函数)</p>
+<p>（1）一个信号可以与另一个信号相连，代码如下：</p>
+<p>connect(Object1,SIGNAL(signal1),Object2,SIGNAL(signal1));</p>
+<p>表示Object1的信号1发送可以触发Object2的信号1发送。</p>
+<p>（2）同一个信号可以与多个槽相连，代码如下：</p>
+<p>connect(Object1,SIGNAL(signal2),Object2,SIGNAL(slot2));<br>connect(Object1,SIGNAL(signal2),Object3,SIGNAL(slot1));</p>
+<p>(槽函数按照建立连接时的顺序依次执行)</p>
+<p>（3）同一个槽可以响应多个信号，代码如下：</p>
+<p>connect(Object1,SIGNAL(signal2),Object2,SIGNAL(slot2));<br>connect(Object3,SIGNAL(signal2),Object2,SIGNAL(slot2));</p>
+<p>但是，常用的连接方式为：</p>
+<p>connect(Object1,SIGNAL(signal),Object2,SLOT(slot));</p>
+<p>其中，signal为对象Object1的信号，slot为对象Object2的槽。</p>
+<ul>
+<li>严格情况下，信号与槽的参数个数和类型需要一致，至少信号的参数不能少于槽的参数，如果不匹配，会出现编译错误和运行错误</li>
+</ul>
+<h3 id="信号槽关联方式"><a href="#信号槽关联方式" class="headerlink" title="信号槽关联方式"></a>信号槽关联方式</h3><ul>
+<li>Qt:: DirectConnection (立即调用） </li>
+<li>Qt::QueuedConnection (异步调用） </li>
+<li>Qt::BlockingQueuedConnection (同步调用） </li>
+<li>Qt: :AutoConnection (默认连接） </li>
+<li>Qt:: UniqueConnection (单一连接） </li>
+</ul>
+<h3 id="信号与槽机制的优点"><a href="#信号与槽机制的优点" class="headerlink" title="信号与槽机制的优点"></a>信号与槽机制的优点</h3><p>类型安全：信号与槽的参数个数和类型要一致，但是槽的参数个数可以少于信号的参数个数，但缺少的参数必须是信号的参数的最后一个或者最后几个参数</p>
+<p>松散耦合：激发信号的QT对象无须知道哪个对象的哪个函数接收信号，它只需要在适当的时间发送适当的信号。对象的槽也无须知道哪些信号关联了自己，互相独立</p>
+<h3 id="信号与槽的效率"><a href="#信号与槽的效率" class="headerlink" title="信号与槽的效率"></a>信号与槽的效率</h3><p>信号与槽机制增强了对象间通信的灵活性，然而也损失了一些性能，运行速度慢了</p>
+<ul>
+<li><p>需要定位接收信号的对象</p>
+</li>
+<li><p>安全的遍历所有关联(一个信号关联多个槽)</p>
+</li>
+<li><p>编组 / 解组 传递的参数</p>
+</li>
+<li><p>多线程的时候，信号可能需要排队等待</p>
+</li>
+</ul>
+<hr>
+<p>2019-07-14 23:12:49 星期日</p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Qt/" rel="tag"><i class="fa fa-tag"></i> Qt</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/01/08/interview-2/" rel="prev" title="实习面试、秋招面试">
+      <i class="fa fa-chevron-left"></i> 实习面试、秋招面试
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/01/08/java-1/" rel="next" title="Java基础（数组、字符串）">
+      Java基础（数组、字符串） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#工程"><span class="nav-number">1.</span> <span class="nav-text">工程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件组成"><span class="nav-number">2.</span> <span class="nav-text">文件组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#界面UI设计"><span class="nav-number">3.</span> <span class="nav-text">界面UI设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号与槽机制"><span class="nav-number">4.</span> <span class="nav-text">信号与槽机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号槽关联方式"><span class="nav-number">5.</span> <span class="nav-text">信号槽关联方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号与槽机制的优点"><span class="nav-number">6.</span> <span class="nav-text">信号与槽机制的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号与槽的效率"><span class="nav-number">7.</span> <span class="nav-text">信号与槽的效率</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
