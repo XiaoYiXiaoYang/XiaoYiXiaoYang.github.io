@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="从对称加密、非对称加密、数字证书、数字签名到SSL单双向握手">
+<meta name="keywords" content="信息安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSL详解">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;08&#x2F;25&#x2F;informationsecurity-2&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="从对称加密、非对称加密、数字证书、数字签名到SSL单双向握手">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;08&#x2F;25&#x2F;informationsecurity-2&#x2F;one-way.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;08&#x2F;25&#x2F;informationsecurity-2&#x2F;two-way.png">
+<meta property="og:updated_time" content="2020-08-26T12:43:49.687Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;08&#x2F;25&#x2F;informationsecurity-2&#x2F;one-way.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/08/25/informationsecurity-2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>SSL详解 | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/25/informationsecurity-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SSL详解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-25 20:17:59" itemprop="dateCreated datePublished" datetime="2020-08-25T20:17:59+08:00">2020-08-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-26 20:43:49" itemprop="dateModified" datetime="2020-08-26T20:43:49+08:00">2020-08-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/08/25/informationsecurity-2/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/25/informationsecurity-2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>从对称加密、非对称加密、数字证书、数字签名到SSL单双向握手</p>
+<a id="more"></a>
+
+
+
+<h2 id="对称非对称加密"><a href="#对称非对称加密" class="headerlink" title="对称非对称加密"></a>对称非对称加密</h2><p><strong>对称加密</strong>：加密和解密使用同一个秘钥</p>
+<p><strong>对称加密应用</strong>：客户端 服务器使用同一个秘钥加密解密数据</p>
+<p><strong>问题</strong>：秘钥传输是不安全的，会泄露秘钥</p>
+<p><strong>非对称加密</strong>：加密和解密使用的秘钥不同，分为公钥和私钥</p>
+<p>使用公钥进行加密，只有对应的私钥才能解密</p>
+<p>借鉴：<a href="https://blog.csdn.net/jijianshuai/article/details/80582187" target="_blank" rel="noopener">https://blog.csdn.net/jijianshuai/article/details/80582187</a>  (小白也能看得懂，没错，我懂了)</p>
+<p><strong>非对称加密应用</strong>：</p>
+<p>1.服务器生成公钥、私钥</p>
+<p>2.服务器将公钥公开，客户端获得公钥，使用公钥加密数据，传输给服务器</p>
+<p>3.服务器使用私钥解密，查看数据</p>
+<p><strong>问题</strong>：</p>
+<p>1.如果服务器向客户端传输数据，服务器使用私钥加密，客户端使用公钥解密，其他客户端也知晓公钥，不安全</p>
+<p>2.</p>
+<p><strong>两对秘钥非对称加密应用</strong>：</p>
+<p>1.服务器有自己的公钥A1 私钥A2，客户端有自己的公钥B1，私钥B2</p>
+<p>2.服务器客户端互相传递公钥A1，B1</p>
+<p>3.客户端服务器传输数据都使用公钥加密，私钥解密</p>
+<p><strong>问题</strong>：</p>
+<p>1.</p>
+<p><strong>非对称加密+对称加密</strong></p>
+<p>1.客户端有用于非对称加密的公钥A1、私钥A2</p>
+<p>2.客户端向服务器请求，服务器把公钥A1传输给客户端</p>
+<p>3.客户端随机生成一个用于对称加密的秘钥X，用公钥A1加密后传给服务器</p>
+<p>4.服务器使用私钥A2解密，拿到对称加密秘钥X</p>
+<p>5.双方使用对称加密秘钥X传数据</p>
+<p><strong>问题</strong>：</p>
+<p>1.在上面的第二步，中间人可能劫持服务器传给客户端的公钥A1，换成自己伪造的公钥B1</p>
+<p>2.客户端傻傻的拿到公钥B1，加密了秘钥X，传给服务器</p>
+<p>3.中间人继续劫持后，使用私钥B2解密，再使用公钥A1加密后传给服务器</p>
+<p>4.服务器拿到后使用私钥AA2解密</p>
+<p>中间人就这样拿到了他们的对称加密秘钥X</p>
+<p>为了避免这个问题需要解决：<strong>客户端可以验证收到的公钥一定是服务器的公钥，而不是经过伪造</strong></p>
+<h2 id="证书"><a href="#证书" class="headerlink" title="证书"></a>证书</h2><p>1.服务器向CA申请一份证书，证书里有服务器CN信息，公钥A1信息等</p>
+<p>2.服务器将证书传给客户端</p>
+<p>3.客户端取证书中的公钥</p>
+<p><strong>同样的问题</strong>：中间人可能劫持证书，伪造一个证书传给客户端</p>
+<h3 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h3><p>数字签名的制作</p>
+<p>1.CA拥有非对称加密的公钥M和私钥N</p>
+<p>2.CA对证书的明文信息进行hash</p>
+<p>3.对hash后的值用私钥N加密，得到<strong>数字签名</strong></p>
+<p>4.服务器把<strong>数字签名</strong>加在明文后，一起发送给客户端</p>
+<p>客户端拿到证书验证过程：</p>
+<p>1.拿到证书，得到明文T1，数字签名S1</p>
+<p>2.用CA机构的公钥M对S1解密得到S2，成功则证明确实来自CA，得到hash值</p>
+<p>3.用证书里说明的hash算法对明文T1进行hash得到T2</p>
+<p>4.比较S2和T2是否相等，就能知道是否被篡改</p>
+<p><strong>问题</strong>：</p>
+<p>1.中间人篡改证书原文</p>
+<p>客户端验证私钥解密数字签名后的hash值和对明文hash的值不同。即S2 和 T2不同</p>
+<p>2.中间人直接换掉证书</p>
+<p>另一个客户端B也拿到了CA机构认证的证书，对证书掉包，则需要通过证书明文信息来判断</p>
+<h2 id="数字证书"><a href="#数字证书" class="headerlink" title="数字证书"></a>数字证书</h2><p>1.服务器找CA申请证书，CA使用自己的私钥对服务器公钥和服务器CN等信息加密，生成<strong>数字证书</strong></p>
+<p>2.服务器给客户端传输信息加上数字签名、数字证书</p>
+<p>3.客户端收到后用CA的公钥解密数字证书，拿到服务器公钥，然后验证数字签名</p>
+<h2 id="SSL握手"><a href="#SSL握手" class="headerlink" title="SSL握手"></a>SSL握手</h2><p><strong>单向认证</strong></p>
+<p><img src="one-way.png" alt="单向认证握手过程图解"></p>
+<p><strong>双向认证</strong></p>
+<p><img src="two-way.png" alt="双向认证握手过程图解"></p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/" rel="tag"><i class="fa fa-tag"></i> 信息安全</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/24/kafka-1/" rel="prev" title="Kafka介绍">
+      <i class="fa fa-chevron-left"></i> Kafka介绍
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#对称非对称加密"><span class="nav-number">1.</span> <span class="nav-text">对称非对称加密</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#证书"><span class="nav-number">2.</span> <span class="nav-text">证书</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数字签名"><span class="nav-number">2.1.</span> <span class="nav-text">数字签名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数字证书"><span class="nav-number">3.</span> <span class="nav-text">数字证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSL握手"><span class="nav-number">4.</span> <span class="nav-text">SSL握手</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">146</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
