@@ -54,8 +54,10 @@
 <meta property="og:site_name" content="萧逸小杨的个人博客">
 <meta property="og:description" content="一个有名的多分区多副本且基于ZooKeeper协调的分布式消息系统，高吞吐、可持久化、可水平扩展、支持流数据处理等多种特性被使用。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-08-24T15:36:43.922Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;08&#x2F;24&#x2F;kafka-1&#x2F;producer-structure.jpg">
+<meta property="og:updated_time" content="2020-09-09T14:51:18.559Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;08&#x2F;24&#x2F;kafka-1&#x2F;producer-structure.jpg">
 
 <link rel="canonical" href="http://yoursite.com/2020/08/24/kafka-1/">
 
@@ -208,10 +210,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-08-24 22:33:03 / 修改时间：23:36:43" itemprop="dateCreated datePublished" datetime="2020-08-24T22:33:03+08:00">2020-08-24</time>
+              <time title="创建时间：2020-08-24 22:33:03" itemprop="dateCreated datePublished" datetime="2020-08-24T22:33:03+08:00">2020-08-24</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-09 22:51:18" itemprop="dateModified" datetime="2020-09-09T22:51:18+08:00">2020-09-09</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -262,7 +270,7 @@
 <li>Consumer：消费者，也就是接收消息的一番。消费者连接到Kafka上并接收消息，进而进行相应的业务逻辑处理</li>
 <li>Broker：服务代理结点：对于Kafka而言，Broker可以简单的看做一个独立的Kafka服务结点或Kafka服务实例。</li>
 <li>主题：Kafka中的消息以主题为单位进行归类，生产者负责将消息发送到特定的主题，而消费者负责订阅主题并进行消费</li>
-<li>分区：一个分区只属于单个主题，同一主题下不同分区包含的消息四是不同的，分区在存储层面可以看做一个可追加的日志文件，消息在被追加到分区日志文件的时候都会分配一个特定的偏移量。</li>
+<li>分区：一个分区只属于单个主题，同一主题下不同分区包含的消息是不同的，分区在存储层面可以看做一个可追加的日志文件，消息在被追加到分区日志文件的时候都会分配一个特定的偏移量。</li>
 <li>Offset偏移量：offset是消息在分区中的唯一标识，Kafka通过它来保证消息在分区内的顺序性，不过offset并不跨越分区，Kafka保证分区有序而不是主题有序</li>
 <li>副本因子：副本个数</li>
 <li>AR：分区内所有副本</li>
@@ -287,6 +295,63 @@
 
 
 <p>消息对象ProducerRecord 并不是单纯意义上的消息，包含了多个属性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProducerRecord</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> String topic;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Integer paitition;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Headers headers;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> K key;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> V value;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Long timestamp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><p>KafkaProducer是线程安全的，可以在多个线程中共享单个KafkaProducer实例，也可以将KafkaProducer实例进行池化来供其他线程调用</p>
+</li>
+<li><p>构建ProducerRecord 对象，topic属性和value属性是必填，其他选填</p>
+</li>
+</ul>
+<p><strong>发送消息</strong></p>
+<p>发后即忘：send方法不指定Callback，性能最高，可靠性最差</p>
+<p>同步：send方法利用返回的Future对象，阻塞等待Kafka响应</p>
+<p>异步：send方法，指定Callback回调函数</p>
+<p>可重试异常和不可重试异常</p>
+<p>对于可重试异常，如果配置了retries参数，那么只要在规定的重试次数内自行恢复，就不会抛出异常</p>
+<p>对于不可重试的异常，则直接抛出异常，不进行重试</p>
+<p>对于同一个分区而言，如果消息record1先与record2发送，那么KafkaProducer就可以保证对应的callback1先与callback2调用</p>
+<p><strong>序列化器</strong></p>
+<p>生产者需要使用序列化器将对象转换成字节数组，才能通过网络发送给Kafka，在对端消费者使用反序列化器把Kafka转换成相应的对象</p>
+<p>序列化器实现了org.apache.kafka.common.serialization.Serializer接口</p>
+<p>一般要实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void configure(Map&lt;String, ?&gt;configs,boolean isKey)</span><br><span class="line">public byte[]serialize(String topic, T data)</span><br><span class="line">public void close()</span><br></pre></td></tr></table></figure>
+
+
+
+<p>可以使用Avro、JSON、Thrift、Protobuf、Protostuff等通用工具来实现</p>
+<p><strong>分区器</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public int partition(String topic, Object key,byte[] keyBytes, Object Value, byte[] valueBytes,Cluster cluster);</span><br><span class="line">public void close();</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><p>如果ProducerRecord中指定了Partition字段，则不需要分区器，partition字段就是要发往的分区号</p>
+</li>
+<li><p>如果没有指定分区器，就需要分区器根据key字段来计算partition值。Kafka的默认分区器实现了 xx.Partitioner接口，接口中有partition方法和close方法</p>
+<p>默认分区器会判断key不为null，则对key进行哈希，最终根据得到的哈希值来计算分区号，拥有相同key的消息会被写入同一个分区。如果key为null，那么消息会以轮询的方式发往主题内的某一个可用分区</p>
+</li>
+</ul>
+<p>  自定义分区器也只需实现上述接口即可</p>
+<p><strong>生产者拦截器</strong></p>
+<p>消息发送前做一些过滤，修改等等</p>
+<p>需要自定义实现ProducerInterceptor接口</p>
+<p>KafkaProducer会在消息被应答之前或消息发送失败时调用拦截器的onAcknowledgement方法，优于用户设定的Callback之前执行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ProducerRecord&lt;K, V&gt; <span class="title">onSend</span><span class="params">(ProducerRecord&lt;K, V&gt; record)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAcknowledgement</span><span class="params">(RecordMetadata metadata, Exception exception)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>可以指定一个拦截链，KafkaProducer按照interceptor.classes参数配置的拦截器的顺序来一一执行（各个拦截器按逗号隔开）</p>
+<p><strong>整体架构</strong></p>
+<p><img src="producer-structure.jpg" alt="生产者客户端整体架构"></p>
+<p>生产者客户端有两个线程，主线程和Sender线程。主线程生产消息经过拦截器、序列化器、分区器缓存到消息累加器中，Sender线程从RecordAccumulator中获取消息并发往Kafka中</p>
+<p>buffer.memory： 指定RecordAccumulator缓存的大小</p>
+<p>max.block.ms：指定生产者发送太快，缓冲区满了，阻塞的最大时间</p>
+<p>RecordAccumulator为每个分区维护一个双端队列，队列内容为ProducerBatch，Producer为一个至多个ProducerRecord</p>
+<p>消息在网络上传输是以字节传输的，发送之前要创建内存区域。RecordAccumulator内部还有一个BufferPool，管理ByteBuffer</p>
+<p>batch.size 指定ByteBuffer的大小</p>
 
     </div>
 
