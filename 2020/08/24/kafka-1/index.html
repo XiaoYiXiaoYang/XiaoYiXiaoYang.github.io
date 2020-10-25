@@ -55,7 +55,7 @@
 <meta property="og:description" content="一个有名的多分区多副本且基于ZooKeeper协调的分布式消息系统，高吞吐、可持久化、可水平扩展、支持流数据处理等多种特性被使用。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;08&#x2F;24&#x2F;kafka-1&#x2F;producer-structure.jpg">
-<meta property="og:updated_time" content="2020-09-09T14:51:18.559Z">
+<meta property="og:updated_time" content="2020-10-20T15:10:38.197Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;08&#x2F;24&#x2F;kafka-1&#x2F;producer-structure.jpg">
 
@@ -218,7 +218,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-09-09 22:51:18" itemprop="dateModified" datetime="2020-09-09T22:51:18+08:00">2020-09-09</time>
+                <time title="修改时间：2020-10-20 23:10:38" itemprop="dateModified" datetime="2020-10-20T23:10:38+08:00">2020-10-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -349,10 +349,55 @@
 <p>生产者客户端有两个线程，主线程和Sender线程。主线程生产消息经过拦截器、序列化器、分区器缓存到消息累加器中，Sender线程从RecordAccumulator中获取消息并发往Kafka中</p>
 <p>buffer.memory： 指定RecordAccumulator缓存的大小</p>
 <p>max.block.ms：指定生产者发送太快，缓冲区满了，阻塞的最大时间</p>
-<p>RecordAccumulator为每个分区维护一个双端队列，队列内容为ProducerBatch，Producer为一个至多个ProducerRecord</p>
-<p>消息在网络上传输是以字节传输的，发送之前要创建内存区域。RecordAccumulator内部还有一个BufferPool，管理ByteBuffer</p>
+<p>RecordAccumulator缓存的大小由buffer.memory配置；如果生产者发送消息的速度超过发送到服务器的速度，则会导致生产者空间不足，这时候producer的send方法调用要么被阻塞，要么抛出异常，这个取决于参数max.block.ms的设置。</p>
+<p>RecordAccumulator为每个分区维护一个双端队列，队列内容为ProducerBatch，ProducerBatch为一个至多个ProducerRecord；可以使得生产者创建的消息组成一个批次，更为紧凑。</p>
+<p>消息在网络上传输是以字节传输的，发送之前要创建内存区域。kafka生产者中，通过java.io.ByteBuffer实现消息内存创建和释放。RecordAccumulator内部还有一个BufferPool，实现ByteBuffer的复用。BufferPool只针对特定大小的ByteBuffer进行管理，这个大小由batch.size指定。</p>
 <p>batch.size 指定ByteBuffer的大小</p>
+<p>ProducerBatch的大小和batch.size相关。当一条ProducerRecord消息到了RecordAccumulator，会先寻找与分区对应的双端队列(如果没有则新建)，再从尾部获取一个ProducerBatch，查看该ProducerBatch中是否还可以写入这个ProducerRecord，可以写入则写入，不可以写入则新建ProducerBatch。</p>
+<p>新建ProducerBatch时，判断这条ProducerRecord消息大小是否超过batch.size没超过，则就以batch.size的大小新建ProducerBatch，这段内存还可以由ByterBuffer复用；如果超过了则以<strong>评估的大小？</strong>新建ProducerBatch，这段内存不会被复用。</p>
+<p>Sender从RecordAccumulator获取缓存的消息后，进一步将原本的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;分区，Deque&lt;ProducerBatch&gt;&gt;</span><br></pre></td></tr></table></figure>
 
+<p>转换为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Node, List&lt;ProducerBatch&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Node表示kafka集群的结点。生产者向具体的broker结点发消息。</p>
+<p>Sender还会进一步封装为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Node, Request&gt;</span><br></pre></td></tr></table></figure>
+
+<p>才发往各个Node</p>
+<p>请求在从Sender发往kafka之前会保存到InFlightRequests中，保存形式为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;NodeId, Deque&lt;Request&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>主要作用是缓存了已经发出去，但是还没有收到响应的请求。</p>
+<p>这里限制了每个连接最多缓存的请求数，由max.in.flight.requests.per.connecttion</p>
+<p><strong>元数据的更新</strong></p>
+<p>上一节提到的inFlightRequests可以获得leastLoadedNode，即所有Node中负载最小的。</p>
+<p>Node中未确认的请求越多，则认为负载越大。</p>
+<p>选择leastLoadedNode发送请求可以使它能尽快发出，避免网络拥塞等异常的影响。</p>
+<p>leastLoadedNode还可以用于<strong>元数据请求</strong>、<strong>消费者组播协议的交互</strong></p>
+<p>如果发送一个很简单的消息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ProducerRecord&lt;string, string&gt; record = new ProducerRecord&lt;&gt;(topic, &quot;hello&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>这里只有主题和消息</p>
+<p>KafkaProducer需要将消息追加到指定主题的某个分区的对应leader副本之前。需要知道分区数目，计算出目标分区，需要知道目标分区的leader副本所在broker结点的地址、端口信息。这些需要的信息都属于<strong>元数据信息</strong>。</p>
+<p>bootstrap.servers参数只需要配置部分broker结点的地址，客户端可以发现其他broker结点的地址，这一过程属于元数据更新。</p>
+<p>客户端没有元数据信息时，会先选出leastLoadedNode，然后向这个Node发送MetadataRequest请求来获取具体的元数据信息。这个更新操作由Sender线程发起，在创建完MetadataRequest后同样会存入inFlightRequests。元数据虽然由Sender线程负责更新，但是主线程也需要读取这些信息，这里数据同步通过synchronized 和 final关键字保障。</p>
+<p><strong>重要的生产者参数</strong></p>
+<p>acks：指定分区中必须要有多少副本收到这条消息，之后生产者才会认为这条消息是成功写入的。</p>
+<p>默认acks = 1</p>
+<p>acks = 0 生产者发送消息之后不需要等待任何服务端响应</p>
+<p>max.request.size 客户端能发送消息的最大值</p>
+<p>retries 和 retry.backoff.ms</p>
+<p>retries是生产者重试的次数</p>
+<p>retry.backoff.ms 两次重试之间的间隔默认100ms</p>
+<p>compression.type 默认值为none，指定消息压缩</p>
+<p>connections.max.idle.ms 指定在多久之后关闭闲置的连接</p>
+<p>linger.ms 指定生产者发送ProducerBatch之间等待更多ProducerRecord加入的时间</p>
+<p>receive.buffer.bytes 设置Socket接收消息缓冲区大小  默认32kb</p>
+<p>send.buffer.bytes Socket发送消息缓冲区大小</p>
+<p>request.timeout.ms 配置Producer等待请求响应的最长时间，默认30000ms</p>
+<h1 id="第三章-消费者"><a href="#第三章-消费者" class="headerlink" title="第三章 消费者"></a>第三章 消费者</h1>
     </div>
 
     
@@ -424,7 +469,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一章初识Kafka"><span class="nav-number">1.</span> <span class="nav-text">第一章初识Kafka</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">1.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生产与消费"><span class="nav-number">1.2.</span> <span class="nav-text">生产与消费</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二章-生产者"><span class="nav-number">2.</span> <span class="nav-text">第二章 生产者</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一章初识Kafka"><span class="nav-number">1.</span> <span class="nav-text">第一章初识Kafka</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">1.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生产与消费"><span class="nav-number">1.2.</span> <span class="nav-text">生产与消费</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二章-生产者"><span class="nav-number">2.</span> <span class="nav-text">第二章 生产者</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三章-消费者"><span class="nav-number">3.</span> <span class="nav-text">第三章 消费者</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -440,7 +485,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">150</span>
+          <span class="site-state-item-count">151</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -453,7 +498,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

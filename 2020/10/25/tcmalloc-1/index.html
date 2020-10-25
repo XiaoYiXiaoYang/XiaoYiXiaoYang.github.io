@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="https:&#x2F;&#x2F;github.com&#x2F;google&#x2F;tcmalloc">
+<meta name="keywords" content="TCmalloc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tcmalloc-1">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;10&#x2F;25&#x2F;tcmalloc-1&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="https:&#x2F;&#x2F;github.com&#x2F;google&#x2F;tcmalloc">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;overview.gif">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;threadheap.gif">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;pageheap.gif">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;spanmap.gif">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspersec.vs.size.1.threads.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspersec.vs.size.2.threads.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspersec.vs.size.3.threads.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspersec.vs.size.4.threads.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspersec.vs.size.5.threads.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspersec.vs.size.8.threads.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspersec.vs.size.12.threads.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspersec.vs.size.16.threads.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspersec.vs.size.20.threads.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspercpusec.vs.threads.64.bytes.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspercpusec.vs.threads.256.bytes.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspercpusec.vs.threads.1024.bytes.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspercpusec.vs.threads.4096.bytes.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspercpusec.vs.threads.8192.bytes.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspercpusec.vs.threads.16384.bytes.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspercpusec.vs.threads.32768.bytes.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspercpusec.vs.threads.65536.bytes.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;tcmalloc-opspercpusec.vs.threads.131072.bytes.png">
+<meta property="og:updated_time" content="2020-10-25T15:13:42.248Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gperftools.github.io&#x2F;gperftools&#x2F;overview.gif">
+
+<link rel="canonical" href="http://yoursite.com/2020/10/25/tcmalloc-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>tcmalloc-1 | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/25/tcmalloc-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          tcmalloc-1
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-10-25 16:00:14 / 修改时间：23:13:42" itemprop="dateCreated datePublished" datetime="2020-10-25T16:00:14+08:00">2020-10-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/10/25/tcmalloc-1/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/10/25/tcmalloc-1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a href="https://github.com/google/tcmalloc" target="_blank" rel="noopener">https://github.com/google/tcmalloc</a></p>
+<a id="more"></a>
+
+
+
+<p>标题：TCMalloc 线程缓存的Malloc</p>
+<h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h3><p>TCMalloc比我测试过的glibc 2.3 malloc（可称为ptmalloc2的独立库）和其他malloc更快。ptmalloc2在2.8 GHz P4上（用于小型对象）执行malloc / free对大约需要300纳秒。对于同一操作对，TCMalloc实现大约需要50纳秒。速度对于malloc实现很重要，因为如果malloc不够快，应用程序编写者倾向于在malloc之上编写自己的自定义空闲列表。除非应用程序编写者非常谨慎地适当调整可用列表的大小并从空闲列表中清除空闲对象，否则这可能导致额外的复杂性和更多的内存使用。</p>
+<p>TCMalloc还减少了多线程程序的锁争用。对于小对象，竞争几乎为零。对于大对象，TCMalloc尝试使用细粒度且高效的自旋锁。ptmalloc2也通过使用每个线程的arenas 来减少锁争用，但是ptmalloc2使用每个线程的arenas 存在一个大问题。在ptmalloc2中，内存永远无法从一个领域移动到另一个领域。这会导致大量的空间浪费。例如，在一个Google应用程序中，第一阶段将为其URL规范化数据结构分配大约300MB的内存。当第一阶段完成时，第二阶段将在相同的地址空间中开始。如果为第二阶段分配的arena不同于第一阶段使用的arena，此阶段将不复用第一阶段之后剩余的任何内存，并将在地址空间中再增加300MB。在其他应用程序中也发现了类似的内存膨胀问题。</p>
+<p>TCMalloc的另一个好处是小对象的空间高效表示。例如，可以在使用大约<code>8N * 1.01</code>字节的空间时分配8N字节的对象。即，空间开销为百分之一。ptmalloc2为每个对象使用一个四字节的标头，并且（我认为）将大小四舍五入为8个字节的倍数，最后使用<code>16N</code>字节结束。</p>
+<p>总结：快、减少线程锁、小对象高效</p>
+<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><p>要使用TCMalloc，只需通过“ -ltcmalloc”链接器标志将TCMalloc链接到您的应用程序中。</p>
+<p>您可以通过使用LD_PRELOAD在未编译的应用程序中使用TCMalloc：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ LD_PRELOAD =“ / usr / lib / libtcmalloc.so”</span><br></pre></td></tr></table></figure>
+
+<p>LD_PRELOAD很棘手，我们不一定推荐这种使用方式。</p>
+<p>TCMalloc还包括<a href="https://gperftools.github.io/gperftools/heap_checker.html" target="_blank" rel="noopener">堆检查器</a> 和<a href="https://gperftools.github.io/gperftools/heapprofile.html" target="_blank" rel="noopener">堆分析器</a>。</p>
+<p>如果您希望链接一个不包含堆分析器和检查器的TCMalloc版本（也许可以减小静态二进制文件的二进制大小），则可以链接<code>libtcmalloc_minimal</code> 来替代 。</p>
+<h3 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h3><p>TCMalloc为每个线程分配一个线程本地缓存。线程本地缓存满足小分配。根据需要将对象从中央数据结构移动到线程本地缓存中，并使用定期垃圾回收将内存从线程本地缓存迁移回中心数据结构中。</p>
+<p><img src="https://gperftools.github.io/gperftools/overview.gif" alt="img"></p>
+<p>TCMalloc将大小小于等于256K的对象（“小”对象）与大对象区别对待。使用页面级分配器（页面是内存的8K对齐区域）直接从中央堆分配大对象。即，大对象始终是页面对齐的，并且占据整数页。</p>
+<p>可以将一系列页面分成一系列小对象，每个对象大小均相等。例如，一页（4K）可以分成32个对象，每个对象大小为128字节。</p>
+<h3 id="小对象内存分配"><a href="#小对象内存分配" class="headerlink" title="小对象内存分配"></a>小对象内存分配</h3><p>每个小对象尺寸映射到大约88个可分配尺寸等级之一。例如，所有在961到1024字节范围内的分配都被四舍五入为1024。大小类被隔开，以便小尺寸被8字节分隔，大尺寸被16字节分隔，更大尺寸被32字节分隔，依此类推。 。控制最大间距，以便在分配请求刚好超出大小类的末尾并且必须向上舍入到下一个类时，不会浪费太多空间。</p>
+<p>线程缓存包含每个大小级别的空闲对象的单链接列表。</p>
+<p><img src="https://gperftools.github.io/gperftools/threadheap.gif" alt="img"></p>
+<p>分配小对象时：（1）我们根据其大小映射到相应的类。（2）在线程本地缓存中的相应空闲列表中查找当前线程。（3）如果空闲列表不为空，则从列表中删除第一个对象并返回它。当遵循此快速路径时，TCMalloc根本不会获得任何锁。因为在2.8 GHz Xeon上，锁定/解锁对大约花费100纳秒，所以这大大有助于加速分配。</p>
+<p>如果空闲列表为空：（1）我们从该类的中央空闲列表中获取一堆对象（中央空闲列表由所有线程共享）。（2）将它们放在线程本地缓存空闲列表中。（3）将新获取的对象之一返回给应用程序。</p>
+<p>如果中央空闲列表也为空：（1）我们从中央页面分配器分配一系列页面。（2）将其分成一组该大小级别的对象。（3）将新对象放置在中央空闲列表上。（4）和以前一样，将其中一些对象移动到线程本地缓存空闲列表中。</p>
+<h3 id="调整线程缓存空闲列表的大小"><a href="#调整线程缓存空闲列表的大小" class="headerlink" title="调整线程缓存空闲列表的大小"></a>调整线程缓存空闲列表的大小</h3><p>正确调整线程缓存空闲列表的大小很重要。如果空闲列表太小，我们将需要经常访问中央空闲列表。如果空闲列表太大，则由于空闲列表中的对象处于空闲状态，我们将浪费内存。</p>
+<p>请注意，线程缓存空闲列表对于释放和分配都同样重要。如果没有缓存，则每个重新分配都需要将内存移至中央空闲列表。另外，某些线程具有非对称的分配/释放行为（例如，生产者线程和消费者线程），因此正确地确定空闲列表的大小会变得更加棘手。</p>
+<p>为了适当地调整空闲列表的大小，我们使用慢启动算法来确定每个空闲列表的最大长度。随着空闲列表的使用更加频繁，其最大长度也会增加。但是，如果空闲列表用于释放的次数多于申请内存的次数，则其最大长度只会增加到可以立即将整个列表有效地移动到中央空闲列表的程度。</p>
+<p>下面的伪代码说明了这种慢启动算法。请注意，<code>num_objects_to_move</code>等于每个类的空闲列表长度。通过移动一个对象列表长度，中央缓存可以在线程缓存之间有效地传递这些列表。如果线程缓存希望少于<code>num_objects_to_move</code>，则对中央空闲列表的操作具有线性时间复杂度。始终使用<code>num_objects_to_move</code>与中央缓存之间来回传输的对象数量的缺点是，它浪费了不需要所有这些对象的线程中的内存。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">Start each freelist max_length at 1.</span><br><span class="line"></span><br><span class="line">Allocation</span><br><span class="line">  if freelist empty &#123;</span><br><span class="line">    fetch min(max_length, num_objects_to_move) from central list;</span><br><span class="line">    if max_length &lt; num_objects_to_move &#123;  // slow-start</span><br><span class="line">      max_length++;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      max_length += num_objects_to_move;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">Deallocation</span><br><span class="line">  if length &gt; max_length &#123;</span><br><span class="line">    // Don&apos;t try to release num_objects_to_move if we don&apos;t have that many.</span><br><span class="line">    release min(max_length, num_objects_to_move) objects to central list</span><br><span class="line">    if max_length &lt; num_objects_to_move &#123;</span><br><span class="line">      // Slow-start up to num_objects_to_move.</span><br><span class="line">      max_length++;</span><br><span class="line">    &#125; else if max_length &gt; num_objects_to_move &#123;</span><br><span class="line">      // If we consistently go over max_length, shrink max_length.</span><br><span class="line">      overages++;</span><br><span class="line">      if overages &gt; kMaxOverages &#123;</span><br><span class="line">        max_length -= num_objects_to_move;</span><br><span class="line">        overages = 0;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>另请参阅“<a href="https://gperftools.github.io/gperftools/tcmalloc.html#Garbage_Collection" target="_blank" rel="noopener">垃圾回收</a>”部分 以了解它如何影响<code>max_length</code>。    </p>
+<h3 id="中等对象内存分配"><a href="#中等对象内存分配" class="headerlink" title="中等对象内存分配"></a>中等对象内存分配</h3><p>中型对象大小（256K≤大小≤1MB）被四舍五入为页面大小（8K），并由中心页面堆处理。中心页面堆包含128个空闲列表的数组。第<code>k</code>项是页面大小为k+1pages的运行的空闲列表：</p>
+<p><img src="https://gperftools.github.io/gperftools/pageheap.gif" alt="img"></p>
+<p>大小为k pages的内存申请通过在第<code>k</code>个空闲列表中查找，可以满足页面分配要求。如果该空闲列表为空，则查找下一个空闲列表，依此类推。如果没有任何中型对象的空闲列表不能满足分配，则将该分配视为大对象。</p>
+<h3 id="大对象内存分配"><a href="#大对象内存分配" class="headerlink" title="大对象内存分配"></a>大对象内存分配</h3><p>1MB或更多的分配被认为是大分配。可以满足这些分配要求的可用内存跨度在按大小排序的红黑树中进行跟踪。分配遵循<em>best-fit</em> 算法：搜索树以找到最小的可用空间跨度，该跨度大于请求的分配。分配是从该范围中划出的，剩余的空间将重新插入到大型对象树中，或者可能是重新插入到较小的空闲列表之一中。如果没有空闲存储能适合所请求的分配，我们从系统申请内存（使用存储器<code>sbrk</code>， <code>mmap</code>或者通过在部分的映射 <code>/dev/mem</code>）。</p>
+<p>如果申请k pages大小的内存&gt;的页面运行满足页面分配，则将运行的其余部分重新插入到页面堆中的相应空闲列表中。</p>
+<h2 id="Spans"><a href="#Spans" class="headerlink" title="Spans"></a>Spans</h2><p>TCMalloc管理的堆由一组页面组成。连续页面的运行由一个<code>Span</code>对象表示。span可以<em>分配</em>，也可以<em>空闲</em>。如果空闲，则span是页面堆链接列表中的条目之一。如果已分配，则它要么是已移交给应用程序的大对象，要么是已分成多个小对象序列的一系列页面。如果拆分为小对象，则将对象的大小级别记录在span中。</p>
+<p>由页码索引的中央数组可用于查找页面所属的span。例如，下面的span<em>a</em>占2页，span<em>b</em>占1页，span<em>c</em>占5页，span<em>d</em>占3页。</p>
+<p><img src="https://gperftools.github.io/gperftools/spanmap.gif" alt="img"></p>
+<p>在32位地址空间中，中央数组由2级基数树表示，其中根包含32个条目，每个叶包含2 ^ 14个条目（32位地址空间具有2 ^ 19个8K页，树的第一层将2 ^ 19页除以2 ^ 5）。这导致中央阵列的起始内存使用空间为64KB（2 ^ 14 * 4字节），这似乎可以接受。</p>
+<p>在64位计算机上，我们使用3级基数树。</p>
+<h2 id="释放对象"><a href="#释放对象" class="headerlink" title="释放对象"></a>释放对象</h2><p>当一个对象被释放时，我们计算它的页码并在中央数组中查找以找到相应的span对象。span告诉我们对象是否小，并告知其所在空闲列表类对象size 是否小。如果对象较小，则将其插入当前线程的线程缓存中的相应空闲列表中。如果线程缓存现在超过预定大小（默认为2MB），我们将运行垃圾回收器，将垃圾缓存中未使用的对象移到中央空闲列表中。</p>
+<p>如果对象很大，则span会告诉我们该对象覆盖的页面范围。假设此范围是<code>[p,q]</code>。我们还将查找页面<code>p-1</code>和的<code>q+1</code>的span。如果这些相邻跨度中的任意一个是空闲的，则将它们与<code>[p,q]</code>span合并 。将结果span插入到页面堆中适当的空闲列表中。</p>
+<h2 id="中央空闲列表的小对象"><a href="#中央空闲列表的小对象" class="headerlink" title="中央空闲列表的小对象"></a>中央空闲列表的小对象</h2><p>如前所述，我们为每个尺寸级别保留一个中央空闲列表。每个中央空闲列表都组织为两级数据结构：一组span，以及每个span的空闲对象的链表。</p>
+<p>通过从某个范围的链接列表中删除第一个条目，可以从中央空闲列表中分配一个对象。（如果所有跨度都有空的链表，则首先从中央页面堆中分配一个适当大小的跨度。）</p>
+<p>通过将对象添加到其包含范围的链接列表中，可以将其返回到中央空闲列表。如果链接列表的长度现在等于该范围中小对象的总数，则该范围现在完全空闲，并返回到页面堆。</p>
+<h2 id="线程缓存的垃圾收集"><a href="#线程缓存的垃圾收集" class="headerlink" title="线程缓存的垃圾收集"></a>线程缓存的垃圾收集</h2><p>从线程缓存收集垃圾对象可以控制缓存的大小，并将未使用的对象返回到中央空闲列表。一些线程需要较大的缓存才能正常运行，而其他线程则需要很少或根本不需要缓存。当线程缓存超过<code>max_size</code>时，垃圾收集将启动，然后该线程与其他线程竞争更大的缓存。</p>
+<p>垃圾回收仅在释放对象期间运行。我们遍历缓存中的所有空闲列表，然后将一些对象从空闲列表移到相应的中央列表。</p>
+<p>使用每个列表的低水位标记确定要从空闲列表中移动的对象的数量<code>L</code>。 <code>L</code> 记录自上次垃圾回收以来列表的最小长度。请注意，我们可以在上一个垃圾回收时通过<code>L</code>个对象将列表缩短， 而无需对中央列表进行任何额外的访问。我们将过去的历史用作将来访问的预测，并将<code>L/2</code> 对象从线程缓存空闲列表移动到相应的中央空闲列表。该算法具有很好的属性，即如果某个线程停止使用特定大小，则该大小的所有对象将迅速从线程缓存移到中央空闲列表，其他线程可以在该列表中使用它们。</p>
+<p>如果一个线程持续释放的某个特定大小的对象多于其分配的数量，则此<code>L/2</code>行为将至少导致 <code>L/2</code>对象始终位于空闲列表中。为了避免以这种方式浪费内存，我们缩小了要聚合的<a href="https://gperftools.github.io/gperftools/tcmalloc.html#Sizing_Thread_Cache_Free_Lists" target="_blank" rel="noopener">空闲列表</a>的最大长度<code>num_objects_to_move</code>（另请参见 <a href="https://gperftools.github.io/gperftools/tcmalloc.html#Sizing_Thread_Cache_Free_Lists" target="_blank" rel="noopener">调整线程缓存空闲列表的大小</a>）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">垃圾回收</span><br><span class="line">  if（L！= 0 &amp;&amp; max_length&gt; num_objects_to_move）&#123; </span><br><span class="line">    max_length = max（max_length-num_objects_to_move，num_objects_to_move）</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>线程缓存超过了<code>max_size</code>表明该线程将从更大的缓存中受益。简单地增加<code>max_size</code>将在具有许多活动线程的程序中使用过多的内存。开发人员可以使用–tcmalloc_max_total_thread_cache_bytes标志来绑定使用的内存。</p>
+<p>每个线程缓存都以一个较小的<code>max_size</code> （例如64KB）开头，以便空闲线程不会预分配它们不需要的内存。每次缓存运行垃圾回收时，它也会尝试扩大其<code>max_size</code>。如果线程缓存大小的总和小于–tcmalloc_max_total_thread_cache_bytes，则 <code>max_size</code>很容易增长。如果不是，线程缓存1将尝试通过减少线程缓存2的max_size来从线程缓存2窃取（选择循环）<code>max_size</code>。这样，活动性更高的线程将会更多的窃取其他线程的内存，而不是自己的内存中。大多数情况下，空闲线程以小缓存结束，而活动线程以大缓存结束。请注意，这种窃取可能导致线程缓存大小的总和大于–tcmalloc_max_total_thread_cache_bytes，直到线程缓存2释放一些内存以触发垃圾回收为止。</p>
+<h2 id="性能说明"><a href="#性能说明" class="headerlink" title="性能说明"></a>性能说明</h2><h3 id="PTMalloc2单元测试"><a href="#PTMalloc2单元测试" class="headerlink" title="PTMalloc2单元测试"></a>PTMalloc2单元测试</h3><p>PTMalloc2软件包（现在是glibc的一部分）包含一个unittest程序<code>t-test1.c</code>。这会派生多个线程，并在每个线程中执行一系列分配和释放。线程仅通过内存分配器中的同步进行通信。</p>
+<p><code>t-test1</code>（包含在 <code>tests/tcmalloc/</code>中，并编译为 <code>ptmalloc_unittest1</code>）使用不同数量的线程（1-20）和最大分配大小（64字节-32KB）运行。这些测试使用RedHat 9的Linux glibc-2.3.2在启用超线程的2.4GHz双Xeon系统上运行，每个测试中每个线程执行一百万次操作。在每种情况下，测试均正常运行一次，并使用 <code>LD_PRELOAD=libtcmalloc.so</code>。</p>
+<p>下图显示了针对几种不同指标的TCMalloc与PTMalloc2的性能。首先，对于不同数量的线程，每秒经过的总操作数（百万）与最大分配大小之比。可用于生成这些图的原始数据（<code>time</code>实用程序的输出 ） <code>t-test1.times.txt</code>。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.1.threads.png" alt="img"></th>
+<th><img src="https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.2.threads.png" alt="img"></th>
+<th><img src="https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.3.threads.png" alt="img"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.4.threads.png" alt="img"></td>
+<td><img src="https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.5.threads.png" alt="img"></td>
+<td><img src="https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.8.threads.png" alt="img"></td>
+</tr>
+<tr>
+<td><img src="https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.12.threads.png" alt="img"></td>
+<td><img src="https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.16.threads.png" alt="img"></td>
+<td><img src="https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.20.threads.png" alt="img"></td>
+</tr>
+</tbody></table>
+<ul>
+<li>TCMalloc比PTMalloc2具有更一致的可扩展性-对于所有线程数大于1的情况，小分配可达到约7-9百万个操作/秒，大分配可降低至约200万个操作/秒。单线程的情况显然是异常的，因为它只能使单个处理器保持繁忙，因此可以实现更少的运算/秒。PTMalloc2的每秒操作数差异更大-对于较小的分配，峰值约为400万操作/秒，对于较大的分配，则降至&lt;100万操作/秒。</li>
+<li>在大多数情况下，尤其是对于小型分配，TCMalloc比PTMalloc2快。在TCMalloc中，线程之间的争用问题不大。</li>
+<li>随着分配大小的增加，TCMalloc的性能会下降。这是因为当每个线程缓存达到阈值（默认为2MB）时，将对其进行垃圾回收。使用较大的分配大小，在垃圾被垃圾回收之前，可以将较少的对象存储在缓存中。</li>
+<li>最大分配大小为〜32K时，TCMalloc的性能明显下降；较大尺寸时，性能下降的速度较慢。这是由于每个线程缓存中对象的最大大小为32K。对于大于此TCMalloc的对象，从中央页堆分配。</li>
+</ul>
+<p>接下来，CPU的每秒操作数（百万）与线程数的关系（最大分配大小为64字节-128 KB）。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.64.bytes.png" alt="img"></th>
+<th><img src="https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.256.bytes.png" alt="img"></th>
+<th><img src="https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.1024.bytes.png" alt="img"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.4096.bytes.png" alt="img"></td>
+<td><img src="https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.8192.bytes.png" alt="img"></td>
+<td><img src="https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.16384.bytes.png" alt="img"></td>
+</tr>
+<tr>
+<td><img src="https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.32768.bytes.png" alt="img"></td>
+<td><img src="https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.65536.bytes.png" alt="img"></td>
+<td><img src="https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.131072.bytes.png" alt="img"></td>
+</tr>
+</tbody></table>
+<p>在这里，我们再次看到，TCMalloc比PTMalloc2更一致，更高效。对于最大分配大小小于32K的情况，TCMalloc通常使用大量线程来实现每秒约2-250万个操作，而PTMalloc通常可以实现每秒0.5-1百万个操作，在很多情况下可以实现很多小于这个数字。超过32K最大分配大小后，TCMalloc的CPU时间下降到每秒1-150万，而对于大量线程，PTMalloc的下降几乎为零（即，使用PTMalloc时，大量的CPU时间被消耗掉，等待大量的锁定多线程情况）。</p>
+<h3 id="修改运行时行为"><a href="#修改运行时行为" class="headerlink" title="修改运行时行为"></a>修改运行时行为</h3><p>您可以通过环境变量更好地控制tcmalloc的行为。</p>
+<p>一般有用的标志：</p>
+<table>
+<thead>
+<tr>
+<th><code>TCMALLOC_SAMPLE_PARAMETER</code></th>
+<th>默认值：0</th>
+<th>采样动作之间的近似差距。也就是说，我们大约每<code>tcmalloc_sample_parmeter</code>分配一个字节取一个样本 。可通过<code>MallocExtension::GetHeapSample()</code>或 获取此采样堆信息 <code>MallocExtension::ReadStackTraces()</code>。合理的值为524288。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>TCMALLOC_RELEASE_RATE</code></td>
+<td>默认值：1.0</td>
+<td>在<code>madvise(MADV_DONTNEED)</code>支持它的系统上，通过释放未使用的内存到系统的速率 。零表示我们永远不会将内存释放回系统。增加此标志以更快地返回内存；减少它以更慢地返回内存。合理的比率在[0,10]范围内。</td>
+</tr>
+<tr>
+<td><code>TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD</code></td>
+<td>默认值：1073741824</td>
+<td>大于此值的分配将导致堆栈跟踪转储到stderr。每次我们打印一条消息时，转储堆栈跟踪的阈值将增加1.125倍，以便每60条消息，阈值将自动增加约1000倍。这限制了此标志生成的额外日志记录的数量。该标志的默认值非常大，因此除非覆盖了该标志，否则您将看不到任何额外的日志记录。</td>
+</tr>
+<tr>
+<td><code>TCMALLOC_MAX_TOTAL_THREAD_CACHE_BYTES</code></td>
+<td>默认值：16777216</td>
+<td>约束分配给线程缓存的字节总数。此限制不是严格的，因此在某些情况下缓存可能会超过此限制。该值默认为16MB。对于具有多个线程的应用程序，这可能不是足够大的缓存，这可能会影响性能。如果您怀疑由于TCMalloc中的锁争用而导致应用程序无法扩展到多个线程，则可以尝试增加此值。这可能会提高性能，但以TCMalloc占用额外的内存为代价。有关更多详细信息，请参见<a href="https://gperftools.github.io/gperftools/tcmalloc.html#Garbage_Collection" target="_blank" rel="noopener"> 垃圾回收</a>。</td>
+</tr>
+</tbody></table>
+<p>高级“ tweaking”标志，可更精确地控制tcmalloc如何尝试从内核分配内存。</p>
+<table>
+<thead>
+<tr>
+<th><code>TCMALLOC_SKIP_MMAP</code></th>
+<th>默认值：false</th>
+<th>如果为true，请不要尝试用于<code>mmap</code>从内核获取内存。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>TCMALLOC_SKIP_SBRK</code></td>
+<td>默认值：false</td>
+<td>如果为true，请不要尝试用于<code>sbrk</code>从内核获取内存。</td>
+</tr>
+<tr>
+<td><code>TCMALLOC_DEVMEM_START</code></td>
+<td>默认值：0</td>
+<td>用于<code>/dev/mem</code> 分配的物理内存起始位置（以MB为单位）。将此设置为0将禁用<code>/dev/mem</code> 分配。</td>
+</tr>
+<tr>
+<td><code>TCMALLOC_DEVMEM_LIMIT</code></td>
+<td>默认值：0</td>
+<td>用于<code>/dev/mem</code> 分配的物理内存限制位置（以MB为单位）。将此设置为0表示没有限制。</td>
+</tr>
+<tr>
+<td><code>TCMALLOC_DEVMEM_DEVICE</code></td>
+<td>默认值：/ dev / mem</td>
+<td>用于分配非托管内存的设备。</td>
+</tr>
+<tr>
+<td><code>TCMALLOC_MEMFS_MALLOC_PATH</code></td>
+<td>默认值：“”</td>
+<td>如果已设置，请指定安装了ugettlbfs或tmpfs的路径。这可以允许更快的分配。</td>
+</tr>
+<tr>
+<td><code>TCMALLOC_MEMFS_LIMIT_MB</code></td>
+<td>默认值：0</td>
+<td>将总memfs分配大小限制为指定的MB数。0表示“无限制”。</td>
+</tr>
+<tr>
+<td><code>TCMALLOC_MEMFS_ABORT_ON_FAIL</code></td>
+<td>默认值：false</td>
+<td>如果为true，则每当memfs_malloc未能满足分配时，则中止（）。</td>
+</tr>
+<tr>
+<td><code>TCMALLOC_MEMFS_IGNORE_MMAP_FAIL</code></td>
+<td>默认值：false</td>
+<td>如果为true，则忽略mmap的失败。</td>
+</tr>
+<tr>
+<td><code>TCMALLOC_MEMFS_MAP_PRIVATE</code></td>
+<td>默认值：false</td>
+<td>如果为true，则通过memfs而不是MAP_SHARED进行映射时，请使用MAP_PRIVATE。</td>
+</tr>
+</tbody></table>
+<h2 id="修改代码中的行为"><a href="#修改代码中的行为" class="headerlink" title="修改代码中的行为"></a>修改代码中的行为</h2><p>``malloc_extension.h<code>中的</code>MallocExtension`类 提供了一些旋钮，您可以在程序中对其进行调整，以影响tcmalloc的行为。</p>
+<h3 id="将内存释放回系统"><a href="#将内存释放回系统" class="headerlink" title="将内存释放回系统"></a>将内存释放回系统</h3><p>默认情况下，tcmalloc会随着时间的推移逐渐将不再使用的内存释放回内核。该<a href="https://gperftools.github.io/gperftools/tcmalloc.html#runtime" target="_blank" rel="noopener">tcmalloc_release_rate</a>标志控制如何快速发生这种情况。您还可以在程序执行中的给定时间点强制释放，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MallocExtension :: instance（）-&gt; ReleaseFreeMemory（）;</span><br></pre></td></tr></table></figure>
+
+<p>您还可以调用在运行时<code>SetMemoryReleaseRate()</code>更改 <code>tcmalloc_release_rate</code>值，或 <code>GetMemoryReleaseRate</code>查看当前的释放速率。</p>
+<h3 id="内存自省"><a href="#内存自省" class="headerlink" title="内存自省"></a>内存自省</h3><p>有几种例程可以使人理解形式的当前内存使用情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MallocExtension :: instance（）-&gt; GetStats（buffer，buffer_length）; </span><br><span class="line">MallocExtension :: instance（）-&gt; GetHeapSample（＆string）; </span><br><span class="line">MallocExtension :: instance（）-&gt; GetHeapGrowthStacks（＆string）;</span><br></pre></td></tr></table></figure>
+
+<p>最后两个创建文件的格式与heap-profiler相同，并且可以作为数据文件传递给pprof。第一个是人类可读的，用于调试。</p>
+<h3 id="通用Tcmalloc状态"><a href="#通用Tcmalloc状态" class="headerlink" title="通用Tcmalloc状态"></a>通用Tcmalloc状态</h3><p>TCMalloc支持设置和检索任意“属性”：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MallocExtension :: instance（）-&gt; SetNumericProperty（property_name，value）; </span><br><span class="line">MallocExtension :: instance（）-&gt; GetNumericProperty（property_name，＆value）;</span><br></pre></td></tr></table></figure>
+
+<p>应用程序可以设置和获取这些属性，但是最有用的是库设置属性时，应用程序可以读取它们。这是TCMalloc定义的属性；您可以通过以下调用 <code>MallocExtension::instance()-&gt;GetNumericProperty(&quot;generic.heap_size&quot;, &amp;value);</code>：</p>
+<table>
+<thead>
+<tr>
+<th><code>generic.current_allocated_bytes</code></th>
+<th>应用程序使用的字节数。这通常与操作系统报告的内存使用情况不匹配，因为它不包括TCMalloc开销或内存碎片。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>generic.heap_size</code></td>
+<td>TCMalloc保留的系统内存字节。</td>
+</tr>
+<tr>
+<td><code>tcmalloc.pageheap_free_bytes</code></td>
+<td>页面堆中空闲的映射页面中的字节数。这些字节可用于满足分配请求。它们始终计入虚拟内存使用率，并且除非操作系统将基础内存换出，否则它们也计入物理内存使用率。</td>
+</tr>
+<tr>
+<td><code>tcmalloc.pageheap_unmapped_bytes</code></td>
+<td>页面堆中未映射的空闲页面中的字节数。这些字节可能已经通过MallocExtension“释放”调用之一释放回了操作系统。它们可用于满足分配请求，但通常会导致页面错误。它们始终计入虚拟内存使用情况，并且取决于操作系统，通常不计入物理内存使用情况。</td>
+</tr>
+<tr>
+<td><code>tcmalloc.slack_bytes</code></td>
+<td>pageheap_free_bytes和pageheap_unmapped_bytes的总和。仅提供向后兼容性。不使用。</td>
+</tr>
+<tr>
+<td><code>tcmalloc.max_total_thread_cache_bytes</code></td>
+<td>TCMalloc为小对象专用的内存量有一个限制。在某些情况下，更高的数字会折衷更多的内存使用量，从而提高效率。</td>
+</tr>
+<tr>
+<td><code>tcmalloc.current_total_thread_cache_bytes</code></td>
+<td>TCMalloc使用的某些内存的度量（用于小对象）。</td>
+</tr>
+</tbody></table>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>对于某些系统，TCMalloc可能无法与未链接的应用程序<code>libpthread.so</code>（或OS上的等效文件）无法正常工作。它应该在使用glibc 2.3的Linux上运行，但是尚未测试其他OS / libc组合。</p>
+<p>TCMalloc可能比其他malloc占用更多的内存（但往往没有其他malloc可能发生的大量崩溃）。特别是，在启动时，TCMalloc分配大约240KB的内部存储器。</p>
+<p>不要尝试将TCMalloc加载到正在运行的二进制文件中（例如，在Java程序中使用JNI）。二进制文件将使用系统malloc分配一些对象，并可能尝试将它们传递给TCMalloc进行释放。TCMalloc将无法处理此类对象。</p>
+<hr>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/TCmalloc/" rel="tag"><i class="fa fa-tag"></i> TCmalloc</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/15/gitlab-shedules/" rel="prev" title="GitLab CI/CD Pipelene schedules">
+      <i class="fa fa-chevron-left"></i> GitLab CI/CD Pipelene schedules
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#动机"><span class="nav-number">1.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用法"><span class="nav-number">2.</span> <span class="nav-text">用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总览"><span class="nav-number">3.</span> <span class="nav-text">总览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小对象内存分配"><span class="nav-number">4.</span> <span class="nav-text">小对象内存分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调整线程缓存空闲列表的大小"><span class="nav-number">5.</span> <span class="nav-text">调整线程缓存空闲列表的大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中等对象内存分配"><span class="nav-number">6.</span> <span class="nav-text">中等对象内存分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大对象内存分配"><span class="nav-number">7.</span> <span class="nav-text">大对象内存分配</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spans"><span class="nav-number"></span> <span class="nav-text">Spans</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#释放对象"><span class="nav-number"></span> <span class="nav-text">释放对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中央空闲列表的小对象"><span class="nav-number"></span> <span class="nav-text">中央空闲列表的小对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程缓存的垃圾收集"><span class="nav-number"></span> <span class="nav-text">线程缓存的垃圾收集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能说明"><span class="nav-number"></span> <span class="nav-text">性能说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PTMalloc2单元测试"><span class="nav-number">1.</span> <span class="nav-text">PTMalloc2单元测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改运行时行为"><span class="nav-number">2.</span> <span class="nav-text">修改运行时行为</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改代码中的行为"><span class="nav-number"></span> <span class="nav-text">修改代码中的行为</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#将内存释放回系统"><span class="nav-number">1.</span> <span class="nav-text">将内存释放回系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存自省"><span class="nav-number">2.</span> <span class="nav-text">内存自省</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通用Tcmalloc状态"><span class="nav-number">3.</span> <span class="nav-text">通用Tcmalloc状态</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意事项"><span class="nav-number"></span> <span class="nav-text">注意事项</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
