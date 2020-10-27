@@ -55,7 +55,7 @@
 <meta property="og:description" content="一个有名的多分区多副本且基于ZooKeeper协调的分布式消息系统，高吞吐、可持久化、可水平扩展、支持流数据处理等多种特性被使用。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;08&#x2F;24&#x2F;kafka-1&#x2F;producer-structure.jpg">
-<meta property="og:updated_time" content="2020-10-20T15:10:38.197Z">
+<meta property="og:updated_time" content="2020-10-27T15:25:13.125Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;08&#x2F;24&#x2F;kafka-1&#x2F;producer-structure.jpg">
 
@@ -218,7 +218,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-20 23:10:38" itemprop="dateModified" datetime="2020-10-20T23:10:38+08:00">2020-10-20</time>
+                <time title="修改时间：2020-10-27 23:25:13" itemprop="dateModified" datetime="2020-10-27T23:25:13+08:00">2020-10-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -397,7 +397,40 @@
 <p>receive.buffer.bytes 设置Socket接收消息缓冲区大小  默认32kb</p>
 <p>send.buffer.bytes Socket发送消息缓冲区大小</p>
 <p>request.timeout.ms 配置Producer等待请求响应的最长时间，默认30000ms</p>
-<h1 id="第三章-消费者"><a href="#第三章-消费者" class="headerlink" title="第三章 消费者"></a>第三章 消费者</h1>
+<h1 id="第三章-消费者"><a href="#第三章-消费者" class="headerlink" title="第三章 消费者"></a>第三章 消费者</h1><p><strong>消费者与消费者组</strong></p>
+<p>每个消费者都有一个对应的消费者组。当消息发布到主题后，只会被投递给订阅它的每个消费组中的一个消费者。</p>
+<p>每个消费组消费全部分区的消息。</p>
+<p>消费者与消费组这种模型又可以让整体的消费能力具备横向伸缩性，我们可以增加消费者的个数来提高整体的消费能力。对于分区数固定的情况，一直增加消费者，到消费者个数超过分区数，就会有消费者分配不到分区。</p>
+<p>点对点模式：基于队列，消息生产者发送消息到队列，消费者从消息队列中接收消息。</p>
+<p>发布订阅模式：定义了如何想一个内容节点发布和订阅消息，这个内容节点叫做主题，主题可以认为是消息传递的中介，消息发布者将消息发布到某个主题，而消息订阅者从主题中订阅消息。主题使得消息的订阅者和发布者互相保持独立，不需要进行接触即可保证消息的传递，发布订阅模式在消息的一对多广播时采用。</p>
+<p>kafka同时支持两种消息投递模式。</p>
+<ul>
+<li>如果所有的消费者隶属于一个消费者组，那么所有的消息都会被均衡的投递给每一个消费者，即每条消息只会被一个消费者处理，这相当于点对点。</li>
+<li>如果所有的消费者隶属于不同的消费组，那么所有的消息都会被广播给所有的消费者，即每条消息都会被所有的消费者处理，相当于发布订阅模式应用。</li>
+</ul>
+<p>消费组是一个逻辑概念，每个消费者在消费前需要指定所属消费组的名称，由group.id指定。消费者是实际的应用实例，可以是一个线程，也可以是一个进程，同一个消费组的消费者既可以部署在同一机器上，也可以部署在不同机器上。</p>
+<p><strong>客户端开发</strong></p>
+<ol>
+<li>配置消费者客户端参数以及创建相应的消费者实例</li>
+<li>订阅主题</li>
+<li>拉取消息并消费</li>
+<li>提交消费位移</li>
+<li>关闭消费者实例</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public class KafkaConsumerAnalysis &#123;</span><br><span class="line">	public static final String brokerList = &quot;&quot;;</span><br><span class="line">	...</span><br><span class="line">	</span><br><span class="line">	public static Properties initConfig() &#123;</span><br><span class="line">		Properties props = new Properties();</span><br><span class="line">		props.put(&quot;bootstrap.servers&quot;, brokerList);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public static void main() &#123;</span><br><span class="line">		Properties props = initConfig();</span><br><span class="line">		KafkaConsumer&lt;String, String&gt; consumer = new KafkaConsmer&lt;&gt;(props);</span><br><span class="line">		consumer.subscribe(Arrays.asList(topic));</span><br><span class="line">		</span><br><span class="line">		try &#123;</span><br><span class="line">			while(isRunning.get()) &#123;</span><br><span class="line">				ConsumerRecrds&lt;String, String&gt; records = consumer.poll(Duration.ofMillis(1000));</span><br><span class="line">				</span><br><span class="line">			&#125; catch (Exception e) &#123;</span><br><span class="line">				log.error(&quot;&quot;);</span><br><span class="line">			&#125; finally &#123;</span><br><span class="line">				consumer.close();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>必要的参数配置</strong></p>
+<p>bootstrap.servers 集群broker地址</p>
+<p>group.id 消费者组名称</p>
+<p>key.deserializer  反序列化</p>
+<p>value.deserializer</p>
+<p>参数众多，直接使用org.apache.kafka.clients.consumer.ConsumerConfig</p>
+<p>每个参数在ConsumerConfig类中都有对应的名称</p>
+<p>如ConsumerConfig.GROUP_ID_CONFIG</p>
+<p><strong>订阅主题与分区</strong></p>
+
     </div>
 
     
