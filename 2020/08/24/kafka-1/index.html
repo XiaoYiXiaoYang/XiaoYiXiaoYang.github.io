@@ -55,7 +55,7 @@
 <meta property="og:description" content="一个有名的多分区多副本且基于ZooKeeper协调的分布式消息系统，高吞吐、可持久化、可水平扩展、支持流数据处理等多种特性被使用。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;08&#x2F;24&#x2F;kafka-1&#x2F;producer-structure.jpg">
-<meta property="og:updated_time" content="2020-10-27T15:25:13.125Z">
+<meta property="og:updated_time" content="2020-10-28T15:23:03.160Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;08&#x2F;24&#x2F;kafka-1&#x2F;producer-structure.jpg">
 
@@ -218,7 +218,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-27 23:25:13" itemprop="dateModified" datetime="2020-10-27T23:25:13+08:00">2020-10-27</time>
+                <time title="修改时间：2020-10-28 23:23:03" itemprop="dateModified" datetime="2020-10-28T23:23:03+08:00">2020-10-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -430,6 +430,38 @@
 <p>每个参数在ConsumerConfig类中都有对应的名称</p>
 <p>如ConsumerConfig.GROUP_ID_CONFIG</p>
 <p><strong>订阅主题与分区</strong></p>
+<p>一个消费者可以订阅一个或多个主题，subscribe的几个重载方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public void subscribe(Collection&lt;String&gt; topics, ConsumerRebalanceListener listener);</span><br><span class="line">public void subscribe(Collection&lt;String&gt; topics);</span><br><span class="line">public void subscribe(Pattern pattern, ConsumerRebalanceListener listener);</span><br><span class="line">public void subscribe(Pattern pattern);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>1.集合方式，订阅了什么就消费什么主题的消息，如果前后订阅了不同的主题，那么消费者以最后一次的为准。</p>
+<p>2.正则表达式，如果采用正则表达式的方式，在之后如果有人创建了新的主题，且主题名字与正则表达式匹配，那么这个消费者就可以消费到新添加的主题中的消息。</p>
+<p>参数类型是ConsumerRebalanceListener，设置的是在均衡监听器</p>
+<p>消费者还能直接订阅某些主题的特定分区</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public void assign(Collection&lt;TopicPartition&gt; partitions);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>TopicPartition类表示分区</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public final class TopicPartition implements Serializable &#123;</span><br><span class="line">	private final int partition; //分区</span><br><span class="line">	private final String topic; //主题</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果事先不知道主题中有多少分区，则使用partitionsFor()方法查询指定主题的元数据信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public List&lt;PartitionInfo&gt; partitionsFor(String topic)</span><br><span class="line"></span><br><span class="line">public class PartitionInfo &#123;</span><br><span class="line">	private final String topic;</span><br><span class="line">	private final int paitition;</span><br><span class="line">	private final Node leader;</span><br><span class="line">	private final Node[] replicas;  //AR</span><br><span class="line">	private final Node[] inSyncReplicas; //ISR</span><br><span class="line">	private final Node offlineReplicas;  //OSR</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>取消订阅</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">consumer.unsubscribe()</span><br></pre></td></tr></table></figure>
+
+<p>如果没有订阅任何主题或分区，那么继续执行消费程序会报异常IllegalStateException</p>
+<p>订阅状态</p>
+<p>集合订阅  AUTO_TOPICS</p>
+<p>正则表达式订阅 AUTO_PATTERN</p>
+<p>指定分区订阅 USER_ASSIGNED</p>
+<p>通过subscribe()方法订阅主题具有消费者自动在均衡的功能，在多个消费者的情况下，可以根据分区分配策略来自动分配各个消费者与分区的关系。</p>
 
     </div>
 
