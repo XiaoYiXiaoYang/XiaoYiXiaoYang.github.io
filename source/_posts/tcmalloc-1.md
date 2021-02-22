@@ -1,7 +1,7 @@
 ---
 title: 内存管理器-TCmalloc-官网
 date: 2020-10-25 16:00:14
-tags: [TCmalloc]
+tags: [TCMalloc]
 categories: [学习笔记]
 ---
 

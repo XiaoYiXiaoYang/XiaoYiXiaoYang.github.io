@@ -1,7 +1,7 @@
 ---
 title: tcmalloc 高效的内存分配器
 date: 2020-12-04 22:15:48
-tags: [tcmalloc]
+tags: [TCMalloc]
 categories: [学习笔记]
 ---
 
