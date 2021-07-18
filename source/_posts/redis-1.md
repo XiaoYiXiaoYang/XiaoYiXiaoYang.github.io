@@ -5,9 +5,9 @@ tags: [Redis]
 categories: [学习笔记]
 ---
 
+<center>
 老规矩，在学习一门新的科目的时候，先来看点视频课入个门...
-
-
+</center>
 
 <!--more-->
 

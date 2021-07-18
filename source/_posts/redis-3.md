@@ -5,8 +5,9 @@ tags: [Redis]
 categories: [学习笔记]
 ---
 
+<center>
 主从复制、哨兵、安全设置、Jedis
-
+</center>
 <!--more-->
 
 

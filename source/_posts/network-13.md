@@ -5,7 +5,9 @@ tags: [网络化测控]
 categories: [学习笔记]
 ---
 
+<center>
  绪论基础知识点较多
+</center>
 
 <!--more-->
 

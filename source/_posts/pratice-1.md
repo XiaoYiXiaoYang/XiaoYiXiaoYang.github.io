@@ -1,11 +1,13 @@
 ---
 title: 浅拷贝踩内存
 date: 2019-12-15 20:36:16
-tags: [技术分享]
-categories: [实习]
+tags: [经验贴]
+categories: [实战经验]
 ---
 
+<center>
 做UI界面，遇到了浅拷贝、赋值运算符问题
+</center>
 
 <!--more-->
 
@@ -42,8 +44,6 @@ int index = ui->listWidget->row(pitem);
 
 
 #### 赋值操作
-
-
 
 
 

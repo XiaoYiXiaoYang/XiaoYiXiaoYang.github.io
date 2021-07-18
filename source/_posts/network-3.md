@@ -5,7 +5,9 @@ tags: [计算机网络]
 categories: [学习笔记]
 ---
 
+<center>
  ARP--地址解析协议，由IP地址解析为MAC物理地址
+</center>
 
 <!--more-->
 

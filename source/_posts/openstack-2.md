@@ -5,6 +5,8 @@ tags: [OpenStack]
 categories: [学习笔记]
 ---
 
+<center>
 OpenStack 通用组件
+</center>
 
 <!--more-->

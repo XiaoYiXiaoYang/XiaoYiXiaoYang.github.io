@@ -5,7 +5,9 @@ tags: [Redis]
 categories: [学习笔记]
 ---
 
+<center>
 Redis高级话题
+</center>
 
 <!--more-->
 

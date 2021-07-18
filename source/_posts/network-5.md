@@ -5,7 +5,9 @@ tags: [计算机网络]
 categories: [学习笔记]
 ---
 
+<center>
  网际控制报文协议ICMP
+</center>
 
 <!--more-->
 

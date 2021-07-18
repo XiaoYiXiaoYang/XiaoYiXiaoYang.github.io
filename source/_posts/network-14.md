@@ -5,7 +5,9 @@ tags: [网络化测控]
 categories: [学习笔记]
 ---
 
+<center>
  DI、DO、AI
+</center>
 
 <!--more-->
 

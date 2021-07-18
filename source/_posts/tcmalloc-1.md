@@ -5,7 +5,9 @@ tags: [TCMalloc]
 categories: [学习笔记]
 ---
 
-https://github.com/google/tcmalloc   TCMalloc -- 高效的内存分配器
+<center>
+https://github.com/google/tcmalloc  翻译：TCMalloc -- 高效的内存分配器
+</center>
 
 <!--more-->
 
@@ -209,9 +211,9 @@ PTMalloc2软件包（现在是glibc的一部分）包含一个unittest程序`t-t
 
 下图显示了针对几种不同指标的TCMalloc与PTMalloc2的性能。首先，对于不同数量的线程，每秒经过的总操作数（百万）与最大分配大小之比。可用于生成这些图的原始数据（`time`实用程序的输出 ） `t-test1.times.txt`。
 
-| ![img](https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.1.threads.png) | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.2.threads.png) | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.3.threads.png) |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![img](https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.4.threads.png) | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.5.threads.png) | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.8.threads.png) |
+| ![img](https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.1.threads.png)  | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.2.threads.png)  | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.3.threads.png)  |
+| ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| ![img](https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.4.threads.png)  | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.5.threads.png)  | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.8.threads.png)  |
 | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.12.threads.png) | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.16.threads.png) | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspersec.vs.size.20.threads.png) |
 
 - TCMalloc比PTMalloc2具有更一致的可扩展性-对于所有线程数大于1的情况，小分配可达到约7-9百万个操作/秒，大分配可降低至约200万个操作/秒。单线程的情况显然是异常的，因为它只能使单个处理器保持繁忙，因此可以实现更少的运算/秒。PTMalloc2的每秒操作数差异更大-对于较小的分配，峰值约为400万操作/秒，对于较大的分配，则降至<100万操作/秒。
@@ -223,9 +225,9 @@ PTMalloc2软件包（现在是glibc的一部分）包含一个unittest程序`t-t
 
 接下来，CPU的每秒操作数（百万）与线程数的关系（最大分配大小为64字节-128 KB）。
 
-| ![img](https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.64.bytes.png) | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.256.bytes.png) | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.1024.bytes.png) |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![img](https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.4096.bytes.png) | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.8192.bytes.png) | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.16384.bytes.png) |
+| ![img](https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.64.bytes.png)    | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.256.bytes.png)   | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.1024.bytes.png)   |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| ![img](https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.4096.bytes.png)  | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.8192.bytes.png)  | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.16384.bytes.png)  |
 | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.32768.bytes.png) | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.65536.bytes.png) | ![img](https://gperftools.github.io/gperftools/tcmalloc-opspercpusec.vs.threads.131072.bytes.png) |
 
 在这里，我们再次看到，TCMalloc比PTMalloc2更一致，更高效。对于最大分配大小小于32K的情况，TCMalloc通常使用大量线程来实现每秒约2-250万个操作，而PTMalloc通常可以实现每秒0.5-1百万个操作，在很多情况下可以实现很多小于这个数字。超过32K最大分配大小后，TCMalloc的CPU时间下降到每秒1-150万，而对于大量线程，PTMalloc的下降几乎为零（即，使用PTMalloc时，大量的CPU时间被消耗掉，等待大量的锁定多线程情况）。
@@ -238,25 +240,25 @@ PTMalloc2软件包（现在是glibc的一部分）包含一个unittest程序`t-t
 
 一般有用的标志：
 
-| `TCMALLOC_SAMPLE_PARAMETER`             | 默认值：0          | 采样动作之间的近似差距。也就是说，我们大约每`tcmalloc_sample_parmeter`分配一个字节取一个样本 。可通过`MallocExtension::GetHeapSample()`或 获取此采样堆信息 `MallocExtension::ReadStackTraces()`。合理的值为524288。 |
-| --------------------------------------- | ------------------ | ------------------------------------------------------------ |
-| `TCMALLOC_RELEASE_RATE`                 | 默认值：1.0        | 在`madvise(MADV_DONTNEED)`支持它的系统上，通过释放未使用的内存到系统的速率 。零表示我们永远不会将内存释放回系统。增加此标志以更快地返回内存；减少它以更慢地返回内存。合理的比率在[0,10]范围内。 |
-| `TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD` | 默认值：1073741824 | 大于此值的分配将导致堆栈跟踪转储到stderr。每次我们打印一条消息时，转储堆栈跟踪的阈值将增加1.125倍，以便每60条消息，阈值将自动增加约1000倍。这限制了此标志生成的额外日志记录的数量。该标志的默认值非常大，因此除非覆盖了该标志，否则您将看不到任何额外的日志记录。 |
+| `TCMALLOC_SAMPLE_PARAMETER`             | 默认值：0          | 采样动作之间的近似差距。也就是说，我们大约每`tcmalloc_sample_parmeter`分配一个字节取一个样本 。可通过`MallocExtension::GetHeapSample()`或 获取此采样堆信息 `MallocExtension::ReadStackTraces()`。合理的值为524288。                                                                                                                                                                                                                   |
+| --------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TCMALLOC_RELEASE_RATE`                 | 默认值：1.0        | 在`madvise(MADV_DONTNEED)`支持它的系统上，通过释放未使用的内存到系统的速率 。零表示我们永远不会将内存释放回系统。增加此标志以更快地返回内存；减少它以更慢地返回内存。合理的比率在[0,10]范围内。                                                                                                                                                                                                                                       |
+| `TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD` | 默认值：1073741824 | 大于此值的分配将导致堆栈跟踪转储到stderr。每次我们打印一条消息时，转储堆栈跟踪的阈值将增加1.125倍，以便每60条消息，阈值将自动增加约1000倍。这限制了此标志生成的额外日志记录的数量。该标志的默认值非常大，因此除非覆盖了该标志，否则您将看不到任何额外的日志记录。                                                                                                                                                                     |
 | `TCMALLOC_MAX_TOTAL_THREAD_CACHE_BYTES` | 默认值：16777216   | 约束分配给线程缓存的字节总数。此限制不是严格的，因此在某些情况下缓存可能会超过此限制。该值默认为16MB。对于具有多个线程的应用程序，这可能不是足够大的缓存，这可能会影响性能。如果您怀疑由于TCMalloc中的锁争用而导致应用程序无法扩展到多个线程，则可以尝试增加此值。这可能会提高性能，但以TCMalloc占用额外的内存为代价。有关更多详细信息，请参见[ 垃圾回收](https://gperftools.github.io/gperftools/tcmalloc.html#Garbage_Collection)。 |
 
 高级“ tweaking”标志，可更精确地控制tcmalloc如何尝试从内核分配内存。
 
-| `TCMALLOC_SKIP_MMAP`              | 默认值：false       | 如果为true，请不要尝试用于`mmap`从内核获取内存。             |
-| --------------------------------- | ------------------- | ------------------------------------------------------------ |
-| `TCMALLOC_SKIP_SBRK`              | 默认值：false       | 如果为true，请不要尝试用于`sbrk`从内核获取内存。             |
+| `TCMALLOC_SKIP_MMAP`              | 默认值：false       | 如果为true，请不要尝试用于`mmap`从内核获取内存。                                        |
+| --------------------------------- | ------------------- | --------------------------------------------------------------------------------------- |
+| `TCMALLOC_SKIP_SBRK`              | 默认值：false       | 如果为true，请不要尝试用于`sbrk`从内核获取内存。                                        |
 | `TCMALLOC_DEVMEM_START`           | 默认值：0           | 用于`/dev/mem` 分配的物理内存起始位置（以MB为单位）。将此设置为0将禁用`/dev/mem` 分配。 |
-| `TCMALLOC_DEVMEM_LIMIT`           | 默认值：0           | 用于`/dev/mem` 分配的物理内存限制位置（以MB为单位）。将此设置为0表示没有限制。 |
-| `TCMALLOC_DEVMEM_DEVICE`          | 默认值：/ dev / mem | 用于分配非托管内存的设备。                                   |
-| `TCMALLOC_MEMFS_MALLOC_PATH`      | 默认值：“”          | 如果已设置，请指定安装了ugettlbfs或tmpfs的路径。这可以允许更快的分配。 |
-| `TCMALLOC_MEMFS_LIMIT_MB`         | 默认值：0           | 将总memfs分配大小限制为指定的MB数。0表示“无限制”。           |
-| `TCMALLOC_MEMFS_ABORT_ON_FAIL`    | 默认值：false       | 如果为true，则每当memfs_malloc未能满足分配时，则中止（）。   |
-| `TCMALLOC_MEMFS_IGNORE_MMAP_FAIL` | 默认值：false       | 如果为true，则忽略mmap的失败。                               |
-| `TCMALLOC_MEMFS_MAP_PRIVATE`      | 默认值：false       | 如果为true，则通过memfs而不是MAP_SHARED进行映射时，请使用MAP_PRIVATE。 |
+| `TCMALLOC_DEVMEM_LIMIT`           | 默认值：0           | 用于`/dev/mem` 分配的物理内存限制位置（以MB为单位）。将此设置为0表示没有限制。          |
+| `TCMALLOC_DEVMEM_DEVICE`          | 默认值：/ dev / mem | 用于分配非托管内存的设备。                                                              |
+| `TCMALLOC_MEMFS_MALLOC_PATH`      | 默认值：“”          | 如果已设置，请指定安装了ugettlbfs或tmpfs的路径。这可以允许更快的分配。                  |
+| `TCMALLOC_MEMFS_LIMIT_MB`         | 默认值：0           | 将总memfs分配大小限制为指定的MB数。0表示“无限制”。                                      |
+| `TCMALLOC_MEMFS_ABORT_ON_FAIL`    | 默认值：false       | 如果为true，则每当memfs_malloc未能满足分配时，则中止（）。                              |
+| `TCMALLOC_MEMFS_IGNORE_MMAP_FAIL` | 默认值：false       | 如果为true，则忽略mmap的失败。                                                          |
+| `TCMALLOC_MEMFS_MAP_PRIVATE`      | 默认值：false       | 如果为true，则通过memfs而不是MAP_SHARED进行映射时，请使用MAP_PRIVATE。                  |
 
 ## 修改代码中的行为
 
@@ -295,14 +297,14 @@ TCMalloc支持设置和检索任意“属性”：
 
 应用程序可以设置和获取这些属性，但是最有用的是库设置属性时，应用程序可以读取它们。这是TCMalloc定义的属性；您可以通过以下调用 `MallocExtension::instance()->GetNumericProperty("generic.heap_size", &value);`：
 
-| `generic.current_allocated_bytes`           | 应用程序使用的字节数。这通常与操作系统报告的内存使用情况不匹配，因为它不包括TCMalloc开销或内存碎片。 |
-| ------------------------------------------- | ------------------------------------------------------------ |
-| `generic.heap_size`                         | TCMalloc保留的系统内存字节。                                 |
-| `tcmalloc.pageheap_free_bytes`              | 页面堆中空闲的映射页面中的字节数。这些字节可用于满足分配请求。它们始终计入虚拟内存使用率，并且除非操作系统将基础内存换出，否则它们也计入物理内存使用率。 |
+| `generic.current_allocated_bytes`           | 应用程序使用的字节数。这通常与操作系统报告的内存使用情况不匹配，因为它不包括TCMalloc开销或内存碎片。                                                                                                                                |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `generic.heap_size`                         | TCMalloc保留的系统内存字节。                                                                                                                                                                                                        |
+| `tcmalloc.pageheap_free_bytes`              | 页面堆中空闲的映射页面中的字节数。这些字节可用于满足分配请求。它们始终计入虚拟内存使用率，并且除非操作系统将基础内存换出，否则它们也计入物理内存使用率。                                                                            |
 | `tcmalloc.pageheap_unmapped_bytes`          | 页面堆中未映射的空闲页面中的字节数。这些字节可能已经通过MallocExtension“释放”调用之一释放回了操作系统。它们可用于满足分配请求，但通常会导致页面错误。它们始终计入虚拟内存使用情况，并且取决于操作系统，通常不计入物理内存使用情况。 |
-| `tcmalloc.slack_bytes`                      | pageheap_free_bytes和pageheap_unmapped_bytes的总和。仅提供向后兼容性。不使用。 |
-| `tcmalloc.max_total_thread_cache_bytes`     | TCMalloc为小对象专用的内存量有一个限制。在某些情况下，更高的数字会折衷更多的内存使用量，从而提高效率。 |
-| `tcmalloc.current_total_thread_cache_bytes` | TCMalloc使用的某些内存的度量（用于小对象）。                 |
+| `tcmalloc.slack_bytes`                      | pageheap_free_bytes和pageheap_unmapped_bytes的总和。仅提供向后兼容性。不使用。                                                                                                                                                      |
+| `tcmalloc.max_total_thread_cache_bytes`     | TCMalloc为小对象专用的内存量有一个限制。在某些情况下，更高的数字会折衷更多的内存使用量，从而提高效率。                                                                                                                              |
+| `tcmalloc.current_total_thread_cache_bytes` | TCMalloc使用的某些内存的度量（用于小对象）。                                                                                                                                                                                        |
 
 ## 注意事项
 

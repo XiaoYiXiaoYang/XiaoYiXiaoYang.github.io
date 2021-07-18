@@ -5,7 +5,9 @@ tags: [计算机网络]
 categories: [学习笔记]
 ---
 
+<center>
  DNS是域名解析协议，应用层的协议，从域名解析出IP地址
+</center>
 
 <!--more-->
 

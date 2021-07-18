@@ -5,7 +5,9 @@ tags: [Kafka]
 categories: [学习笔记]
 ---
 
+<center>
 翻译 http://kafka.apache.org/documentation/
+</center>
 
 <!--more--> 
 

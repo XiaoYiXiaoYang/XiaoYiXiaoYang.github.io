@@ -5,7 +5,9 @@ tags: [Kafka]
 categories: [学习笔记]
 ---
 
+<center>
 一个有名的多分区多副本且基于ZooKeeper协调的分布式消息系统，高吞吐、可持久化、可水平扩展、支持流数据处理等多种特性被使用。
+</center>
 
 <!--more-->
 
@@ -203,7 +205,7 @@ public void close();
 
 
 
-![生产者客户端整体架构](producer-structure.jpg)
+![生产者客户端整体架构](kafka-1/producer-structure.jpg)
 
 
 

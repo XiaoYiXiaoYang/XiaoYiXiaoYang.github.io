@@ -5,7 +5,9 @@ tags: [计算机网络]
 categories: [学习笔记]
 ---
 
+<center>
  应用层的文件传输协议FTP和远程终端协议TELNET
+</center>
 
 <!--more-->
 

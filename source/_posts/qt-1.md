@@ -5,7 +5,9 @@ tags: [Qt]
 categories: [学习笔记]
 ---
 
+<center>
 用过Qt，十分友好。与MFC不同，QT是跨平台的的开发类库，还支持移动和嵌入式操作系统
+</center>
 
 <!--more-->
 

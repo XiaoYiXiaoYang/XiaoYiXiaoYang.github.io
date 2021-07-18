@@ -5,9 +5,11 @@ tags: [WSL]
 categories: [学习笔记]
 ---
 
+<center>
 1.windows开启wsl功能
 2.安装LxRunOffline 和 centos8
 3.命令使用
+</center>
 <!--more-->
 
 ## windows开启WSL支持

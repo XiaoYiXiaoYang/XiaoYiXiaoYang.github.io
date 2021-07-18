@@ -5,7 +5,9 @@ tags: [设计模式]
 categories: [学习笔记]
 ---
 
- 目前来说我最最最最熟悉的设计模式了把
+<center>
+单例模式
+</center>
 
 <!--more-->
 

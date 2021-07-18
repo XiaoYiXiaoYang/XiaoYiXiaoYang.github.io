@@ -5,9 +5,11 @@ tags: [Kafka]
 categories: [学习笔记]
 ---
 
+<center>
 http://kafka.apache.org/documentation/#brokerconfigs
 
 官方文档 http://kafka.apache.org/documentation/#brokerconfigs
+</center>
 
 <!--more-->
 

@@ -6,8 +6,9 @@ categories: [学习笔记]
 ---
 
 
-
+<center>
 人生苦短，我学Python
+</center>
 
 <!--more-->
 

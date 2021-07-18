@@ -5,7 +5,9 @@ tags: [计算机网络]
 categories: [学习笔记]
 ---
 
+<center>
 路由表中的路由是怎么样得出的
+</center>
 
 <!--more-->
 

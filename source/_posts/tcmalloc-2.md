@@ -5,8 +5,9 @@ tags: [TCMalloc]
 categories: [学习笔记]
 ---
 
+<center>
 优点、内存分配、内存释放、性能调优
-
+</center>
 <!--more-->
 
 tcmalloc 全称 thread cache malloc，即线程缓存的malloc
