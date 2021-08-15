@@ -32,6 +32,7 @@ www.yteng3456.xyz域名已经失效，如果要用还得重新备案；虚拟主
 ```
 
 
+
 ## 2021.06.30
 
 1.hexo源码等保留到了github，重装系统后需要重新部署
@@ -45,5 +46,20 @@ www.yteng3456.xyz域名已经失效，如果要用还得重新备案；虚拟主
 报错：typeError [ERR_INVALID_ARG_TYPE]: The "mode" argument must be integer. Received an instance of Object
 原因：nodejs版本过高，和hexo版本不匹配
 解决办法：切换nodejs为低版本；参考：https://www.jb51.net/article/202124.htm
+
+
+
+## 2021.08.15
+
+1.hexo文章编写小技巧
+
+`<!--more-->`该标签前面可以写文章摘要
+
+`<center><center/>` 该标签可以把摘要居中
+
+`<br/>`该标签可以插入一个换行
+
+- 理论上所有html标签都可以用
+
 
 
