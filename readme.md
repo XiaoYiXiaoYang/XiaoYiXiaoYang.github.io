@@ -1,1 +1,1 @@
-site https://xiaoyixiaoyang.github.io/
+https://xiaoyixiaoyang.github.io/
