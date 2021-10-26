@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="1.swagger 2.0学习2.go-swagger使用实践">
+<meta name="keywords" content="GoLang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go-swagger学习与使用">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2021&#x2F;07&#x2F;24&#x2F;go-swagger1&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="1.swagger 2.0学习2.go-swagger使用实践">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2021&#x2F;07&#x2F;24&#x2F;go-swagger1&#x2F;image-20210724182102934.png">
+<meta property="og:updated_time" content="2021-08-15T15:07:46.028Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2021&#x2F;07&#x2F;24&#x2F;go-swagger1&#x2F;image-20210724182102934.png">
+
+<link rel="canonical" href="http://yoursite.com/2021/07/24/go-swagger1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>go-swagger学习与使用 | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/07/24/go-swagger1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          go-swagger学习与使用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-24 16:53:13" itemprop="dateCreated datePublished" datetime="2021-07-24T16:53:13+08:00">2021-07-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-15 23:07:46" itemprop="dateModified" datetime="2021-08-15T23:07:46+08:00">2021-08-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/07/24/go-swagger1/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/24/go-swagger1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <center>
+    1.swagger 2.0学习<br>2.go-swagger使用实践
+</center>
+
+
+
+<a id="more"></a>
+
+
+
+<h2 id="Swagger-2-0语法"><a href="#Swagger-2-0语法" class="headerlink" title="Swagger 2.0语法"></a>Swagger 2.0语法</h2><p>链接：<a href="https://swagger.io/specification/v2/" target="_blank" rel="noopener">OpenAPI Specification - Version 2.0 | Swagger</a></p>
+<p>说明：swagger3.0语法已经有了，但是go-swagger只支持到2.0</p>
+<p><strong>背景</strong></p>
+<p>swagger是描述restapi的接口描述语言</p>
+<p>swagger也提供了swagger-editor网页来描述api</p>
+<p>链接：<a href="https://editor.swagger.io/" target="_blank" rel="noopener">Swagger Editor</a></p>
+<h3 id="spec语法学习"><a href="#spec语法学习" class="headerlink" title="spec语法学习"></a>spec语法学习</h3><p><strong>数据类型</strong></p>
+<table>
+<thead>
+<tr>
+<th>Common Name</th>
+<th><a href="https://swagger.io/specification/v2/#dataTypeType" target="_blank" rel="noopener"><code>type</code></a></th>
+<th><a href="https://swagger.io/specification/v2/#dataTypeFormat" target="_blank" rel="noopener"><code>format</code></a></th>
+<th>Comments</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>integer</td>
+<td><code>integer</code></td>
+<td><code>int32</code></td>
+<td>signed 32 bits</td>
+</tr>
+<tr>
+<td>long</td>
+<td><code>integer</code></td>
+<td><code>int64</code></td>
+<td>signed 64 bits</td>
+</tr>
+<tr>
+<td>float</td>
+<td><code>number</code></td>
+<td><code>float</code></td>
+<td></td>
+</tr>
+<tr>
+<td>double</td>
+<td><code>number</code></td>
+<td><code>double</code></td>
+<td></td>
+</tr>
+<tr>
+<td>string</td>
+<td><code></code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>byte</td>
+<td><code>string</code></td>
+<td><code>byte</code></td>
+<td>base64 encoded characters</td>
+</tr>
+<tr>
+<td>binary</td>
+<td><code>string</code></td>
+<td><code>binary</code></td>
+<td>any sequence of octets</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td><code>boolean</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>date</td>
+<td><code>string</code></td>
+<td><code>date</code></td>
+<td>As defined by <code>full-date</code> - <a href="http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14" target="_blank" rel="noopener">RFC3339</a></td>
+</tr>
+<tr>
+<td>dateTime</td>
+<td><code>string</code></td>
+<td><code>date-time</code></td>
+<td>As defined by <code>date-time</code> - <a href="http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14" target="_blank" rel="noopener">RFC3339</a></td>
+</tr>
+<tr>
+<td>password</td>
+<td><code>string</code></td>
+<td><code>password</code></td>
+<td>Used to hint UIs the input needs to be obscured.</td>
+</tr>
+</tbody></table>
+<p>string的format还可以是<code>uuid</code> <code>email</code>等 ，参见：</p>
+<p>swagger就是通过这些基本类型描述restpai</p>
+<p>spec主要由一些spec object组成，例：schema object、parameters defenition object等。</p>
+<ul>
+<li><p>swagger，指定swagger spec版本，2.0</p>
+</li>
+<li><p>info，提供API的元数据</p>
+</li>
+<li><p>tags，补充的元数据，在swagger ui中，用于作为api的分组标签</p>
+</li>
+<li><p>host，主机，如果没有提供，则使用文档所在的host</p>
+</li>
+<li><p>basePath，相对于host的路径</p>
+</li>
+<li><p>schemes，API的传输协议，http，https，ws，wss</p>
+</li>
+<li><p>consumes，API可以消费的MIME类型列表</p>
+</li>
+<li><p>produces，API产生的MIME类型列表</p>
+</li>
+<li><p>paths，API的路径，以及每个路径的HTTP方法，一个路径加上一个HTTP方法构成了一个操作。每个操作都有以下内容：</p>
+</li>
+<li><ul>
+<li>tags，操作的标签</li>
+<li>summary，短摘要</li>
+<li>description，描述</li>
+<li>externalDocs，外部文档</li>
+<li>operationId，标识操作的唯一字符串</li>
+<li>consumes，MIME类型列表</li>
+<li>produces，MIME类型列表</li>
+<li>parameters，参数列表</li>
+<li>responses，应答状态码和对于的消息的Schema</li>
+<li>schemes，传输协议</li>
+<li>deprecated</li>
+<li>security，安全</li>
+</ul>
+</li>
+<li><p>definitions，定义API消费或生产的数据类型，使用json-schema描述，操作的parameter和response部分可以通过引用的方式使用definitions部分定义的schema</p>
+</li>
+<li><p>parameters，多个操作共用的参数</p>
+</li>
+<li><p>responses，多个操作共用的响应</p>
+</li>
+<li><p>securityDefinitions，安全scheme定义</p>
+</li>
+<li><p>security，安全声明</p>
+</li>
+<li><p>externalDocs，附加的外部文档</p>
+</li>
+</ul>
+<p><strong>parameter object</strong></p>
+<p>parameter是描述restapi的请求参数，其可能有5中类型</p>
+<ul>
+<li>path - 表示参数在url中以变量的形式替换</li>
+<li>query - 表示参数以?xx=xx的形式拼接在url后</li>
+<li>header - 表示参数在header中</li>
+<li>body - 表示参数在body中</li>
+<li>form - 表示参数在form中， 只有当消息类型为<code>application/x-www-form-urlencoded</code>, <code>multipart/form-data</code></li>
+</ul>
+<p>例：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">paths:</span></span><br><span class="line">  <span class="string">/pet:</span></span><br><span class="line">    <span class="attr">post:</span></span><br><span class="line">      <span class="attr">tags:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">"pet"</span></span><br><span class="line">      <span class="attr">summary:</span> <span class="string">"Add a new pet to the store"</span></span><br><span class="line">      <span class="attr">description:</span> <span class="string">""</span></span><br><span class="line">      <span class="attr">operationId:</span> <span class="string">"addPet"</span></span><br><span class="line">      <span class="attr">parameters:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">in:</span> <span class="string">"body"</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">"body"</span></span><br><span class="line">        <span class="attr">description:</span> <span class="string">"Pet object that needs to be added to the store"</span></span><br><span class="line">        <span class="attr">required:</span> <span class="literal">true</span></span><br><span class="line">        <span class="attr">schema:</span></span><br><span class="line">          <span class="string">$ref:</span> <span class="string">"#/definitions/Pet"</span></span><br><span class="line">      <span class="attr">responses:</span></span><br><span class="line">        <span class="attr">"405":</span></span><br><span class="line">          <span class="attr">description:</span> <span class="string">"Invalid input"</span></span><br><span class="line">      <span class="attr">security:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">petstore_auth:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">"write:pets"</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">"read:pets"</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="go-swagger实践"><a href="#go-swagger实践" class="headerlink" title="go-swagger实践"></a>go-swagger实践</h2><p><a href="https://goswagger.io/" target="_blank" rel="noopener">https://goswagger.io/</a></p>
+<h4 id="go-swagger功能"><a href="#go-swagger功能" class="headerlink" title="go-swagger功能"></a>go-swagger功能</h4><p>1.通过yaml/json描述文档生成client/server代码</p>
+<p>2.通过对源代码添加注释利用工具生成swagger描述文档</p>
+<h3 id="通过yaml生成client-server代码"><a href="#通过yaml生成client-server代码" class="headerlink" title="通过yaml生成client/server代码"></a>通过yaml生成client/server代码</h3><p>(1)在swagger editor页面通过功能生成代码</p>
+<p><img src="/2021/07/24/go-swagger1/image-20210724182102934.png" alt="image-20210724182102934"></p>
+<p>(2)可通过工具命令生成</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">go get -u github.com/go-swagger/go-swagger/cmd/swagger</span><br><span class="line"></span><br><span class="line">swagger generate server -f server.yaml</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="使用自动生成代码构建自己的应用"><a href="#使用自动生成代码构建自己的应用" class="headerlink" title="使用自动生成代码构建自己的应用"></a>使用自动生成代码构建自己的应用</h3><p>go-swagger只是放便的生成了相关的代码，使用时还要自己写。以go为例</p>
+<h5 id="client代码："><a href="#client代码：" class="headerlink" title="client代码："></a>client代码：</h5><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">"os"</span></span><br><span class="line">  <span class="string">"log"</span></span><br><span class="line"></span><br><span class="line">  <span class="string">"github.com/myproject/client/operations"</span></span><br><span class="line">  <span class="string">"github.com/go-openapi/strfmt"</span></span><br><span class="line">  <span class="string">"github.com/go-openapi/spec"</span></span><br><span class="line"></span><br><span class="line">  apiclient <span class="string">"github.com/myproject/client"</span></span><br><span class="line">  httptransport <span class="string">"github.com/go-openapi/runtime/client"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">    transport := httptransport.New(<span class="string">"1.2.3.4:8080"</span>, <span class="string">""</span>, <span class="literal">nil</span>)</span><br><span class="line"> </span><br><span class="line">  client := apiclient.New(transport, strfmt.Default)</span><br><span class="line"></span><br><span class="line">    resp, err := client.addPet(models.addPetParam&#123;&#125;)</span><br><span class="line">  <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatal(err)</span><br><span class="line">  &#125;</span><br><span class="line">  fmt.Printf(<span class="string">"%#v\n"</span>, resp.Payload)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面就是通过自动生成的代码创建了一个自己的apiclient，然后通过这个client向服务端发起http请求，并拿到返回值。</p>
+<h5 id="server代码："><a href="#server代码：" class="headerlink" title="server代码："></a>server代码：</h5><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">todos.AddOneHandlerFunc(<span class="function"><span class="keyword">func</span><span class="params">(params todos.AddOneParams, principal <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">middleware</span>.<span class="title">Responder</span></span> &#123;</span><br><span class="line">  created, err := database.Save(params.Body)</span><br><span class="line">  <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> AddOneDefault&#123;models.Error&#123;<span class="number">500</span>, err.Error()&#125;&#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> AddOneCreated&#123;created&#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>server端已经架好了每个api实现的handler，但是默认是没有实现的，只会返回501</p>
+<p>我们只需要重写handler，然后就可以实现自己的server。</p>
+<p><strong>源码解析</strong></p>
+<p>参考：<a href="https://goswagger.io/generate/server.html" target="_blank" rel="noopener">[Server Usage · GitBook (goswagger.io)](https://goswagger.io/generate/server.html</a></p>
+<p>当请求到达时，服务器会处理</p>
+<ul>
+<li>路由</li>
+<li>认证</li>
+<li>输入验证</li>
+<li>content negotiation</li>
+<li>参数和body绑定</li>
+</ul>
+<p>用一段代码来描述就是以下部分</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">"net/http"</span></span><br><span class="line"></span><br><span class="line">  <span class="string">"github.com/go-openapi/errors"</span></span><br><span class="line">  <span class="string">"github.com/go-openapi/runtime/middleware"</span></span><br><span class="line">  <span class="string">"github.com/gorilla/context"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newCompleteMiddleware</span><span class="params">(ctx *middleware.Context)</span> <span class="title">http</span>.<span class="title">Handler</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> http.HandlerFunc(<span class="function"><span class="keyword">func</span><span class="params">(rw http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> context.Clear(r)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// use context to lookup routes</span></span><br><span class="line">    <span class="comment">// 查询路由</span></span><br><span class="line">    <span class="keyword">if</span> matched, ok := ctx.RouteInfo(r); ok &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> <span class="built_in">len</span>(matched.Authenticators) &gt; <span class="number">0</span> &#123;</span><br><span class="line">        <span class="comment">// 认证处理</span></span><br><span class="line">        <span class="keyword">if</span> _, err := ctx.Authorize(r, matched); err != <span class="literal">nil</span> &#123;</span><br><span class="line">          ctx.Respond(rw, r, matched.Produces, matched, err)</span><br><span class="line">          <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 参数校验</span></span><br><span class="line">      bound, validation := ctx.BindAndValidate(r, matched)</span><br><span class="line">      <span class="keyword">if</span> validation != <span class="literal">nil</span> &#123;</span><br><span class="line">        ctx.Respond(rw, r, matched.Produces, matched, validation)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// handler 处理</span></span><br><span class="line">      result, err := matched.Handler.Handle(bound)</span><br><span class="line">      <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        ctx.Respond(rw, r, matched.Produces, matched, err)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      ctx.Respond(rw, r, matched.Produces, matched, result)</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Not found, check if it exists in the other methods first</span></span><br><span class="line">    <span class="comment">// 路由没找到，尝试其他方法</span></span><br><span class="line">    <span class="keyword">if</span> others := ctx.AllowedMethods(r); <span class="built_in">len</span>(others) &gt; <span class="number">0</span> &#123;</span><br><span class="line">      ctx.Respond(rw, r, ctx.spec.RequiredProduces(), <span class="literal">nil</span>, errors.MethodNotAllowed(r.Method, others))</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    ctx.Respond(rw, r, ctx.spec.RequiredProduces(), <span class="literal">nil</span>, errors.NotFound(<span class="string">"path %s was not found"</span>, r.URL.Path))</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>在处理请求之前，你需要把handler的具体实现配置到configure_xxx.go文件中</li>
+</ul>
+<p>默认这些handler的实现是未实现的</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"github.com/go-openapi/errors"</span></span><br><span class="line">    <span class="string">"github.com/go-openapi/runtime"</span></span><br><span class="line">    <span class="string">"github.com/go-openapi/runtime/middleware"</span></span><br><span class="line"></span><br><span class="line">    <span class="string">"github.com/go-openapi/examples/todo-list/restapi/operations"</span></span><br><span class="line">    <span class="string">"github.com/go-openapi/examples/todo-list/restapi/operations/todos"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// This file is safe to edit. Once it exists it will not be overwritten</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">configureAPI</span><span class="params">(api *operations.ToDoListAPI)</span> <span class="title">http</span>.<span class="title">Handler</span></span> &#123;</span><br><span class="line">    <span class="comment">// configure the api here</span></span><br><span class="line">    api.JSONConsumer = runtime.JSONConsumer()</span><br><span class="line"></span><br><span class="line">    api.JSONProducer = runtime.JSONProducer()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 未实现</span></span><br><span class="line">    api.KeyAuth = <span class="function"><span class="keyword">func</span><span class="params">(token <span class="keyword">string</span>)</span> <span class="params">(<span class="keyword">interface</span>&#123;&#125;, error)</span></span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>, errors.NotImplemented(<span class="string">"api key auth (key) x-petstore-token from header has not yet been implemented"</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 未实现</span></span><br><span class="line">    api.AddOneHandler = todos.AddOneHandlerFunc(<span class="function"><span class="keyword">func</span><span class="params">(params todos.AddOneParams, principal <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">middleware</span>.<span class="title">Responder</span></span> &#123;</span><br><span class="line">        <span class="keyword">return</span> middleware.NotImplemented(<span class="string">"operation addOne has not yet been implemented"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> setupGlobalMiddleware(api.Serve(setupMiddlewares))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从上面的代码看到，除了配置handler实现部分，api这个对象还有配置JSONConsumer成员和JSONProducer成员。这两个成员能将别的format类型的文字解析到object中。可以在sepc文档中配置使用的consumer和producer类型也可以在生成的时候使用命令行<code>--default-consumes --default-produces application/xml</code></p>
+<p>consumer和produce的是两个接口类型，其定义如下</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ConsumerFunc represents a function that can be used as a consumer</span></span><br><span class="line"><span class="keyword">type</span> ConsumerFunc <span class="function"><span class="keyword">func</span><span class="params">(io.Reader, <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">error</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Consume consumes the reader into the data parameter</span></span><br><span class="line"><span class="comment">// 将数据转换为data</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(fn ConsumerFunc)</span> <span class="title">Consume</span><span class="params">(reader io.Reader, data <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> fn(reader, data)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Consumer implementations know how to bind the values on the provided interface to</span></span><br><span class="line"><span class="comment">// data provided by the request body</span></span><br><span class="line"><span class="keyword">type</span> Consumer <span class="keyword">interface</span> &#123;</span><br><span class="line">    <span class="comment">// Consume performs the binding of request values</span></span><br><span class="line">    Consume(io.Reader, <span class="keyword">interface</span>&#123;&#125;) error</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ProducerFunc represents a function that can be used as a producer</span></span><br><span class="line"><span class="keyword">type</span> ProducerFunc <span class="function"><span class="keyword">func</span><span class="params">(io.Writer, <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">error</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Produce produces the response for the provided data</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(f ProducerFunc)</span> <span class="title">Produce</span><span class="params">(writer io.Writer, data <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> f(writer, data)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Producer implementations know how to turn the provided interface into a valid</span></span><br><span class="line"><span class="comment">// HTTP response</span></span><br><span class="line"><span class="keyword">type</span> Producer <span class="keyword">interface</span> &#123;</span><br><span class="line">    <span class="comment">// Produce writes to the http response</span></span><br><span class="line">    Produce(io.Writer, <span class="keyword">interface</span>&#123;&#125;) error</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>当你为api配置一个consumer或producer的时候需要确保它支持对应的content type。go-swagger已经提供了consumer和producer支持已知的部分midea type，可以在configure api中注册一个新的consumer/producer 或者重写一个已经存在的consumer/producer，例</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">configureAPI</span><span class="params">(api *operations.ToDoListAPI)</span> <span class="title">http</span>.<span class="title">Handler</span></span> &#123;</span><br><span class="line">    <span class="comment">// other setup code here...</span></span><br><span class="line"></span><br><span class="line">    api.RegisterConsumer(<span class="string">"application/pkcs10"</span>, myCustomConsumer)</span><br><span class="line">    api.RegisterProducer(<span class="string">"application/pkcs10"</span>, myCustomProducer)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>下一个就是认证部分</li>
+</ul>
+<p>默认启用认证是基于token验证的，如果没有token，则请求将被返回401，以下是验证token的handler声明</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// UserPassAuthentication authentication function</span></span><br><span class="line"><span class="keyword">type</span> UserPassAuthentication <span class="function"><span class="keyword">func</span><span class="params">(<span class="keyword">string</span>, <span class="keyword">string</span>)</span> <span class="params">(<span class="keyword">interface</span>&#123;&#125;, error)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// TokenAuthentication authentication function</span></span><br><span class="line"><span class="keyword">type</span> TokenAuthentication <span class="function"><span class="keyword">func</span><span class="params">(<span class="keyword">string</span>)</span> <span class="params">(<span class="keyword">interface</span>&#123;&#125;, error)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// AuthenticatorFunc turns a function into an authenticator</span></span><br><span class="line"><span class="keyword">type</span> AuthenticatorFunc <span class="function"><span class="keyword">func</span><span class="params">(<span class="keyword">interface</span>&#123;&#125;)</span> <span class="params">(<span class="keyword">bool</span>, <span class="keyword">interface</span>&#123;&#125;, error)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Authenticate authenticates the request with the provided data</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(f AuthenticatorFunc)</span> <span class="title">Authenticate</span><span class="params">(params <span class="keyword">interface</span>&#123;&#125;)</span> <span class="params">(<span class="keyword">bool</span>, <span class="keyword">interface</span>&#123;&#125;, error)</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> f(params)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Authenticator represents an authentication strategy</span></span><br><span class="line"><span class="comment">// implementations of Authenticator know how to authenticate the</span></span><br><span class="line"><span class="comment">// request data and translate that into a valid principal object or an error</span></span><br><span class="line"><span class="keyword">type</span> Authenticator <span class="keyword">interface</span> &#123;</span><br><span class="line">    Authenticate(<span class="keyword">interface</span>&#123;&#125;) (<span class="keyword">bool</span>, <span class="keyword">interface</span>&#123;&#125;, error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>现在可以自定义自己的api实现，我们看下<code>AddOneHandler</code>的细节部分</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// AddOneHandlerFunc turns a function with the right signature into a add one handler</span></span><br><span class="line"><span class="keyword">type</span> AddOneHandlerFunc <span class="function"><span class="keyword">func</span><span class="params">(AddOneParams, <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">middleware</span>.<span class="title">Responder</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Handle executing the request and returning a response</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(fn AddOneHandlerFunc)</span> <span class="title">Handle</span><span class="params">(params AddOneParams, principal <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">middleware</span>.<span class="title">Responder</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> fn(params, principal)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// AddOneHandler interface for that can handle valid add one params</span></span><br><span class="line"><span class="keyword">type</span> AddOneHandler <span class="keyword">interface</span> &#123;</span><br><span class="line">    Handle(AddOneParams, <span class="keyword">interface</span>&#123;&#125;) middleware.Responder</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>首先定义了一个函数类型，这个函数实现了一个接口的Handle方法</p>
+<p>AddOneHandler是一个接口类型，有一个Handle方法。</p>
+<p>因为有认证的原因，实现该接口的函数有两个参数，一个是请求的parameter，另一个是安全的principal。</p>
+<p>实现功能的handler需要自己配置，go-swagger只保证parameter和principal正确的经过了路由绑定和参数校验。所以使用者可以放心的处理接收到的参数。</p>
+<p>对于addOneHandler，它的实现继承了一个<code>http.Handler</code>和<code>middleware.Context</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// NewAddOne creates a new http.Handler for the add one operation</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewAddOne</span><span class="params">(ctx *middleware.Context, handler AddOneHandler)</span> *<span class="title">AddOne</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;AddOne&#123;Context: ctx, Handler: handler&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*AddOne swagger:route POST / todos addOne</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">AddOne add one API</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">type</span> AddOne <span class="keyword">struct</span> &#123;</span><br><span class="line">    Context *middleware.Context</span><br><span class="line">    Params  AddOneParams</span><br><span class="line">    Handler AddOneHandler</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(o *AddOne)</span> <span class="title">ServeHTTP</span><span class="params">(rw http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">    route, _ := o.Context.RouteInfo(r)</span><br><span class="line"></span><br><span class="line">    uprinc, err := o.Context.Authorize(r, route)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        o.Context.Respond(rw, r, route.Produces, route, err)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> principal <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">    <span class="keyword">if</span> uprinc != <span class="literal">nil</span> &#123;</span><br><span class="line">        principal = uprinc</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> err := o.Context.BindValidRequest(r, route, &amp;o.Params); err != <span class="literal">nil</span> &#123; <span class="comment">// bind params</span></span><br><span class="line">        o.Context.Respond(rw, r, route.Produces, route, err)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    res := o.Handler.Handle(o.Params, principal) <span class="comment">// actually handle the request</span></span><br><span class="line"></span><br><span class="line">    o.Context.Respond(rw, r, route.Produces, route, res)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>它的实现包括认证、路由绑定、用户实现的代码和生成response。对于认证，此请求将放到api上下文对象的处理程序中，当请求经过认证后，它会被绑定，此操作最终需要一个对象，即实现。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// RequestBinder is an interface for types to implement</span></span><br><span class="line"><span class="comment">// when they want to be able to bind from a request</span></span><br><span class="line"><span class="keyword">type</span> RequestBinder <span class="keyword">interface</span> &#123;</span><br><span class="line">    BindRequest(*http.Request, *MatchedRoute) error</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// AddOneParams contains all the bound params for the add one operation</span></span><br><span class="line"><span class="comment">// typically these are obtained from a http.Request</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// swagger:parameters addOne</span></span><br><span class="line"><span class="keyword">type</span> AddOneParams <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">      In: body</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    Body *models.Item</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface</span></span><br><span class="line"><span class="comment">// for simple values it will use straight method calls</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(o *AddOneParams)</span> <span class="title">BindRequest</span><span class="params">(r *http.Request, route *middleware.MatchedRoute)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> res []error</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> body models.Item</span><br><span class="line">    <span class="keyword">if</span> err := route.Consumer.Consume(r.Body, &amp;body); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        res = <span class="built_in">append</span>(res, errors.NewParseError(<span class="string">"body"</span>, <span class="string">"body"</span>, <span class="string">""</span>, err))</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> err := body.Validate(route.Formats); err != <span class="literal">nil</span> &#123;</span><br><span class="line">            res = <span class="built_in">append</span>(res, err)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(res) == <span class="number">0</span> &#123;</span><br><span class="line">            o.Body = &amp;body</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(res) &gt; <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> errors.CompositeValidationError(res...)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>AddOneParams有一个绑定request的方法，这个方法实现了RequestBinder的BindRequest接口，</p>
+<p>对于响应，go-swagger定义了responder接口，谁实现了这些接口，就可以写response返回。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Responder is an interface for types to implement</span></span><br><span class="line"><span class="comment">// when they want to be considered for writing HTTP responses</span></span><br><span class="line"><span class="keyword">type</span> Responder <span class="keyword">interface</span> &#123;</span><br><span class="line">    WriteResponse(http.ResponseWriter, runtime.Producer)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*AddOneCreated Created</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">swagger:response addOneCreated</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">type</span> AddOneCreated <span class="keyword">struct</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// In: body</span></span><br><span class="line">    Payload *models.Item <span class="string">`json:"body,omitempty"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// WriteResponse to the client</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(o *AddOneCreated)</span> <span class="title">WriteResponse</span><span class="params">(rw http.ResponseWriter, producer runtime.Producer)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">    rw.WriteHeader(<span class="number">201</span>)</span><br><span class="line">    <span class="keyword">if</span> o.Payload != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> err := producer.Produce(rw, o.Payload); err != <span class="literal">nil</span> &#123;</span><br><span class="line">            <span class="built_in">panic</span>(err) <span class="comment">// let the recovery middleware deal with this</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*AddOneDefault error</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">swagger:response addOneDefault</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">type</span> AddOneDefault <span class="keyword">struct</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// In: body</span></span><br><span class="line">    Payload *models.Error <span class="string">`json:"body,omitempty"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// WriteResponse to the client</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(o *AddOneDefault)</span> <span class="title">WriteResponse</span><span class="params">(rw http.ResponseWriter, producer runtime.Producer)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">    rw.WriteHeader(<span class="number">500</span>)</span><br><span class="line">    <span class="keyword">if</span> o.Payload != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> err := producer.Produce(rw, o.Payload); err != <span class="literal">nil</span> &#123;</span><br><span class="line">            <span class="built_in">panic</span>(err) <span class="comment">// let the recovery middleware deal with this</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>因此，要实现<code>AddOneHandler</code>,你可以这样</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">todos.AddOneHandlerFunc(<span class="function"><span class="keyword">func</span><span class="params">(params todos.AddOneParams, principal <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">middleware</span>.<span class="title">Responder</span></span> &#123;</span><br><span class="line">  created, err := database.Save(params.Body)</span><br><span class="line">  <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> AddOneDefault&#123;models.Error&#123;<span class="number">500</span>, err.Error()&#125;&#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> AddOneCreated&#123;created&#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>// TODO</p>
+<p>整理一个流程图：</p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/GoLang/" rel="tag"><i class="fa fa-tag"></i> GoLang</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/24/go-graphql1/" rel="prev" title="go-graphql学习与使用">
+      <i class="fa fa-chevron-left"></i> go-graphql学习与使用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/08/container-network-1/" rel="next" title="Slim-对低开销容器覆盖网络的操作系统内核支持">
+      Slim-对低开销容器覆盖网络的操作系统内核支持 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Swagger-2-0语法"><span class="nav-number">1.</span> <span class="nav-text">Swagger 2.0语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#spec语法学习"><span class="nav-number">1.1.</span> <span class="nav-text">spec语法学习</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#go-swagger实践"><span class="nav-number">2.</span> <span class="nav-text">go-swagger实践</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#go-swagger功能"><span class="nav-number">2.0.1.</span> <span class="nav-text">go-swagger功能</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过yaml生成client-server代码"><span class="nav-number">2.1.</span> <span class="nav-text">通过yaml生成client/server代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用自动生成代码构建自己的应用"><span class="nav-number">2.2.</span> <span class="nav-text">使用自动生成代码构建自己的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#client代码："><span class="nav-number">2.2.0.1.</span> <span class="nav-text">client代码：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#server代码："><span class="nav-number">2.2.0.2.</span> <span class="nav-text">server代码：</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

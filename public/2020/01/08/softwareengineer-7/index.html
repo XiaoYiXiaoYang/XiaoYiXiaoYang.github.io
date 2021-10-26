@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="软件质量保证（QA）最关键的步骤是测试">
+<meta name="keywords" content="软件工程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="软件工程复习（第七章 软件测试）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;08&#x2F;softwareengineer-7&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="软件质量保证（QA）最关键的步骤是测试">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T06:03:49.640Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/01/08/softwareengineer-7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>软件工程复习（第七章 软件测试） | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/softwareengineer-7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          软件工程复习（第七章 软件测试）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-08 20:55:33" itemprop="dateCreated datePublished" datetime="2020-01-08T20:55:33+08:00">2020-01-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 14:03:49" itemprop="dateModified" datetime="2021-07-18T14:03:49+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/01/08/softwareengineer-7/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/08/softwareengineer-7/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> 软件质量保证（QA）最关键的步骤是测试</p>
+<a id="more"></a>
+
+<p>7.1 软件测试的基本概念</p>
+<p>使用人工或自动手段运行软件系统的过程，目的在于检验系统是否满足规定的需求，或确定预期结果与实际结果之间的差异</p>
+<p>7.1.1 软件测试的目标</p>
+<p>为发现程序中的错误<br>软件测试的过程也是程序运行的过程<br>程序运行需要数据，为测试而设计的数据称为<strong>测试用例</strong><br>设计测试用例的原则是尽可能暴露错误<br>不能保证通过测试的程序一定正确<br>测试只能找出程序中的错误，而不能证明程序无措<br>软件运行期间，测试活动从未中断，在交付用户之后，用户继续扮演软件测试者的角色</p>
+<p>7.1.2 测试阶段的信息流程</p>
+<p>软件配置：需求说明书、设计说明书、源代码<br>硬件配置：测试计划、测试工具、测试用例、期望结果</p>
+<p>7.1.3 测试用例和场景设计</p>
+<p>黑盒测试：已知产品应有的功能，通过测试检验每个功能<br>白盒测试：已知产品内部结构和工作过程通过测试验证产品内部动作是否按照产品规格说明书正常运行</p>
+<p>a.黑盒测试白盒测试并不矛盾，互为补充<br>b.黑盒测试和白盒测试是两个端点<br>c.测试用例处于两者之间</p>
+<p>选择测试用例取决于：<br>可能路径个数<br>输入数据的属性<br>计算量的大小<br>算法复杂度</p>
+<p>总期望：用尽可能少的时间和代价发现尽可能多的错误</p>
+<p>7.1.4 软件测试的步骤</p>
+<p><strong>螺旋图</strong></p>
+<p>为开发软件，沿螺旋线由外向里旋转，每旋转一圈，软件的抽象级别降低一次<br>为测试软件，沿同一螺旋线有里向外运动，每旋转一圈，测试的范围加大一级</p>
+<p>螺旋中心对应单元测试，它测试源程序的每一模块，<br>下一步是集成测试，它测试软件的总体结构，<br>再下一步是确认测试，测试软件是否满足需求，<br>最后一步是系统测试，它检测软件与系统中其他元素是否协调</p>
+<p>7.2 软件测试方法</p>
+<p>7.2.1 白盒测试</p>
+<p>*白盒测试关注处理细节，针对程序的每一条逻辑路径分别设计测试用例，检查分支和循环的情况</p>
+<p>穷举测试不可取，一般选用少量“最有效”，即最有可能暴露错误的路径进行测试*</p>
+<p>保证每模块中每一独立的路径至少执行一次<br>保证所有判断的每一分支至少执行一次<br>保证每一循环都在边界条件和一般条件下至少各执行一次<br>验证所有内部数据结构的有效性</p>
+<p>7.2.1.1 <strong>基本路径测试</strong></p>
+<p>思想：根据软件过程性描述中的控制流程确定<strong>复杂性度量</strong>(V(G)),然后用此度量定义基本路径集合，由此导出一组测试用例，他们能保证每个语句至少执行一次。</p>
+<p>为了使用图论的知识和术语，引入了<strong>流图</strong>的概念</p>
+<p>流图把程序中的结构化构件改为一般有向图的表示形式</p>
+<p>独立路径：指至少引入了一个新处理语句和一个新判断的一条程序通路</p>
+<p>流图的复杂性度量V(G)等于程序中独立路径的条数，也给出了程序中每个语句至少执行一次所必须进行测试的最少次数</p>
+<p>如果能设计测试用例，使得每条独立路径执行一次，则程序中所有语句、所有判断的真假分支都至少执行了一次</p>
+<p>a.根据详细设计或代码导出流图<br>b.确定复杂性度量 V(G) = e - n + 2   //e是边数，n是顶点数<br>c.确定独立路径集合<br>d.准备测试用例</p>
+<p>7.2.1.2 其他测试方法</p>
+<p><strong>条件测试法</strong></p>
+<p>简单条件和符合条件</p>
+<p>分支测试，对一个符合条件C，里面含n个变量的布尔表达式，理论上需要2^n组数据进行完全的测试</p>
+<p><strong>数据流测试法</strong></p>
+<p>根据程序中变量定义和引用的位置选择测试路径</p>
+<p>DEF（S）集合 表示所有在S中定义的变量的集合<br>USE（S）集合 表示所有在S中使用的变量的集合</p>
+<p>如果从语句S到语句S’ 存在一条路径，且在这条路径上不存在X的再定义，则称在S中定义的X在S’处活跃</p>
+<p>定义变量X的 定义-引用链（DU链），[X,S,S’]</p>
+<p>一种简单的数据流测试策略即对每条DU链至少覆盖一次，称为DU测试策略，它对于含if语句和多重循环语句的程序特别有效</p>
+<p><strong>循环测试</strong></p>
+<p>循环分为简单循环、并列循环、嵌套循环、非结构循环四类</p>
+<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">对于<span class="built_in">n</span>次的简单循环，做如下测试</span><br><span class="line">a.完全跳过循环</span><br><span class="line">b.仅循环一次</span><br><span class="line">c.循环两次</span><br><span class="line">d.循环m次，m&lt;<span class="built_in">n</span></span><br><span class="line">e.循环<span class="built_in">n</span>-<span class="number">1</span>次 <span class="built_in">n</span>次 <span class="built_in">n</span>+<span class="number">1</span>次</span><br></pre></td></tr></table></figure>
+
+<p>7.2.2 黑盒测试</p>
+<p><em>黑盒测试完全不考虑程序的内部结构和处理过程<br>设计测试用例旨在说明：<br> 功能是否可操作性<br> 能否适当的接收输入数据并产生正确的输出结果<br> 能否保持外部信息的完整性</em></p>
+<p>黑盒测试主要诊断<br>不正确或遗漏的功能<br>界面出错<br>数据结构或外部数据库访问出错<br>性能问题<br>初始化和终止条件出错</p>
+<p>7.2.2.1 等价分类法</p>
+<p>把程序的输入数据集合按输入条件划分为若干个等价类，每一等价类相对于输入条件表示为一组有效或无效的输入，然后为每一等价类设计一个测试用例，这样既可大大减少测试的次数，又不丢失发现缺陷的机会</p>
+<p>规则<br>如果能为输入条件指定一个范围，即可划分出一个有效的等价类<br>如果能为输入条件指定一个特定值，<br>如果能为输入条件指定一个集合<br>如果能为输入条件指定一个布尔量</p>
+<p>7.2.2.2 边界值分析法（BVA）</p>
+<p>BVA技术是对等价分类技术的补充，即在一个等价类中不是任选一个元素作为等价类的代表做测试，而是选择等价类边界上的值</p>
+<p>规则<br>如果输入条件范围（a，b），则a,b和紧挨ab左右的值应作为测试用例<br>如果输入条件是一组数，那么这组数中最大，最小，次大，次小作为测试用例<br>如果内部数据结构有界，则检查数据结构的边界</p>
+<p>7.3 软件测试策略</p>
+<p>从模块测试开始，一级一级向外扩展，直至整个系统测试完毕</p>
+<p>7.3.1 单元测试</p>
+<p>7.3.1.1 单元测试任务</p>
+<p>包括模块接口测试、模块局部数据结构测试、模块边界条件测试、模块中所有独立执行通路测试和模块各条出错处理通路测试</p>
+<p><em>模块接口测试</em><br>输入参数和形参个数是否相同、类型是否匹配、量纲是否一致</p>
+<p>调用其他模块时候实参和被调模块形参个数是否相同、类型是否匹配、量纲是否一致</p>
+<p><em>局部数据结构测试</em><br>检查局部数据结构是为了保证临时存储在模块内的数据再程序执行过程中完整、正确</p>
+<p><em>独立路径测试</em><br>在模块中应对每条独立路径进行测试</p>
+<p>7.3.1.2 <strong>单元测试过程</strong></p>
+<p>为测试模块开发一个驱动模块或者若干个桩模块</p>
+<p>驱动模块在大多数场合被称为“主程序”，它接收测试数据并将这些数据传递到被测试模块，被测试模块被调用后，“主程序”打印相关结果。</p>
+<p>桩模块用于替代那些真正附属于被测模块的模块，桩模块的界面与其对应的真实模块完全一致，但内部只做少量数据处理，主要任务是打印“进入-退出”消息</p>
+<p>7.3 <strong>综合测试</strong>（集成测试）</p>
+<p>按设计要求把通过单元测试的模块组装在一起之后，进行集成测试以便发现与接口相关的各种缺陷</p>
+<p>增量式集成：程序一段一段扩展，测试的范围一步一步地增大，缺陷易于定位和纠正，界面的测试亦可做到完全彻底</p>
+<p>非增量式集成：把所有模块按设计要求一次全部组装起来，然后进行整体测试，</p>
+<p>7.3.2.1 自顶向下集成</p>
+<p>它从主控模块开始，按照软件的控制层次结构，以深度优先或广度优先的策略，逐步把各个模块集成在一起。</p>
+<p>深度优先策略首先把主控制路径上的模块集成在一起，至于选择哪一条路径带随意性</p>
+<p>步骤：<br>a.以主控模块为测试驱动模块，把对主控模块进行单元测试时引入的所有桩模块用实际模块替代<br>b.依据所选的集成策略，每次只替代一个桩模块<br>c.每集成一个模块立即测试一遍<br>d.只有每组测试完成后，才着手替换下一个模块<br>e.为避免引入新缺陷，须不断进行回归测试，</p>
+<p>7.3.2.2 自底向上集成</p>
+<p>从“原子模块”（即软件结构最低层的模块）开始组装和测试，因测试到较高层模块时，所需的下层模块功能均已具备，所以不再需要桩模块</p>
+<p>步骤：<br>a.把低层模块的组织称实现某个子功能的模块群<br>b.开发一个测试用驱动模块，控制测试数据的输入和测试结果的输出<br>c.对每个模块群进行测试<br>d.删除测试使用的驱动模块，用较高层模块把模块群组织成为完成更大功能的新模块群</p>
+<p>7.3.3 确认测试</p>
+<p>确认测试应检查软件能否按合同要求进行工作，即是否满足软件需求规格说明中的确认标准</p>
+<p>a测试：阿尔法测试，指软件开发公司组织内部人员模拟各类用户行为对即将面市的软件制品进行测试，试图发现缺陷并修正</p>
+<p>经过阿尔法测试的调整的软件制品称为贝塔版本</p>
+<p>b测试：贝塔测试，软件开发公司组织各方面的典型用户在日常工作中实际使用b版本</p>
+<p>7.3.4 系统测试</p>
+<p>恢复测试</p>
+<p>安全测试</p>
+<p>强度测试</p>
+<p>性能测试</p>
+<p>7.3.5 排错</p>
+<p><em>程序中的错误的特征</em>:</p>
+<p>错误的外部特征兆远离引起错误的内部原因，高度耦合的程序结构此类现象更严重</p>
+<p>纠正一个错误造成另一个错误暂时消失</p>
+<p>某些错误征兆只是假象</p>
+<p>一时疏忽造成的错误征兆不易追踪</p>
+<p>错误是由于分时而不是程序引起</p>
+<p>输入条件难以精确的再现</p>
+<p>错误征兆时有时无</p>
+<p>错误是由于分布式处理造成</p>
+<p><em>排错方法</em>：</p>
+<p>原始类<br>回溯类<br>排除类</p>
+<p>7.4 自动测试工具</p>
+<p>Code Analysis tools</p>
+<p>Test execution tools</p>
+<p>Test case generators</p>
+<hr>
+<p>2019-05-14 21:45:02 星期二</p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 软件工程</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/01/08/softwareengineer-6/" rel="prev" title="软件工程复习（第六章 程序设计语言和编码）">
+      <i class="fa fa-chevron-left"></i> 软件工程复习（第六章 程序设计语言和编码）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/01/08/compilerprinciple-1/" rel="next" title="编译原理（第一章 编译器概述）">
+      编译原理（第一章 编译器概述） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

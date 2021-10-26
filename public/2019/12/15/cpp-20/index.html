@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="数据抽象和封装，依赖于接口和实现">
+<meta name="keywords" content="C++ Primer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ Primer(第七章 类)">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;cpp-20&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="数据抽象和封装，依赖于接口和实现">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T06:03:48.850Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/15/cpp-20/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>C++ Primer(第七章 类) | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/cpp-20/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ Primer(第七章 类)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-15 14:11:05" itemprop="dateCreated datePublished" datetime="2019-12-15T14:11:05+08:00">2019-12-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 14:03:48" itemprop="dateModified" datetime="2021-07-18T14:03:48+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/15/cpp-20/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/15/cpp-20/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>数据抽象和封装，依赖于接口和实现</p>
+<a id="more"></a>
+
+
+
+<h4 id="定义抽象数据类型"><a href="#定义抽象数据类型" class="headerlink" title="定义抽象数据类型"></a>定义抽象数据类型</h4><p><strong>引入this</strong></p>
+<p>当我们用对象调用函数的时候，this指针会被初始化</p>
+<p>则在成员函数内对数据成员的访问都被看做this的隐式引用</p>
+<p><strong>引入const成员函数</strong></p>
+<p>const成员函数的作用是修改this指针的类型</p>
+<p>意味着this指针的类型是指向类类型非常量版本的常量指针，在成员函数内不能修改对象成员的值</p>
+<p>意味着不能把this指针绑定到一个常量对象上，则一个常量对象不能调用普通的成员函数</p>
+<p>这样的函数叫做<strong>常成员函数</strong></p>
+<p><strong>类作用域和成员函数</strong></p>
+<p>成员的声明在函数的后面，但是还能使用</p>
+<p>因为编译器先编译成员的声明，然后才轮到成员函数体。成员函数体可以随意使用类中的成员而无须在意成员出现的次序</p>
+<p><strong>在类的外部定义成员函数</strong></p>
+<p>成员函数的定义必须和成员函数的声明保持一致</p>
+<p><strong>定义一个返回this对象的函数</strong></p>
+<p>return *this;</p>
+<p><strong>构造函数</strong></p>
+<p>构造函数不能是const的，当我们创建一个const对象时，直到构造函数初始化完成，对象才能真正取得“<strong>常量</strong>”属性</p>
+<p><strong>合成的默认构造函数</strong></p>
+<p>假象：没有为类显式的定义一个构造函数，则编译器隐式的定义一个默认构造函数</p>
+<p><strong>某些类不能依赖于合成的默认构造函数</strong></p>
+<p>原因1.一旦我们定义了自己的构造函数，则编译器不会帮我们合成</p>
+<p>原因2.合成的默认构造函数可能执行错误的操作</p>
+<ul>
+<li>如果类内包含有内置类型或者复合类型的成员，则只有当这些成员全都被赋予了类內初始值时，这个类才适合于使用合成的默认构造函数</li>
+</ul>
+<p>原因3.有的时候编译器不能为某些类合成默认构造函数，如果类中包含其他类类型成员，而该类没有默认构造函数，则编译器无法初始化该成员</p>
+<p><strong>=default</strong></p>
+<p>要求编译器生成构造函数</p>
+<p><strong>拷贝、赋值和析构</strong></p>
+<p>管理动态内存的类一般不能依赖于上述操作的合成版本</p>
+<p>而使用vector或string的类能避免分配和释放内存带来的复杂性</p>
+<h4 id="访问控制与封装"><a href="#访问控制与封装" class="headerlink" title="访问控制与封装"></a>访问控制与封装</h4><p><strong>友元</strong></p>
+<p>友元会破坏封装</p>
+<h4 id="类的其他特性"><a href="#类的其他特性" class="headerlink" title="类的其他特性"></a>类的其他特性</h4><p><strong>可变数据成员</strong></p>
+<p>通过在变量的声明中加入mutable关键字</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">S</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">mutable</span> <span class="keyword">int</span> a;		<span class="comment">//即使在一个const对象内也能被修改</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>返回*this的成员函数</strong></p>
+<p>返回的是A&amp;类型</p>
+<p><strong>从const成员函数返回*this</strong></p>
+<p>一个const成员函数如果以引用形式返回*this，那么他的返回类型将是常量引用</p>
+<p><strong>基于const的重载</strong></p>
+<p>函数是不是const的可以重载</p>
+<p><strong>友元再探</strong></p>
+<p>友元类的成员函数可以访问此类包括非公有成员在内的所有成员</p>
+<h4 id="类的作用域"><a href="#类的作用域" class="headerlink" title="类的作用域"></a>类的作用域</h4><p>一个类就是一个作用域</p>
+<p>函数的返回类型通常出现在函数名之前，因此当成员函数定义在类的外部时，返回类型中使用的名字都位于类的作用域之外，这时，返回类型必须指明它是哪个类的成员</p>
+<h4 id="构造函数再探"><a href="#构造函数再探" class="headerlink" title="构造函数再探"></a>构造函数再探</h4><p>成员初始化顺序，与初始化列表无关，和成员在类內声明的顺序一致</p>
+<p><strong>委托构造函数</strong></p>
+<p>使用成员初始值列表，类名后面紧跟圆括号括起来的参数列表，参数列表必须与类中另外一个构造函数匹配。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">S</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    S(<span class="built_in">string</span> s,<span class="keyword">int</span> cn,<span class="keyword">double</span> price):bookNo(s),unit_sold(cn),revenue(price)&#123;&#125;</span><br><span class="line">    S():S(<span class="string">""</span>,<span class="number">0</span>,<span class="number">0</span>)&#123;&#125;   <span class="comment">//使用了委托构造函数</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>默认构造函数的作用</strong></p>
+<p>默认初始化在以下情况发生</p>
+<ul>
+<li>当我们在块作用域内不适用任何初始值定义一个非静态变量或数组时</li>
+<li>当一个类本身含有类类型的成员且使用和合成的默认构造函数时</li>
+<li>当类类型的成员没有在构造函数初始值列表中显式地初始化时</li>
+</ul>
+<p>值初始化在以下情况发生</p>
+<ul>
+<li><p>在数组初始化过程中如果我们提供的初始值数量少于数组的大小时</p>
+</li>
+<li><p>当我们不适用初始值定义一个局部静态变量时</p>
+</li>
+<li><p>当我们书写形如T()的表达式显式的请求值初始化时</p>
+</li>
+</ul>
+<p><strong>隐式的类类型转换</strong></p>
+<p>编译器只会自动的执行一步类型转换</p>
+<p><strong>抑制构造函数定义的隐式转换</strong></p>
+<p>explicit关键字</p>
+<p>explicit构造函数只能用于直接初始化</p>
+<p><strong>聚合类</strong></p>
+<ul>
+<li>所有成员都是public</li>
+<li>没有定义任何构造函数</li>
+<li>没有类內初始值</li>
+<li>没有基类，也没有虚函数</li>
+</ul>
+<p>满足以上的是聚合类</p>
+<p>可以使用花括号括起来的初始值列表初始化</p>
+<p><strong>字面值常量类</strong></p>
+<p>constexpr函数的参数和返回值必须是字面值类型</p>
+<p>数据成员都是字面值类型的聚合类是字面值常量类</p>
+<p>如果一个类不是聚合类，但他符合下列要求，则也是字面值常量类</p>
+<ul>
+<li>数据成员必须是字面值类型</li>
+<li>类必须至少含有一个constexpr构造函数</li>
+<li>如果一个数据成员含有类內初始值，则内置类型成员的初始值必须是一条常量表达式；或者如果属于某种类类型，则初始值必须使用成员自己的constexpr函数</li>
+<li>类必须使用析构函数默认定义，</li>
+</ul>
+<p><strong>constexpr构造函数</strong></p>
+<p>通过前置关键字constexpr声明</p>
+<p>constexpr构造函数必须初始化所有数据成员，初始值或使用constexpr构造函数，或者是一条常量表达式</p>
+<h4 id="类的静态成员"><a href="#类的静态成员" class="headerlink" title="类的静态成员"></a>类的静态成员</h4><p>静态成员函数不含this指针</p>
+<p>静态成员可以是不完全类型</p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C-Primer/" rel="tag"><i class="fa fa-tag"></i> C++ Primer</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/14/cpp-19/" rel="prev" title="C++中什么函数不能是虚函数">
+      <i class="fa fa-chevron-left"></i> C++中什么函数不能是虚函数
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/15/cpp-21/" rel="next" title="C++Primer（第12章 动态内存）">
+      C++Primer（第12章 动态内存） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#定义抽象数据类型"><span class="nav-number">1.</span> <span class="nav-text">定义抽象数据类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#访问控制与封装"><span class="nav-number">2.</span> <span class="nav-text">访问控制与封装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类的其他特性"><span class="nav-number">3.</span> <span class="nav-text">类的其他特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类的作用域"><span class="nav-number">4.</span> <span class="nav-text">类的作用域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#构造函数再探"><span class="nav-number">5.</span> <span class="nav-text">构造函数再探</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类的静态成员"><span class="nav-number">6.</span> <span class="nav-text">类的静态成员</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

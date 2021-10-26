@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="终于复习到了面向对象的核心内容">
+<meta name="keywords" content="C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++基础（类和对象）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;08&#x2F;cpp-4&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="终于复习到了面向对象的核心内容">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T06:03:48.855Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/08/cpp-4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>C++基础（类和对象） | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/08/cpp-4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++基础（类和对象）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-08 15:23:51" itemprop="dateCreated datePublished" datetime="2019-12-08T15:23:51+08:00">2019-12-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 14:03:48" itemprop="dateModified" datetime="2021-07-18T14:03:48+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/08/cpp-4/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/08/cpp-4/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> 终于复习到了面向对象的核心内容</p>
+<a id="more"></a>
+
+<h4 id="类和对象"><a href="#类和对象" class="headerlink" title="类和对象"></a>类和对象</h4><p><em>从前到后一点一点总结</em><br>类和对象的相关名词：<strong>抽象、封装、继承、多态</strong><br>抽象的结果：共同的属性。共同的行为<br>封装：把抽象的数据和行为封装成类</p>
+<p>类成员的访问控制<br>public：在类外只能访问类的公有成员<br>protected：和private相似<br>private：只能被奔雷的成员函数访问，来自类外部的任何访问都是非法的；（如果私有成员紧接着类名称，则关键字private可以省略）</p>
+<p>在类中，对于未指定的访问控制属性的成员，其访问控制属性为私有类型（private）<br>在结构体中，对于未指定的访问控制属性的成员，其访问控制属性为公有类型（public）</p>
+<p><strong>类的静态数据成员和静态函数成员</strong><br>静态数据成员：某个属性为整个类所有，不属于任何一个具体的对象(具有静态生存期)</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span></span>&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Point()&#123;<span class="keyword">count</span>++;&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">int</span> <span class="keyword">count</span>;  <span class="comment">//静态数据成员声明，</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">int</span> Point::<span class="keyword">count</span> =<span class="number">0</span>;  <span class="comment">//静态数据成员定义和初始化，使用类名限定</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>定义和初始化在类外完成，要利用类名引用</strong></p>
+<p>静态函数成员：使用static声明的函数成员</p>
+<p><em>静态函数成员可以直接访问该类的静态数据成员和静态函数成员，<br>而访问非静态函数成员和非静态数据成员，必须通过对象名</em></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Point()&#123;count++;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">showCount</span><span class="params">()</span></span>&#123;<span class="built_in">cout</span>&lt;&lt;count&lt;&lt;<span class="built_in">endl</span>;&#125;  <span class="comment">//静态函数成员</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">int</span> count;  <span class="comment">//静态数据成员声明，</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">int</span> Point::count =<span class="number">0</span>;  <span class="comment">//静态数据成员定义和初始化，使用类名限定</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	Point::showCount();  <span class="comment">//输出对象个数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>类的友元</strong><br>友元关系提供了不同类或对象的成员函数之间、类的成员函数与一般函数之间进行数据共享的机制</p>
+<p>友元函数(一个普通函数或者类的成员函数可以访问另一个类中的函数)</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span>&#123;</span></span><br><span class="line">	<span class="function"><span class="keyword">friend</span> <span class="keyword">float</span> <span class="title">dist</span><span class="params">(Point &amp;p1,Point &amp;p2)</span></span>;  <span class="comment">//友元函数声明</span></span><br><span class="line">&#125;;</span><br><span class="line">	<span class="function"><span class="keyword">float</span> <span class="title">dist</span><span class="params">(Point &amp;p1,Point &amp;p2)</span></span>&#123;<span class="comment">//友元函数实现</span></span><br><span class="line">	<span class="keyword">double</span> x = p1.x-p2.x;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>从代码中看出友元函数是个普通函数，同时他也可以是其他类的成员函数</p>
+<p>友元类（若A类为B类的友元类，则A类的所有成员函数都是B类的友元函数，都可以访问B类的私有和保护成员）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span>&#123;</span></span><br><span class="line">	...</span><br><span class="line">	<span class="keyword">friend</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span>;</span>  <span class="comment">//声明A为B类的友元类</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>划重点<br>友元关系是不能传递的；(A是B的友元，C是A的友元 —-没有C是B的)<br>友元关系是单向的；（A类是B类的友元类，A的成员函数可以访问B的私有和保护数据，但是B的成员函数不能访问A的私有和保护数据）<br>友元关系是不被继承的；（A类是B类的友元，则A类的派生类不会自动成为B类的友元类）</p>
+<p><strong>常对象</strong>（用const修饰的对象）<br>他的数据成员值在对象的整个生存期内不能被改变，常对象必须进行初始化，而且不能被更新</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>&#123;</span></span><br><span class="line">	A()&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">const</span> A <span class="title">a</span><span class="params">()</span></span>;   <span class="comment">//a是常对象，不能被更新</span></span><br></pre></td></tr></table></figure>
+<p>如果通过对象名访问其数据成员，由于常对象的数据成员被视为常量，所以不能重新赋值；如果通过成员函数改变数据成员的值，常对象规定不能通过常对象调用普通的成员函数；但是可以调用常成员函数</p>
+<p><strong>常成员函数</strong>（const修饰的成员函数）<br>常对象只能调用常成员函数<br>普通对象可以调用常成员函数，调用期间视为常对象<br>关键字const可以用于对重载函数的区分</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> <span class="keyword">const</span></span>;有效重载</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>常数据成员</strong>（使用const声明的数据成员）<br>任何函数都不能对该成员赋值，构造函数对该成员进行初始化，只能通过初始化列表</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	A(<span class="keyword">int</span> i);</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> a;</span><br><span class="line">&#125;；</span><br><span class="line">A::A(<span class="keyword">int</span> i):a(i);  <span class="comment">//常数据成员只能通过初始化列表来获得初值</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>常引用</strong>（声明引用时用const修饰，常引用引用的对象不能被更新）<br>非const的引用只能绑定到普通对象<br>const的引用能绑定到普通对象，也能绑定到常对象，绑定后则把该对象当做常对象</p>
+<p><strong>内联成员函数</strong><br>将函数体直接放在类体内，称为隐式声明<br>函数体放在类体外，加上inline关键字，称为显式声明</p>
+<p><strong>继承与派生</strong>（新的类熊原有的类那里得到已有的特性）<br>原有的类称为基类或父类，新的类称为派生类或子类，Ce+允许多继承和单继承<br>1.吸收基类成员，2.改造基类成员（基类成员的访问控制，对基类数据或函数成员的覆盖或隐藏），3.添加新的成员</p>
+<p>public继承:基类的公有成员和保护成员在派生类中不变，而基类的私有成员在派生类中不可直接访问；<br>protected继承:基类的公有成员和保护成员以保护成员身份出现在派生类中，而基类的私有成员不可直接访问；<br>private继承:基类的公有成员和保护成员以私有成员身份出现在派生类中，而基类的私有成员在派生类中不可直接访问；</p>
+<p><strong>类型兼容规则</strong>（在任何需要基类对象的地方，都可以使用公有派生类的对象来替代）<br>派生类的对象可以隐含转换为基类对象<br>派生类的对象可以初始化基类的引用<br>派生类的对象可以隐含转换为基类的指针</p>
+<p><strong>派生类构造函数</strong><br>1.调用基类构造函数，调用顺序按照他们被继承时声明的顺序<br>2.对派生类新增的成员对象进行初始化，调用顺序按照他们在类中声明的顺序<br>3.指向派生类的构造函数体中的内容</p>
+<p><strong>派生类析构函数</strong><br>1.首先执行析构函数的函数体，<br>2.然后对派生类新增的类类型的成员对象进行清理，<br>3.最后对所有从基类继承来的成员进行清理</p>
+<p><strong>派生类成员的标识访问</strong><br>隐藏规则：如果外层和内层声明了相同的标识符，那么外层标识符在内层不可见，<br>如果派生类中声明了与基类成员函数同名的新函数，及时函数的参数表不同，从基类继承的同名函数的所有重载形式也都会被隐藏。</p>
+<p><strong>多继承同名隐藏：</strong><br>如果派生类的多个基类拥有同名函数成员，派生类又新增这样的同名函数成员，这种情况下，派生类函数成员将隐藏所有基类的同名成员，这时使用“对象名.成员名”或者“对象指针-&gt;成员名”可以唯一标识派生类的新增成员；<br>如果派生类没有新增同名成员，“对象名.成员名”或者“对象指针-&gt;成员名”就没有办法唯一标识成员，就需要根据基类名和作用域分辨符来标识成员；</p>
+<p>如果某个派生类的部分或全部直接基类是从另一个共同的基类派生而来，在这些直接基类中，从上一级基类继承来的成员拥有相同的名称，因此派生类中也会产生同名现象，对这种类型的同名成员也要使用作用域分辨符来唯一标识，而且必须用<strong>直接基类</strong>来规定。</p>
+<p><strong>虚基类</strong><br>如果某个派生类的部分或全部直接基类是从另一个共同的基类派生而来，在这些直接基类中，从上一级基类继承来的成员拥有相同的名称，因此派生类中也会产生多个副本，可以使用作用域分蝙蝠来唯一标识，也可以将共同基类设置为虚基类，这时候从不同路径继承来的同名数据成员在内存中就只有一个副本，同一个函数名也只有一个映射<br>class 派生类名:virtual 继承方式 基类名</p>
+<p>创建派生类对象后，通过成员名称就可以访问该类的成员</p>
+<p>虚基类及其派生类构造函数<br>虚基类有自己的构造函数，在整个继承关系中，所有直接或间接继承虚基类的所有派生类，都必须在构造函数初始化列表中列出对虚基类的初始化，</p>
+<p>当多个派生类对虚基类进行初始化，C++采<strong>用最远派生类构造</strong>，即创建一个对象时，如果这个对象中含有从虚基类继承来的成员，则虚基类的成员由最远派生类的构造函数通过调用虚基类的构造函数进行初始化的，而且，只有最远派生类的构造函数会调用虚基类的构造函数，该派生类的其他基类对虚基类构造函数的调用被自动忽略</p>
+<p><strong>多态</strong>（消息被不同对象接收时导致不同的行为）<br>编译时的多态：编译过程中确定了同名操作的具体对象<br>运行时的多态：程序运行过程中才动态确定操作的具体对象<br>绑定：就是把一条消息和一个对象绑定的过程<br>静态绑定：绑定工作编译连接阶段完成<br>动态绑定：绑定工作在程序运行阶段完成</p>
+<p><strong>运算符重载</strong>（对已有运算符赋予多重含义，使同一个运算符作用于不同类型的数据时导致不同的行为）<br>不能重载的操作符，类属关系运算符.   成员指针运算符-&gt;   作用域分辨符::  三目运算符？</p>
+<p>重载为类的成员函数时，函数的参数个数比原来少一个，第一个操作数会被作为函数调用的目的对象，因此无需出现在参数表中，函数体可以直接访问第一个操作数的成员<br>重载为类的非成员函数时，参数个数与原操作数个数相同，运算符的所有操作数必须显式通过参数传递</p>
+<p>前置单目运算符重载（类名 &amp;operate++()）<br>后置单目运算符重载（类名 &amp;operate++(int)）</p>
+<p>前置单目运算符重载（friend 类名 operate++()）<br>后置单目运算符重载（friend 类名 operate++(int)）</p>
+<p><strong>虚函数</strong>（用virtual限定的成员函数，关键字virtual只能出现在类定义中的函数原型声明中，不能在成员函数实现的时候）<br>运行过程中的多态需要满足的3个条件<br>1.满足类型兼容规则<br>2.要声明虚函数<br>3.由成员函数来调用或者是通过指针、引用来访问虚函数</p>
+<p>系统遵循以下对着判断派生类的一个函数成员是不是虚函数<br>该函数是否与基类的虚函数有相同的名称<br>该函数是否与基类的虚函数有相同的参数个数及相同的对应参数类型<br>该函数是否与基类的虚函数有相同的返回值或者满足赋值兼容规则的指针、引用型的返回值</p>
+<p>派生类覆盖基类的成员函数时，可以使用virtual关键字，也可以不使用</p>
+<p>如果派生类需要修改基类的行为，就应该在基类中将相应的函数声明为虚函数。而基类中声明的非虚函数，通常代表那些不希望被派生类改变的功能，也是不能实现多态的。一般不要重写继承而来的非虚函数（不强制），因为那会导致通过基类指针和派生类的指针或对象调用同名函数时，产生不同的结果，从而引起混乱。</p>
+<p>虚析构函数（不能声明虚构造函数，但是可以声明虚析构函数）<br>如果一个类的析构函数时虚函数，那么由他派生来的所有子类的析构函数也是虚析构函数，在使用指针时就可以动态绑定，实现运行时的多态，保证使用基类类型的指针就能够调用适当的析构函数针对不同的对象进行清理工作</p>
+<p><strong>纯虚函数</strong><br>virtual 函数类型 函数名(参数表) = 0；   //声明为纯虚函数之后，基类可以不再给出函数的实现部分，即使给出实现，也必须由派生类覆盖，否则无法进行实例化。<br>如果将析构函数声明为纯虚函数，则必须给出实现。</p>
+<p>抽象类（带有纯虚函数的类）<br>抽象类声明了一个类族派生类的共同接口，而接口的具体实现，由派生类自己定义。<br>如果派生类给出所有纯虚函数的实现，这个派生类就可以定义自己的对象；如果派生类没有给出全部纯虚函数的实现，这时的派生类仍然是一个抽象类。</p>
+<p>抽象类不能实例化，但是可以定义一个抽象类的指针，通过指针或引用，就可以指向并访问派生类的对象，进而访问派生类的成员。</p>
+<hr>
+<p><em>2019-03-13 20:55:40 星期三<br>萧逸小杨</em></p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/08/cpp-3/" rel="prev" title="C++基础（作用域、文件）">
+      <i class="fa fa-chevron-left"></i> C++基础（作用域、文件）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/08/cpp-5/" rel="next" title="C++基础（自定义数据类型、指针、数组）">
+      C++基础（自定义数据类型、指针、数组） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#类和对象"><span class="nav-number">1.</span> <span class="nav-text">类和对象</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

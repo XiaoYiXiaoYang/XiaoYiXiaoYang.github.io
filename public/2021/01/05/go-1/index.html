@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Go语言介绍、基础语法">
+<meta name="keywords" content="GoLang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go语言基础">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2021&#x2F;01&#x2F;05&#x2F;go-1&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="Go语言介绍、基础语法">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2021&#x2F;01&#x2F;05&#x2F;go-1&#x2F;Tue,%2005%20Jan%202021%20230620.jpeg">
+<meta property="og:updated_time" content="2021-07-24T08:49:42.642Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2021&#x2F;01&#x2F;05&#x2F;go-1&#x2F;Tue,%2005%20Jan%202021%20230620.jpeg">
+
+<link rel="canonical" href="http://yoursite.com/2021/01/05/go-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Go语言基础 | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/05/go-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go语言基础
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-05 22:57:36" itemprop="dateCreated datePublished" datetime="2021-01-05T22:57:36+08:00">2021-01-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-24 16:49:42" itemprop="dateModified" datetime="2021-07-24T16:49:42+08:00">2021-07-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/01/05/go-1/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/01/05/go-1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <center>
+Go语言介绍、基础语法
+</center>
+
+<a id="more"></a>
+
+
+
+<h2 id="Go语言介绍"><a href="#Go语言介绍" class="headerlink" title="Go语言介绍"></a>Go语言介绍</h2><p><img src="/2021/01/05/go-1/Tue,%2005%20Jan%202021%20230620.jpeg" alt="img"></p>
+<ul>
+<li>Google开源</li>
+<li>编译型语言</li>
+</ul>
+<p>特点：</p>
+<ul>
+<li>语法简洁</li>
+<li>开发效率高</li>
+<li>执行性能好</li>
+</ul>
+<p>学习源：<a href="http://www.liwenzhou.com" target="_blank" rel="noopener">www.liwenzhou.com</a></p>
+<h2 id="Go开发环境搭建"><a href="#Go开发环境搭建" class="headerlink" title="Go开发环境搭建"></a>Go开发环境搭建</h2><p>Go开发包镜像地址：<a href="https://golang.google.cn/dl/" target="_blank" rel="noopener">https://golang.google.cn/dl/</a></p>
+<p>安装好后，cmd下运行<code>go version</code>显示版本号</p>
+<h2 id="go语法"><a href="#go语法" class="headerlink" title="go语法"></a>go语法</h2><h3 id="包、变量、函数"><a href="#包、变量、函数" class="headerlink" title="包、变量、函数"></a>包、变量、函数</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">推荐<span class="keyword">import</span> package方式</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"math"</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><strong>函数</strong></p>
+<p>func 函数名(参数名 类型,…) 返回值… {<br>}</p>
+<p>//1.多个参数同一类型时，支持简写(x, y int)<br>//2.支持多个返回值时 声明为func swap(x, y string) (string, string)   返回为 return x, y<br>//3.支持return named return values   声明为func test(sum int)(x, y int)   返回为 return</p>
+<p><strong>变量</strong></p>
+<p>var 变量名… 类型   // 声明<br>var x, y int = 1, 2 //声明加初始化<br>x := 1              //短变量声明 类型推导</p>
+<p><strong>基本类型</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">string</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">int</span>  <span class="keyword">int8</span>  <span class="keyword">int16</span>  <span class="keyword">int32</span>  <span class="keyword">int64</span></span><br><span class="line"><span class="keyword">uint</span> <span class="keyword">uint8</span> <span class="keyword">uint16</span> <span class="keyword">uint32</span> <span class="keyword">uint64</span> <span class="keyword">uintptr</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">byte</span> <span class="comment">// alias for uint8</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">rune</span> <span class="comment">// alias for int32</span></span><br><span class="line">     <span class="comment">// represents a Unicode code point</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">float32</span> <span class="keyword">float64</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">complex64</span> <span class="keyword">complex128</span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">zero values：</span><br><span class="line"><span class="number">0</span> <span class="keyword">for</span> numeric types,</span><br><span class="line"><span class="literal">false</span> <span class="keyword">for</span> the boolean <span class="keyword">type</span>, and</span><br><span class="line"><span class="string">""</span> (the empty <span class="keyword">string</span>) <span class="keyword">for</span> strings.</span><br><span class="line"><span class="literal">nil</span> <span class="keyword">for</span> other <span class="keyword">type</span></span><br></pre></td></tr></table></figure>
+
+<p>类型转换：<br>T(v)</p>
+<p><strong>常量</strong></p>
+<p>const 变量 = 值</p>
+<p>//1.不能使用短变量声明法</p>
+<h3 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h3><p><strong>for</strong></p>
+<p>for init statment; condition statement; post statement {<br>}</p>
+<p>//1.初始和结束执行的语句可以省略(保留分号)<br>//2.只有一句condition，像使用while一样(没有分号)<br>//3.连condition语句都没有(死循环)</p>
+<p><strong>if</strong></p>
+<p>if condition {<br>}<br>//1.没有小括号，但是{}是必须的<br>//2.变形 if init statement; condition stament {}(声明的短变量作用域在if else块内)</p>
+<p><strong>switch</strong></p>
+<p>switch init statement;condition{<br>    case 值1：<br>    case 值2<br>}<br>//1.go自动在每个case后break<br>//2.go的条件不必是const的，也不一定是integer<br>//3.switch语句也可以带短变量声明语句，也可以省略condition(等于switch true)</p>
+<p><strong>defer</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">test</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">"123"</span>)</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> fmt.Println(<span class="string">"world"</span>)</span><br><span class="line"> </span><br><span class="line">    fmt.Println(<span class="string">"hello"</span>)</span><br><span class="line">    test()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>//1.defer语句会立即求值，但是推迟到函数返回之前执行。<br>//2.多个defer语句会压栈，直到函数返回时，多个defer会按出栈顺序调用</p>
+<h3 id="复合数据类型"><a href="#复合数据类型" class="headerlink" title="复合数据类型"></a>复合数据类型</h3><p><strong>pointer</strong><br>i= 42<br>p := &amp;i</p>
+<p>//1.默认未初始化为零值</p>
+<p><strong>struct</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Vertex <span class="keyword">struct</span> &#123;</span><br><span class="line">    X <span class="keyword">int</span></span><br><span class="line">    Y <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    v := Vertex&#123;<span class="number">1</span>, <span class="number">2</span>&#125;</span><br><span class="line">    p := &amp;v</span><br><span class="line">    p.X = <span class="number">666</span></span><br><span class="line">    fmt.Println(v)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>//1.可以使用v.X 也可以使用指针p.X访问成员</p>
+<p><strong>array</strong></p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var <span class="keyword">a</span> [<span class="number">2</span>]<span class="keyword">string</span></span><br><span class="line"><span class="keyword">a</span>[<span class="number">0</span>] = <span class="string">"Hello"</span></span><br><span class="line"><span class="keyword">a</span>[<span class="number">1</span>] = <span class="string">"World"</span></span><br><span class="line">fmt.Println(<span class="keyword">a</span>)</span><br></pre></td></tr></table></figure>
+
+<p>//1.array是值 数组长度固定</p>
+<p><strong>slice</strong></p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">primes := [<span class="number">6</span>]<span class="built_in">int</span>&#123;<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>&#125;</span><br><span class="line">var s []<span class="built_in">int</span> = primes[:<span class="number">4</span>]  <span class="comment">//切片</span></span><br><span class="line">fmt.Println(s)</span><br></pre></td></tr></table></figure>
+
+<p>//1.切片是引用，切片底层指向数组，长度可扩容<br>//2.切片a[low:high];省略low为0，省略high为切片的len<br>//3.make 构造，make([]int, len, cap)<br>//4.切片元素为切片<br>//5.append 可以添加一个元素、多个元素、一个切片。当切片容量不足，则新创建一个大数组，切片指向新数组</p>
+<p><strong>range</strong><br>//1.range 数组；slice；返回 inedx, value<br>//2.range map；返回 key, value<br>//3.匿名变量 _ ，接收不使用的值</p>
+<p><strong>map</strong><br>//1.删除元素  delete(map1, key)<br>//2.测试key值是否存在 value， ok = map1[key]</p>
+<p><strong>function</strong><br>func 函数名(参数) 返回值 {}</p>
+<p>//1.函数可以作为参数，也可以作为返回值<br>//2.函数闭包：闭包是一个函数值，它从其主体外部引用变量。该函数可以访问并分配给引用的变量。函数是绑定到变量的</p>
+<h3 id="方法和接口"><a href="#方法和接口" class="headerlink" title="方法和接口"></a>方法和接口</h3><p><strong>method</strong><br>func (receiver) 函数名(参数) 返回值 {}</p>
+<p>//1.作用于特定的receiver的函数<br>//2.特定的receiver可以不是struct，可以是基本数据类型。(是否需要使用type重命名一下)<br>//3.指针receiver 和 值receiver；指针receiver可以修改值，(传参无需关心传的是指针还是值)(函数则不行，函数必须要确定传参类型匹配)</p>
+<p><strong>interface</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> T <span class="keyword">struct</span> &#123;</span><br><span class="line">    S <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">type</span> add <span class="keyword">interface</span> &#123;</span><br><span class="line">    Abs() <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(t T)</span> <span class="title">Abs</span><span class="params">()</span></span> &#123; <span class="comment">// 类型通过实现其method来实现接口</span></span><br><span class="line">    fmt.Println(t.S)</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">var</span> i I = T&#123;<span class="string">"hello"</span>&#125;</span><br><span class="line">i.M()</span><br></pre></td></tr></table></figure>
+
+<p>//1.接口值可以视为(value, type)，在接口值上调用方法会在其基础类型上执行相同名称的方法。<br>//2.var i I；一个空的接口值，其value和type都是nil，调用会产生运行时错误<br>//3.var i interface{}；一个空接口，可以保存任何类型的值<br>//4. s, ok := i.(string)； 判断接口是否含有类型string<br>//5.fmt就是其他都实现了String接口<br>type Stringer interface {<br>    String() string<br>}</p>
+<p>//6.go中的error是其他实现了Error接口<br>type error interface {<br>    Error() string<br>}</p>
+<h3 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h3><p><strong>goroutines</strong></p>
+<p><strong>channels</strong></p>
+<p><strong>select</strong></p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/GoLang/" rel="tag"><i class="fa fa-tag"></i> GoLang</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/23/openstack-2/" rel="prev" title="openStack-各组件介绍">
+      <i class="fa fa-chevron-left"></i> openStack-各组件介绍
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/06/21/wsl-1/" rel="next" title="wsl (安装与使用)">
+      wsl (安装与使用) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Go语言介绍"><span class="nav-number">1.</span> <span class="nav-text">Go语言介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Go开发环境搭建"><span class="nav-number">2.</span> <span class="nav-text">Go开发环境搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#go语法"><span class="nav-number">3.</span> <span class="nav-text">go语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#包、变量、函数"><span class="nav-number">3.1.</span> <span class="nav-text">包、变量、函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流程控制"><span class="nav-number">3.2.</span> <span class="nav-text">流程控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复合数据类型"><span class="nav-number">3.3.</span> <span class="nav-text">复合数据类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法和接口"><span class="nav-number">3.4.</span> <span class="nav-text">方法和接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并发"><span class="nav-number">3.5.</span> <span class="nav-text">并发</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

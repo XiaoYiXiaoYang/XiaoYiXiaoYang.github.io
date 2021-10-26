@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Redis高级话题">
+<meta name="keywords" content="Redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis事务与持久化">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;08&#x2F;02&#x2F;redis-2&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="Redis高级话题">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T08:24:03.963Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/08/02/redis-2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Redis事务与持久化 | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/02/redis-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Redis事务与持久化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-02 17:01:55" itemprop="dateCreated datePublished" datetime="2020-08-02T17:01:55+08:00">2020-08-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 16:24:03" itemprop="dateModified" datetime="2021-07-18T16:24:03+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/08/02/redis-2/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/02/redis-2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <center>
+Redis高级话题
+</center>
+
+<a id="more"></a>
+
+<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><p>mysql中：一组命令的集合，要么全做要么全部做，即执行和回滚</p>
+<p>redis中：也是一组命令的集合，但是redis保证这些命令不会被打断，都会成功</p>
+<p>1.multi </p>
+<p>标记一个事务的开始，事务内的多条命令会按照先后顺序被放进一个队列中</p>
+<p>返回值：总是ok</p>
+<p>2.exec</p>
+<p>执行所有事务块内的命令</p>
+<p>返回值：事务内所有执行语句内容，事务被打断，返回nil</p>
+<p>3.discard</p>
+<p>取消事务，放弃事务内块内的所有命令</p>
+<p>返回值：总是ok</p>
+<p><strong>事务的实现</strong></p>
+<p><strong><em>正常情况</em></strong></p>
+<p>执行步骤：开启事务，向事务队列中加入命令，最后执行事务的提交</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">multi   <span class="comment">#开启事务</span></span><br><span class="line">sadd cars biyadi   <span class="comment">#命令入队</span></span><br><span class="line">sadd cars baoma    <span class="comment">#命令入队</span></span><br><span class="line">exec    <span class="comment">#事务执行</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong><em>事务开始之前，入队命令错误（语法错误；严重错误导致服务器不能正常工作），如内存不足，放弃事务</em></strong></p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">multi</span></span><br><span class="line"><span class="keyword">set </span><span class="built_in">k1</span> <span class="number">1</span></span><br><span class="line">incr <span class="built_in">k1</span> k2   <span class="comment">#有语法错误，只能有一个参数</span></span><br><span class="line">exec         <span class="comment">#执行错误，因为有语法错误，放弃执行事务</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p><strong><em>事务执行exec后，命令执行错误，事务提交</em></strong></p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">multi</span><br><span class="line"><span class="keyword">set</span> <span class="built_in">name</span> zhangsan</span><br><span class="line">lpop <span class="built_in">name</span>     <span class="comment">#这句语法没错，执行会有错，lpop是操作列表的</span></span><br><span class="line">exec          <span class="comment">#执行后lpop name这一句出错，其他的被提交</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong><em>放弃事务</em></strong></p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">multi</span><br><span class="line"><span class="keyword">set</span> age <span class="comment">25</span></span><br><span class="line"><span class="keyword">set</span> <span class="comment">age 30</span></span><br><span class="line">discard  <span class="comment">#</span>放弃事务</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong><em>watch机制</em></strong></p>
+<p>mysql在多个事务（T1、T2、T3、T4、T5）操作数据的时候，使用锁的机制去保护</p>
+<p>redis使用watch机制</p>
+<p>watch机制：使用WATCH监视一个或多个key，跟踪key的value的修改情况。如果有key的value在事务exec执行之前被修改了，整个事务取消。EXEC返回提示信息，表示事务已经失败。</p>
+<p>为了高效性，大多数情况下，大家不会同时操作一个键</p>
+<p>WATCH机制使得事务EXEC变的所有条件，事务只有在被WATCH的key没有修改的前提下才能执行，不满足条件，事务被取消；使用WATCH监视了一个过期的键，那么即使那个键过期了，事务仍然可以正常执行[???]</p>
+<p>(1)WATCH命令可以被调用多次，对键的监视从调用WATCH执行之后开始生效，直到调用EXEC为止，不管事务是都是否成功执行，对所有键的监视都会被取消</p>
+<p>(2)当客户端断开连接，该客户端对键的监视也会被取消</p>
+<p>(3)UNWATCH可以手动取消对所有键的监视</p>
+<p>4.watch</p>
+<p>watch key [key..]</p>
+<p>监视一个或多个key，如果在事务执行之前这个key被其他命令改动，那么事务被打断</p>
+<p>返回值：总是OK</p>
+<p>5.unwtatch</p>
+<p>取消WATCH命令对所有key的监视，如果在执行WATCH命令之后，EXEC命令或者DISCARD命令被先执行了的话，那么就不需要再执行UNWATCH了</p>
+<p>例：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">A客户端</span><br><span class="line"><span class="built_in">set</span> <span class="built_in">num</span> <span class="number">10</span></span><br><span class="line">watch <span class="built_in">num</span></span><br><span class="line">multi</span><br><span class="line"><span class="built_in">set</span> <span class="built_in">num</span> <span class="number">100</span></span><br><span class="line"><span class="comment">#然后暂停，不执行exec ，开启B客户端</span></span><br><span class="line"></span><br><span class="line">B客户端</span><br><span class="line"><span class="built_in">set</span> <span class="built_in">num</span> <span class="number">200</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#然后回到A客户端</span></span><br><span class="line">A客户端</span><br><span class="line">exec</span><br><span class="line"><span class="comment">#返回nil   被监视的num被别的事务修改了，所以本事务放弃提交</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h3><p>持久化：可理解为存储，就是将数据存储到一个不会丢失的地方，放在内存中断电重启会丢失。放在磁盘中，就算是一种持久化</p>
+<p>Redis数据存储在内存中，如果linux重启或者redis崩溃，都会丢失redis数据，为了解决这种问题，Redis提供两种机制对数据进行持久化存储。</p>
+<h4 id="持久化方式"><a href="#持久化方式" class="headerlink" title="持久化方式"></a>持久化方式</h4><p><strong>RDB机制</strong>：在指定时间间隔内将redis内存数据集快照写入磁盘，数据恢复时将快照文件直接再读到内存。</p>
+<p>RDB保存了某个时间点的数据集，存储在一个二进制文件中，只有一个文件，默认是dump.rdb，</p>
+<p>保存数据是在单独的进程中写文件，不影响Redis的正常使用，RDB恢复数据时比其他AOF速度快</p>
+<p>RDB方式的持久化方式，默认启用，在redis.conf文件中配置的。在redis.conf文件中搜索SNAPSHOTTING，进行配置</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>配置执行RDB生成快照文件的时间策略</span><br><span class="line">    #在N秒内数据集至少有M个<span class="type">key</span>改动，满足这一策略，自动保存一次数据</span><br><span class="line"></span><br><span class="line">配置格式：save &lt;seconds&gt; &lt;changes&gt;</span><br><span class="line">        save <span class="number">900</span> <span class="number">1</span>    #<span class="number">900</span>秒内有<span class="number">1</span>个<span class="type">key</span>被改动就做一次快照</span><br><span class="line">        save <span class="number">300</span> <span class="number">10</span></span><br><span class="line">        save <span class="number">60</span> <span class="number">10000</span></span><br><span class="line">       </span><br><span class="line"><span class="number">2.</span>dbfilename   默认是dump.rdb</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span>dir 指定RDB文件的存储位置，默认是当前目录</span><br></pre></td></tr></table></figure>
+
+
+
+<p>缺点：有可能丢失数据，不能100%保证数据全</p>
+<p><strong>AOF机制</strong>（append only file）： Redis每收到一条改变数据的命令时，他就把该命令写到一个AOF文件中，当redis重启时，它通过执行AOF文件中的所有命令来恢复数据</p>
+<p>也是需要在refis.conf文件中配置</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">appendonly</span>       <span class="comment">#默认是no，改成yes，即开启了AOF持久化</span></span><br><span class="line">appendfilename   <span class="comment">#指定AOF文件名，默认appendonly.aof</span></span><br><span class="line">dir              <span class="comment">#指定RDB和AOF文件存放的目录，默认./</span></span><br><span class="line">appendfsync      <span class="comment">#配置向aof文件写命令数据的策略</span></span><br><span class="line">  <span class="literal">no</span>             <span class="comment">#不主动进行同步操作，而是完全交给操作系统来做，每30秒一次，比较快</span></span><br><span class="line">  always         <span class="comment">#每次执行写入都会执行同步，比较慢，但安全</span></span><br><span class="line">  everysec       <span class="comment">#每秒执行一次同步操作，介于速度和安全之间，默认项</span></span><br><span class="line">  auto-aof-rewrite-min-size  <span class="comment">#允许重写的最小AOF文件大小，默认是64M，当aof文件大于64M时，开始整理aof文件，去掉无用的操作命令，缩小aof文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#resid先把用户的set 等写到内存缓冲区，操作系统每隔30秒写入磁盘</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#模拟aof文件内容</span></span><br><span class="line"><span class="number">*2</span></span><br><span class="line"><span class="variable">$6</span></span><br><span class="line">SELECT</span><br><span class="line"><span class="variable">$1</span></span><br><span class="line">0</span><br><span class="line"><span class="number">*3</span></span><br><span class="line"><span class="variable">$3</span>      #$后的数字表示几个字符</span><br><span class="line">set</span><br><span class="line"><span class="variable">$2</span></span><br><span class="line">k1</span><br><span class="line"><span class="variable">$2</span></span><br><span class="line">v1</span><br><span class="line"><span class="number">*3</span></span><br><span class="line"><span class="variable">$3</span></span><br><span class="line">set</span><br><span class="line"><span class="variable">$2</span></span><br><span class="line">k2</span><br><span class="line"><span class="variable">$2</span></span><br><span class="line">v2</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>总结：RDB性能好，缺点是数据可能丢；AOF性能慢一点，但是可靠</p>
+<p>redis先找AOF，如果没有就找RDB恢复</p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Redis/" rel="tag"><i class="fa fa-tag"></i> Redis</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/22/redis-1/" rel="prev" title="Redis基本类型与使用">
+      <i class="fa fa-chevron-left"></i> Redis基本类型与使用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/05/redis-3/" rel="next" title="Redis主从复制&安全">
+      Redis主从复制&安全 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#事务"><span class="nav-number">1.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#持久化"><span class="nav-number">2.</span> <span class="nav-text">持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#持久化方式"><span class="nav-number">2.1.</span> <span class="nav-text">持久化方式</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

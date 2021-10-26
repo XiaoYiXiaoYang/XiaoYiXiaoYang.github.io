@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="OpenStack既是一个社区，也是一个项目和一个开源软件，提供开放源码软件，建立公共和私有云，它提供了一个部署云的操作平台或工具集，其宗旨在于：帮助组织运行为虚拟计算或存储服务的云，为公有云、私有云，也为大云、小云提供可扩展的、灵活的云计算。">
+<meta name="keywords" content="OpenStack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Openstack--基本介绍">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;12&#x2F;16&#x2F;openstack-1&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="OpenStack既是一个社区，也是一个项目和一个开源软件，提供开放源码软件，建立公共和私有云，它提供了一个部署云的操作平台或工具集，其宗旨在于：帮助组织运行为虚拟计算或存储服务的云，为公有云、私有云，也为大云、小云提供可扩展的、灵活的云计算。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T08:08:59.332Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/12/16/openstack-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Openstack--基本介绍 | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/16/openstack-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Openstack--基本介绍
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-16 22:35:05" itemprop="dateCreated datePublished" datetime="2020-12-16T22:35:05+08:00">2020-12-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 16:08:59" itemprop="dateModified" datetime="2021-07-18T16:08:59+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/12/16/openstack-1/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/12/16/openstack-1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <center>
+OpenStack既是一个社区，也是一个项目和一个开源软件，提供开放源码软件，建立公共和私有云，它提供了一个部署云的操作平台或工具集，其宗旨在于：帮助组织运行为虚拟计算或存储服务的云，为公有云、私有云，也为大云、小云提供可扩展的、灵活的云计算。
+</center>
+
+<a id="more"></a>
+
+
+
+<h2 id="云服务模型"><a href="#云服务模型" class="headerlink" title="云服务模型"></a>云服务模型</h2><h3 id="SaaS：Software-as-a-Service-软件即服务"><a href="#SaaS：Software-as-a-Service-软件即服务" class="headerlink" title="SaaS：Software as a Service 软件即服务"></a>SaaS：Software as a Service 软件即服务</h3><p>软件即服务（也称为云应用程序服务）代表了云市场中企业最常用的选项。SaaS利用互联网向其用户提供应用程序，这些应用程序由第三方供应商管理。 大多数SaaS应用程序直接通过Web浏览器运行，不需要在客户端进行任何下载或安装。</p>
+<p>Saas交付：由于其网络传输模式，SaaS无需在每台计算机上下载和安装应用程序，而在每台计算机上下载和安装应用程序正是IT员工的噩梦。 通过SaaS，供应商可以管理所有潜在的技术问题，例如数据、中间件，服务器和存储，因此企业可以简化其维护和支持。</p>
+<p>SaaS通过大大减少安装，管理和升级软件等繁琐任务所花费的时间和金钱，为员工和公司提供了许多好处。 这让技术人员可以花更多时间来处理组织内更紧迫的事情和问题。</p>
+<p>SaaS特点：在统一的地方管理、托管在远程服务器上、可通过互联网访问、用户不负责硬件或软件更新</p>
+<h3 id="PaaS-Platform-as-a-Service-平台即服务"><a href="#PaaS-Platform-as-a-Service-平台即服务" class="headerlink" title="PaaS: Platform as a Service 平台即服务"></a>PaaS: Platform as a Service 平台即服务</h3><p>云平台服务或平台即服务（PaaS）为某些软件提供云组件，这些组件主要用于应用程序。 PaaS为开发人员提供了一个框架，使他们可以基于它创建自定义应用程序。所有服务器，存储和网络都可以由企业或第三方提供商进行管理，而开发人员可以负责应用程序的管理。</p>
+<p>PaaS的交付模式类似于SaaS，除了通过互联网提供软件，PaaS提供了一个软件创建平台。该平台通过Web提供，使开发人员可以自由地专注于创建软件，同时不必担心操作系统、软件更新，存储或基础架构。</p>
+<p>PaaS使应用程序的开发和部署变得简单且经济高效、可扩展、高度可用、使开发人员能够创建自定义应用程序，而无需维护软件、大大减少了编码量、自动化业务策略、允许轻松迁移到混合模型</p>
+<p>PaaS特点：它基于虚拟化技术，这意味着随着业务的变化，资源可以轻松扩展或缩小、提供各种服务以协助开发，测试和部署应用程序、许多用户可以访问相同的开发应用程序、Web服务和数据库是集成的</p>
+<h3 id="IaaS-Infrastructure-as-a-Service-基础架构即服务"><a href="#IaaS-Infrastructure-as-a-Service-基础架构即服务" class="headerlink" title="IaaS: Infrastructure as a Service 基础架构即服务"></a>IaaS: Infrastructure as a Service 基础架构即服务</h3><p>云基础架构服务称为基础架构即服务（IaaS），由高度可扩展和自动化的计算资源组成。 IaaS是完全自助服务，用于访问和监控计算、网络，存储和其他服务等内容，它允许企业按需求和需要购买资源，而不必购买全部硬件。</p>
+<p>IaaS通过虚拟化技术为组织提供云计算基础架构，包括服务器、网络，操作系统和存储等。这些云服务器通常通过仪表盘或API提供给客户端，IaaS客户端可以完全控制整个基础架构。 IaaS提供与传统数据中心相同的技术和功能，而无需对其进行物理上的维护或管理。 IaaS客户端仍然可以直接访问其服务器和存储，但它们都通过云中的“虚拟数据中心”</p>
+<p>与SaaS或PaaS相反，IaaS客户端负责管理应用程序、运行时、操作系统，中间件和数据等方面。但是，IaaS的提供商管理服务器、硬盘驱动器、网络，虚拟化和存储。一些提供商甚至在虚拟化层之外提供更多服务，例如数据库或消息队列。</p>
+<p>IaaS是最灵活的云计算模型、轻松实现存储、网络，服务器和处理能力的自动部署、可以根据消耗量购买硬件、使客户能够完全控制其基础架构、可以根据需要购买资源、高度可扩展</p>
+<p>IaaS的特点：资源可作为服务提供、费用因消费而异、服务高度可扩展、通常在单个硬件上包括多个用户、为组织提供对基础架构的完全控制、动态灵活。</p>
+<h2 id="OpenStack介绍"><a href="#OpenStack介绍" class="headerlink" title="OpenStack介绍"></a>OpenStack介绍</h2><p>openstack主要实现了计算、网络、存储资源池的虚拟化，</p>
+<p><strong>核心项目</strong></p>
+<p>计算服务Nova</p>
+<p>网络服务Neutron</p>
+<p>块存储服务Cinder</p>
+<p>对象存储服务Switft</p>
+<p>虚拟机镜像的发现Glance</p>
+<p>用户信息管理，为其他组件提供认证Keystone</p>
+<p>用以管理、控制Openstack服务的Web控制面板Horizon</p>
+<p><strong>各组件之间的关系</strong></p>
+<p>组件关系图：</p>
+<h2 id="OpenStack发展"><a href="#OpenStack发展" class="headerlink" title="OpenStack发展"></a>OpenStack发展</h2><p><strong>openstack生态圈</strong></p>
+<p>开源、代码贡献</p>
+<p><strong>openstack发展趋势</strong></p>
+<p>技术标准化</p>
+<h3 id="OpenStack整体基本架构"><a href="#OpenStack整体基本架构" class="headerlink" title="OpenStack整体基本架构"></a>OpenStack整体基本架构</h3><p>A-Z 26个英文字母的版本</p>
+<p>开发语言 Python</p>
+<p>架构图：</p>
+<h3 id="OpenStack架构职责演变-amp-设计特点"><a href="#OpenStack架构职责演变-amp-设计特点" class="headerlink" title="OpenStack架构职责演变&amp;设计特点"></a>OpenStack架构职责演变&amp;设计特点</h3><p>一开始只有Nova，后来慢慢拆分</p>
+<p>图1：</p>
+<p>图2：</p>
+<p>特点：无中心、分布式、Restful API、异步执行、插件化可配置</p>
+<p>部署灵活、易扩展、易继承</p>
+<h3 id="成功案例"><a href="#成功案例" class="headerlink" title="成功案例"></a>成功案例</h3><p>国内外很多厂商</p>
+<h3 id="Openstack-和-Cloudstack、Docker对比"><a href="#Openstack-和-Cloudstack、Docker对比" class="headerlink" title="Openstack 和 Cloudstack、Docker对比"></a>Openstack 和 Cloudstack、Docker对比</h3><p>OpenStack vs CloudStack 对比图：</p>
+<p>Docker vs OpenStack 对比图：</p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OpenStack/" rel="tag"><i class="fa fa-tag"></i> OpenStack</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/04/tcmalloc-2/" rel="prev" title="tcmalloc 高效的内存分配器">
+      <i class="fa fa-chevron-left"></i> tcmalloc 高效的内存分配器
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/23/openstack-2/" rel="next" title="openStack-各组件介绍">
+      openStack-各组件介绍 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#云服务模型"><span class="nav-number">1.</span> <span class="nav-text">云服务模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SaaS：Software-as-a-Service-软件即服务"><span class="nav-number">1.1.</span> <span class="nav-text">SaaS：Software as a Service 软件即服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PaaS-Platform-as-a-Service-平台即服务"><span class="nav-number">1.2.</span> <span class="nav-text">PaaS: Platform as a Service 平台即服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IaaS-Infrastructure-as-a-Service-基础架构即服务"><span class="nav-number">1.3.</span> <span class="nav-text">IaaS: Infrastructure as a Service 基础架构即服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenStack介绍"><span class="nav-number">2.</span> <span class="nav-text">OpenStack介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenStack发展"><span class="nav-number">3.</span> <span class="nav-text">OpenStack发展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#OpenStack整体基本架构"><span class="nav-number">3.1.</span> <span class="nav-text">OpenStack整体基本架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OpenStack架构职责演变-amp-设计特点"><span class="nav-number">3.2.</span> <span class="nav-text">OpenStack架构职责演变&amp;设计特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#成功案例"><span class="nav-number">3.3.</span> <span class="nav-text">成功案例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Openstack-和-Cloudstack、Docker对比"><span class="nav-number">3.4.</span> <span class="nav-text">Openstack 和 Cloudstack、Docker对比</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

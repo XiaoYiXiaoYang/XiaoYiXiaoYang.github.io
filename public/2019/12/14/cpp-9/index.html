@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="string 和vector标准库类型">
+<meta name="keywords" content="C++ Primer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ primer（第三章 字符串 向量 数组）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;14&#x2F;cpp-9&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="string 和vector标准库类型">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T06:03:48.862Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/14/cpp-9/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>C++ primer（第三章 字符串 向量 数组） | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/14/cpp-9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ primer（第三章 字符串 向量 数组）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-14 22:40:23" itemprop="dateCreated datePublished" datetime="2019-12-14T22:40:23+08:00">2019-12-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 14:03:48" itemprop="dateModified" datetime="2021-07-18T14:03:48+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/14/cpp-9/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/14/cpp-9/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> string 和vector标准库类型</p>
+<a id="more"></a>
+
+<h4 id="3-1-命名空间using声明"><a href="#3-1-命名空间using声明" class="headerlink" title="3.1 命名空间using声明"></a>3.1 命名空间using声明</h4><p>头文件不应该包含using声明</p>
+<p>头文件的内容会拷贝到所有引用他的文件中去，如果头文件里有using声明，那么每个使用了该头文件的文件就会有这个声明，对某些程序来说会产生名字冲突</p>
+<h4 id="3-2-标准库类型string"><a href="#3-2-标准库类型string" class="headerlink" title="3.2 标准库类型string"></a>3.2 标准库类型string</h4><p>定义和初始化string对象<br>string对象上的操作<br>处理string对象中的字符</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;string&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>直接初始化：不使用 =，则执行的直接初始化<br>拷贝初始化： 使用等号（=）去初始化一个变量，实际上执行的是拷贝初始化</p>
+<p>标准库string类型的cin操作是从第一个非空白字符开始读取，直到读取到下一个空白字符为止，比如输入“   hello world   ”，则输出hello。</p>
+<p>如果想读取一整行，则需要用函数getline函数替换&gt;&gt;运算符。getline函数的参数是一个输入流和一个string对象，函数从给定的输入流中读取内容， 直到遇到换行符为止（<strong>注意：换行符也被读进来了</strong>），<strong>然后把所读的内容存入到那个string对象中去（注意：不存换行符</strong>）。getline只要一遇到换行符就结束读取操作并返回结果，如果一开始就输入换行符，则输出一个空string对象。</p>
+<p>string类的size函数返回string对象的字符数，其返回值是string::size_type类型，它是一个无符号整型的值（string s，s.size()）。可以使用auto来推断变量的类型：<code>auto len = s.size();</code>。需要谨慎其与int类型的数的比较。</p>
+<p>字面值和string对象相加<br>当把string对象和字符字面值及字符串字面值(字符串字面值与string是不同的类型)混在一条语句中使用时，必须确保每个加法运算符（+）的两侧的运算对象至少有一个是string。</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">string </span><span class="built_in">s1</span> = <span class="string">"hello"</span><span class="comment">;</span></span><br><span class="line"><span class="keyword">string </span><span class="built_in">s2</span> = <span class="built_in">s1</span> + <span class="string">", "</span><span class="comment">;    //正确，把一个string对象和字面值相加</span></span><br><span class="line"><span class="keyword">string </span><span class="built_in">s3</span> = “hello” + “, ”+<span class="built_in">s1</span><span class="comment">;//错误，+号两侧是字符串字面值</span></span><br><span class="line"><span class="keyword">string </span><span class="built_in">s4</span> = <span class="built_in">s1</span>+ “, ”+ <span class="string">"world\n"</span><span class="comment">;   //正确，s1+“， ”是string</span></span><br></pre></td></tr></table></figure>
+
+<p>处理string对象中的字符<br>范围for语句用于遍历给定序列中的每个基础元素并对序列中的每个值执行某种操作，其语法形式是：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">for</span><span class="params">(declaration : expression)</span></span></span><br><span class="line">    statement</span><br></pre></td></tr></table></figure>
+
+<p>使用范围for语句和ispunct函数来统计string对象中标点符号的个数</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">string s(<span class="string">"hello world!!"</span>)<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">decltype(<span class="name">s</span>.size()) num=0<span class="comment">;  //punct类型和s.size的返回类型一样</span></span><br><span class="line"></span><br><span class="line">for(<span class="name">auto</span> c<span class="symbol">:s</span>)</span><br><span class="line">	if(<span class="name">ispunct</span>(<span class="name">c</span>))</span><br><span class="line">		++num<span class="comment">;</span></span><br><span class="line">cout&lt;&lt;num&lt;&lt;endl<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<p>使用范围for语句改变字符串中的字符（把循环变量定义成引用类型）</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for(<span class="name">auto</span> <span class="symbol">&amp;c</span><span class="symbol">:s</span>)</span><br><span class="line">	c = toupper(<span class="name">c</span>)<span class="comment">;  //c是一个引用，所以赋值语句改变s中字符的值</span></span><br></pre></td></tr></table></figure>
+
+<p>使用下标</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">for(<span class="name">decltype</span>(<span class="name">s</span>.size() index=0<span class="comment">;</span></span><br><span class="line">index !=s.size() <span class="symbol">&amp;&amp;</span> !isspace(<span class="name">s</span>[index])<span class="comment">;</span></span><br><span class="line">++ index)</span><br><span class="line">&#123;</span><br><span class="line">  s[index] = toupper(<span class="name">s</span>[index])<span class="comment">;  //将当前字符改成大写形式</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用迭代器</strong></p>
+<h4 id="3-3-vector（容器）"><a href="#3-3-vector（容器）" class="headerlink" title="3.3 vector（容器）"></a>3.3 vector（容器）</h4><p>定义和初始化vector<br>添加元素<br>其他操作</p>
+<p>vector是一个类模板，在模板名字后面跟一对尖括号，在括号内放上信息<br>vector能容纳大多数类型的对象作为其元素，但是因为引用不是对象，所以不存在包含引用的vector</p>
+<p>早期C++版本中如果vector的对象还是vector则定义时需要在外层vector对象的右尖括号和其他元素类型之间添加一个空格，vector&lt;vector<int>[空格]&gt;</int></p>
+<p>列表初始化vector对象<br>值初始化vector对象</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; v1&#123;<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>&#125;;  <span class="comment">//列表初始化</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; ivec(<span class="number">10</span>);            <span class="comment">//10个元素，都初始化为0</span></span><br></pre></td></tr></table></figure>
+
+
+<p>第一，使用拷贝初始化时，只能提供一个初始值<br>第二，如果提供的是一个类内初始值，则只能使用拷贝初始化或者使用花括号的形式初始化<br>第三，如果提供的是初始元素值的列表，则只能把初始值都放在花括号内进行列表初始化，而不能放在圆括号里</p>
+<p>列表初始值还是元素数量?</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; ivec;  <span class="comment">//空的vector</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v1(<span class="number">10</span>,<span class="number">0</span>);  <span class="comment">//10个元素，每个都是0  圆括号</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v2&#123;<span class="number">10</span>&#125;;  <span class="comment">//有一个元素，值为10   花括号</span></span><br></pre></td></tr></table></figure>
+
+<p>如果用的是圆括号，可以说提供的值用来构造vector对象<br>如果使用的是花括号，可以表述成我们想列表初始化该vector对象</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; v1&#123;<span class="number">10</span>&#125;;  <span class="comment">//10个元素，每个都是0  花括号</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; v2&#123;<span class="number">10</span>，“hi”&#125;;  <span class="comment">//有10个元素，值为‘hi’   花括号</span></span><br><span class="line"></span><br><span class="line">要想列表初始化<span class="built_in">vector</span>对象，花括号里的值必须与元素类型形同，显然不能用<span class="keyword">int</span>初始化<span class="built_in">string</span>对象，所以v1和v2提供的值不能作为元素的初始值</span><br><span class="line">确认无法执行列表初始化后，编译器尝试用默认值初始化<span class="built_in">vector</span>对象</span><br></pre></td></tr></table></figure>
+
+<p><strong>向vector中添加元素</strong></p>
+<p>先创建一个空vector，然后在运行时再利用vector的成员函数push_back向其中添加元素</p>
+<p>如果循环体内含有向vector加元素的语句，则不能使用范围for循环</p>
+<p>范围for循环语句体内不应改变其所遍历序列的大小</p>
+<p><strong>其他vector操作</strong></p>
+<p>vector对象的下表也是从0开始，下标的类型是相应的size_type类型</p>
+<p>vector对象和string对象的<strong>下标运算符</strong>可用于访问已存在元素，<strong>不能用于添加元素</strong></p>
+<h4 id="3-4-迭代器"><a href="#3-4-迭代器" class="headerlink" title="3.4 迭代器"></a>3.4 迭代器</h4><p>使用迭代器<br>迭代器计算</p>
+<p>迭代器，其对象是容器中的元素或string对象中的字符，使用迭代器可以访问某个元素，迭代器也能从一个元素移动到另一个元素，迭代器有有效和无效之分，<br>有效的迭代器或者指向某个元素，或者指向容器中尾元素的下一位置，其他所有情况都属于无效</p>
+<p>begin()   指向第一个元素<br>end()    指向最后一个元素的下一个位置叫（尾迭代器或尾后迭代器）</p>
+<p>如果容器为空，则begin和end返回的是同一个迭代器，都是尾后迭代器</p>
+<p>迭代器相等—-两个迭代器所指的元素相同或者都是同一个容器的尾后迭代器</p>
+<p>迭代器+1—-将迭代器“向前移动一个位置”</p>
+<p><strong>迭代器类型</strong></p>
+<p>iterator                对象不是常量<br>const_iterator            对象是常量</p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*<span class="comment">(it)</span>.empty<span class="comment">()</span>;			<span class="comment">//*运算符和.运算符</span></span><br></pre></td></tr></table></figure>
+
+<p>限制1.不能在范围for循环语句中向vector添加元素<br>限制2.任何一种可能改变vector对象容量的操作，都会使该vector对象的迭代器失效</p>
+<p><strong>解引用和成员访问操作</strong></p>
+<p>解引用可得到迭代器所指的对象<br>箭头运算符把解引用和成员访问两个操作结合在一起</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">it</span>-&gt;mem</span><br><span class="line">(*<span class="literal">it</span>).mem</span><br></pre></td></tr></table></figure>
+<p><strong>迭代器运算</strong></p>
+<table>
+<thead>
+<tr>
+<th>迭代器</th>
+<th>运算</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iter+n</td>
+<td>迭代器加上一个数值仍得一个迭代器</td>
+</tr>
+<tr>
+<td>iter1-iter2</td>
+<td>两个迭代器相减的结果是它们之间的距离</td>
+</tr>
+</tbody></table>
+<h4 id="3-5-数组"><a href="#3-5-数组" class="headerlink" title="3.5 数组"></a>3.5 数组</h4><p>定义和初始化内置数组<br>访问数组元素<br>数组和指针<br>C风格字符串<br>与旧代码接口</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span> a[d];  <span class="comment">//a是数组名，d是数组维度</span></span><br></pre></td></tr></table></figure>
+
+<p>维度必须是一个常量表达式</p>
+<p>定义数组的时候必须指定数组的类型，不允许用auto关键字由初始值的列表推断类型，另外和vector一样，数组的元素应为对象，因此不存在引用的数组</p>
+<p>字符数组（末尾带结束符’\0’）</p>
+<p>不能将数组的内容拷贝给其他数组作为初始值，也不能用数组为其他数组赋值</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span> a[]=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;</span><br><span class="line"><span class="built_in">int</span> a2=a;   <span class="comment">//错误</span></span><br><span class="line">a2=a;  <span class="comment">//错误</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>复杂的数组声明</strong></p>
+<p>定义数组的指针和数组的引用</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *ptrs[<span class="number">10</span>];   <span class="comment">//ptrs是含有10个整型指针的数组</span></span><br><span class="line"><span class="keyword">int</span> &amp;refs[<span class="number">10</span>]=<span class="comment">/*?*/</span>;  <span class="comment">//错误，不存在引用的数组</span></span><br><span class="line"><span class="keyword">int</span> (*Parray)[<span class="number">10</span>] = &amp;arr;  <span class="comment">//parray指向一个含有10个整数的数组</span></span><br><span class="line"><span class="keyword">int</span> (&amp;arrref)[<span class="number">10</span>] = arr;   <span class="comment">//arrref引用一个含有10个整数的数组</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//ptrs从右向左，大小为10的数组，他的名字是ptrs，数组存放的是int型指针</span></span><br><span class="line"><span class="comment">//Parray由内向外，圆括号括起来的部分*parray意味着parray是个指针，右边看出parray是个指向大小为10的数组的指针，最后左边数组中元素是int</span></span><br></pre></td></tr></table></figure>
+
+<p>数组下标 size_t类型</p>
+<p><strong>指针和数组</strong></p>
+<p><strong>使用数组的时候，编译器一般会把它转换成指针，<br>在很多用到数组名的地方，编译器会把它转换成指向数组首元素的指针</strong></p>
+<p>在大多数表达式中，使用数组类型的对象其实是使用一个指向该数组首元素的指针</p>
+<p><strong>则使用数组作为一个auto变量的初始值时，推断得到的类型是指针而非数组</strong></p>
+<p><strong>当使用decltype时不会发生转换，decltype(ia)得到的是数组而不是指针</strong></p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span> ia[]=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>&#125;;</span><br><span class="line"><span class="built_in">auto</span> ia2(ia)  <span class="comment">//ia2是一个整形指针，指向ia的第一个元素</span></span><br><span class="line">decltype(ia) ia3=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;  <span class="comment">//ia3是一个数组</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>指针也是迭代器</strong></p>
+<p>迭代器的运算，数组的指针全都支持，</p>
+<p>获取尾后指针有些特殊</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span> arr[]=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;</span><br><span class="line"><span class="built_in">int</span> *p=&amp;arr[<span class="number">3</span>];</span><br></pre></td></tr></table></figure>
+
+<p><strong>标准库函数begin和end</strong></p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *beg =<span class="built_in">begin</span>(ia);   <span class="comment">//首指针</span></span><br><span class="line"><span class="keyword">int</span> *last=<span class="built_in">end</span>(ia);     <span class="comment">//尾后指针</span></span><br></pre></td></tr></table></figure>
+
+<p>指针相减得到ptrdiff_t的标准库类型，在头文件cstddef中</p>
+<p><strong>解引用和指针</strong></p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span> last = *(ia+<span class="number">4</span>);  <span class="comment">//ia地址前进四个元素后的新地址，解引用它</span></span><br><span class="line"></span><br><span class="line">last =*ia+<span class="number">4</span>；     <span class="comment">//先解引用，再给解引用的元素值+4</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>C风格字符串</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> a[] =&#123;<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>&#125;;   <span class="comment">//列表初始化 没有空字符</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> a[]=<span class="string">"ac"</span>;   <span class="comment">//末尾自动添加空字符</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>strlen(p)</th>
+<th>返回p的长度，空字符不计算在内</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>strcmp(p1,p2)</td>
+<td>比较p1和p2的相等性，如果p1==p2,返回0，如果p1》p2，返回1个正值，如果p1《p2，返回一个负值</td>
+</tr>
+<tr>
+<td>strcat(p1,p2)</td>
+<td>将p2附加到p1之后，返回p1</td>
+</tr>
+<tr>
+<td>strcpy(p1,p2)</td>
+<td>将p2拷贝给p1，返回p1</td>
+</tr>
+<tr>
+<td></td>
+<td>上述函数不负责验证其字符串参数</td>
+</tr>
+<tr>
+<td></td>
+<td>传入此类函数的指针必须以指向空字符作为结束的数组</td>
+</tr>
+</tbody></table>
+<p><strong>混用string对象和c风格字符串</strong></p>
+<p>任何出现字符串字面值的地方都可以用以空字符结束的字符数组来替代：</p>
+<ol>
+<li><p>允许使用以空字符结束的字符数组来初始化string对象或为string对象赋值。</p>
+</li>
+<li><p>在string对象的加法运算中允许使用以空字符结束的字符数组作为其中一个运算对象（不能两个运算对象都是）；在string对象的复合赋值运算中允许使用以空字符结束的字符数组作为右侧的运算对象。</p>
+</li>
+</ol>
+<p>上述结论反过来就不成立了：如果程序的某处需要一个C风格字符串，无法直接用string对象来替代它。例如不能用string对象直接初始化指向字符的指针。不过string专门提供了一种方法来完成该功能：一个名为c_str的成员函数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">s</span><span class="params">(<span class="string">"hello world"</span>)</span></span>;</span><br><span class="line"><span class="keyword">char</span> *str = s;    <span class="comment">//错误，不能用string对象初始化char*</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *str = s.c_str();    <span class="comment">//正确</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看出，函数的返回结果是一个指针，该指针指向一个以空字符结束的字符数组，而这个数组所存的数据恰好与那个string对象的一样。结果指针的类型是const char* ，从而确保不会改变字符数组的内容。</p>
+<p><strong>使用数组初始化vector</strong></p>
+<p>不允许使用一个数组为另一个内置类型的数组赋初值，<br>不允许使用vector对象初始化数组</p>
+<p>允许使用数组初始化vector对象</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span> arr[] =&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;;</span><br><span class="line"></span><br><span class="line">vector&lt;<span class="built_in">int</span>&gt; ivec(begin(arr),end(arr));  <span class="comment">//指明拷贝区域的首指针和尾后指针</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h4><p>初始化</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int ia[<span class="string">3</span>][<span class="symbol">4</span>]=&#123;&#123;0&#125;,&#123;4&#125;,&#123;8&#125;&#125;;   //显式的初始化每行首元素</span><br><span class="line"></span><br><span class="line">int ix[<span class="string">3</span>][<span class="symbol">4</span>]=&#123;0,3,6,9&#125;;       //显式的初始化第一行</span><br></pre></td></tr></table></figure>
+
+<p>引用</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span> (&amp;row)[<span class="number">4</span>] =ia[<span class="number">1</span>];  <span class="comment">//把row绑定到ia的第二个4元素数组上</span></span><br></pre></td></tr></table></figure>
+<p>把row定义成一个含有4个整数的数组的引用，然后将其绑定到ia的第二行</p>
+<p>范围for语句处理多维数组</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">size_t cnt = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="built_in">auto</span> &amp;row :ia)			<span class="comment">//对于外层数组每个元素</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="built_in">auto</span> &amp;col :row)&#123;    <span class="comment">//对于内层数组每个元素</span></span><br><span class="line">		col =cnt;           <span class="comment">//将下一个值赋给钙元素</span></span><br><span class="line">		++cnt;              <span class="comment">//cnt+1</span></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为要改变元素值，所以声明row，col为引用<br>第一个for循环遍历ia的所有元素，这些元素是大小为4的数组<br>第二个for循环遍历4个元素数组中的某有一个，col的类型是整数的引用</p>
+<p>声明成引用类型，这是为了避免数组被自动转换成指针</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(auto <span class="built_in">row</span> :ia)</span><br><span class="line">	<span class="keyword">for</span>(auto <span class="built_in">col</span> :<span class="built_in">row</span>)</span><br><span class="line">程序将无法通过编译，</span><br><span class="line"><span class="built_in">row</span>不是引用类型，编译器初始化<span class="built_in">row</span>会自动讲这些数组形式的元素转换为指向数组内首元素的指针，则<span class="built_in">row</span>的类型是int *，则内层循环不合法</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>指针和多维数组</strong></p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span> *ip[<span class="number">4</span>];    <span class="comment">//整型指针的数组</span></span><br><span class="line"><span class="built_in">int</span> (*p)[<span class="number">4</span>];   <span class="comment">//指向含有4个整数的数组</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(auto <span class="attribute">p</span>=ia;p != ia+3;++ p)&#123;</span><br><span class="line">	<span class="keyword">for</span>(auto <span class="attribute">q</span>=*p;q != *p+4;++q)</span><br><span class="line">		cout&lt;&lt;*q&lt;&lt;<span class="string">""</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>外层for循环声明一个指针p，并令其指向ia的第一个内层数组，然后依次迭代3行<br>内层for循环令指针q指向p当前所在行的第一个元素，*p是一个含有4个整数的数组，数组名被自动转换成指向数组首元素的指针，</p>
+<hr>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C-Primer/" rel="tag"><i class="fa fa-tag"></i> C++ Primer</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/14/cpp-8/" rel="prev" title="C++ Primer（第二章  变量和基本类型）">
+      <i class="fa fa-chevron-left"></i> C++ Primer（第二章  变量和基本类型）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/14/cpp-10/" rel="next" title="C++ primer（第六章 函数）">
+      C++ primer（第六章 函数） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-命名空间using声明"><span class="nav-number">1.</span> <span class="nav-text">3.1 命名空间using声明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-标准库类型string"><span class="nav-number">2.</span> <span class="nav-text">3.2 标准库类型string</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-vector（容器）"><span class="nav-number">3.</span> <span class="nav-text">3.3 vector（容器）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-迭代器"><span class="nav-number">4.</span> <span class="nav-text">3.4 迭代器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-数组"><span class="nav-number">5.</span> <span class="nav-text">3.5 数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多维数组"><span class="nav-number">6.</span> <span class="nav-text">多维数组</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

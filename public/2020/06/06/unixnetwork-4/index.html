@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="编写基本的客户&#x2F;服务器程序，以及分析各种异常终止的情况">
+<meta name="keywords" content="UNIX网络编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UNIX网络编程--·TCP客户服务器">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;06&#x2F;unixnetwork-4&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="编写基本的客户&#x2F;服务器程序，以及分析各种异常终止的情况">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T06:03:49.677Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/06/06/unixnetwork-4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>UNIX网络编程--·TCP客户服务器 | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/06/unixnetwork-4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UNIX网络编程--·TCP客户服务器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-06-06 17:21:37" itemprop="dateCreated datePublished" datetime="2020-06-06T17:21:37+08:00">2020-06-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 14:03:49" itemprop="dateModified" datetime="2021-07-18T14:03:49+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/06/06/unixnetwork-4/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/06/06/unixnetwork-4/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>编写基本的客户/服务器程序，以及分析各种异常终止的情况</p>
+<a id="more"></a>
+
+<p>客户和服务器启动时会发生什么？客户正常终止时发生什么？若服务器进程在客户之前终止，则客户会发生什么？若服务器主机崩溃，则客户会发生什么？</p>
+<h4 id="TCP回射服务器程序"><a href="#TCP回射服务器程序" class="headerlink" title="TCP回射服务器程序"></a>TCP回射服务器程序</h4><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">#<span class="keyword">include</span> <span class="string">"unp.h"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">int</span> main(<span class="built_in">int</span> argc, <span class="built_in">char</span> **argv)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">int</span> listenfd,confd;</span><br><span class="line">	pid_t childpid;</span><br><span class="line">	socklen_t clien;</span><br><span class="line">	<span class="keyword">struct</span> sockaddr_in cliaddr,servaddr;</span><br><span class="line">	</span><br><span class="line">	listenfd = <span class="constructor">Socket(AF_INET,SOCK_STREAM,0)</span>;</span><br><span class="line">	</span><br><span class="line">	bzero(&amp;servaddr,sizeof(servaddr));</span><br><span class="line">	servaddr.sin_family = AF_INET;</span><br><span class="line">	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);</span><br><span class="line">	servaddr.sin_port = htons(SERV_PORT);</span><br><span class="line">	</span><br><span class="line">	<span class="constructor">Bind(<span class="params">listenfd</span>,(SA<span class="operator">*</span>)</span>&amp;servaddr,sizeof(servaddr));</span><br><span class="line">	</span><br><span class="line">	<span class="constructor">Listen(<span class="params">listenfd</span>,LISTENQ)</span>;</span><br><span class="line">	</span><br><span class="line">	for(;;)</span><br><span class="line">	&#123;</span><br><span class="line">		clien = sizeof(cliaddr);</span><br><span class="line">        connfd = <span class="constructor">Accept(<span class="params">listenfd</span>,(SA<span class="operator">*</span>)</span>&amp;cliaddr,&amp;clien);</span><br><span class="line">        <span class="keyword">if</span>((childpid =<span class="constructor">Fork()</span><span class="operator"> == </span><span class="number">0</span>))</span><br><span class="line">        &#123;</span><br><span class="line">        	<span class="constructor">Close(<span class="params">listenfd</span>)</span>;</span><br><span class="line">        	str<span class="constructor">_echo(<span class="params">connfd</span>)</span>;</span><br><span class="line">        	exit(x);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="constructor">Close(<span class="params">connfd</span>)</span>;</span><br><span class="line">	&#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在地址结构中填入通配地址INADDR_ANY，和服务器众所周知端口SERV_PORT</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#<span class="keyword">include</span> <span class="string">"unp.h"</span></span><br><span class="line"></span><br><span class="line">void str<span class="constructor">_echo(<span class="params">int</span> <span class="params">sockfd</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	ssize_t n;</span><br><span class="line">	<span class="built_in">char</span> buf<span class="literal">[MAXLINE]</span>;</span><br><span class="line"></span><br><span class="line">again:</span><br><span class="line">	<span class="keyword">while</span>(( n<span class="operator"> == </span>read(sockfd,buf,MAXLINE)) &gt; <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="constructor">Writen(<span class="params">sockfd</span>,<span class="params">buf</span>,<span class="params">n</span>)</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(n &lt; <span class="number">0</span> &amp;&amp;errno<span class="operator"> == </span>EINTR)</span><br><span class="line">    &#123;</span><br><span class="line">		goto again;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span>(n &lt; <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		err<span class="constructor">_sys(<span class="string">"str_echo: read error"</span>)</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="TCP回射客户程序"><a href="#TCP回射客户程序" class="headerlink" title="TCP回射客户程序"></a>TCP回射客户程序</h4><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#<span class="keyword">include</span> <span class="string">"unp.h"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">int</span> main(<span class="built_in">int</span> argc, <span class="built_in">char</span> **argv)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">int</span> sockfd;</span><br><span class="line">	<span class="keyword">struct</span> sockaddr_in servaddr;</span><br><span class="line">	<span class="keyword">if</span>(argc != <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		err<span class="constructor">_quit(<span class="string">"usage:tcpli &lt;IPaddress&gt;"</span>)</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	sockfd = <span class="constructor">Socket(AF_INET,SOCK_STREAM,0)</span>;</span><br><span class="line">	</span><br><span class="line">	bzero(&amp;servaddr,sizeof(servaddr));</span><br><span class="line">	servaddr.sin_family = AF_INET;</span><br><span class="line">	servaddr.sin_port = htons(SERV_PORT);</span><br><span class="line">	</span><br><span class="line">	<span class="constructor">Inet_pton(AF_INET,<span class="params">argv</span>[1],&amp;<span class="params">servaddr</span>.<span class="params">sin_addr</span>)</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="constructor">Connect(<span class="params">sockfd</span>,(SA<span class="operator">*</span>)</span>&amp;servaddr,sizeof(servaddr));</span><br><span class="line">	</span><br><span class="line">	str<span class="constructor">_cli(<span class="params">stdin</span>,<span class="params">sockfd</span>)</span>;</span><br><span class="line">	</span><br><span class="line">	exit(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#<span class="keyword">include</span> <span class="string">"unp.h"</span></span><br><span class="line"></span><br><span class="line">void str<span class="constructor">_cli(FILE <span class="operator">*</span><span class="params">fp</span>,<span class="params">int</span> <span class="params">sockfd</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">char</span> sendline<span class="literal">[MAXLINE]</span>,recvline<span class="literal">[MAXLINE]</span>;</span><br><span class="line">	<span class="keyword">while</span>(<span class="constructor">Fgets(<span class="params">senline</span>,MAXLINE,<span class="params">fp</span>)</span>!= NULL)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="constructor">Writen(<span class="params">sockfd</span>,<span class="params">sendline</span>,<span class="params">strlen</span>(<span class="params">sendline</span>)</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span>(<span class="constructor">Readline(<span class="params">sockfd</span>,<span class="params">recvline</span>,MAXLINE)</span><span class="operator"> == </span><span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			err<span class="constructor">_quit(<span class="string">"str_cli: server terminated prematurely"</span>)</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="constructor">Fputs(<span class="params">recvline</span>,<span class="params">stdout</span>)</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="正常启动"><a href="#正常启动" class="headerlink" title="正常启动"></a>正常启动</h4><p>客户调用socket和connect，后者引起三路握手过程，三路握手完成，客户的connect和服务器的accept均返回。</p>
+<p>接着步骤：</p>
+<ol>
+<li>客户调用str_cli函数，函数阻塞于fgets调用，等待用户输入</li>
+<li>服务器调用fork，子进程调用str_echo，该函数调用readline，readline调用read，read等待客户发送文本阻塞</li>
+<li>另一方面，服务器再次调用accept阻塞，等待下一个客户连接</li>
+</ol>
+<p>此时一共有三个进程，一个客户进程，一个二次循环阻塞在Accept的服务器父进程和一个第一次循环阻塞在readline调用的服务器子进程</p>
+<h4 id="正常终止"><a href="#正常终止" class="headerlink" title="正常终止"></a>正常终止</h4><ol>
+<li>当我们在客户键入EOF字符时，fgets返回空指针，str_cli函数返回</li>
+<li>str_cli返回到客户的main函数，main调用exit终止</li>
+<li>进程终止处理部分工作是关闭所有打开的描述符，由内核关闭客户打开的套接字时，客户TCP发送一个FIN给服务器，服务器则以ACK响应，客户向服务器已经关闭，还需要服务器向客户关闭</li>
+<li>服务器TCP接收FIN，服务器子进程阻塞于readline调用，readline返回0，导致str_echo函数返回服务器子进程的main函数</li>
+<li>服务器子进程通过exit终止</li>
+<li>服务器子进程打开的描述符也关闭，引发服务器TCP套接字连接终止序列的最后两个分节【一个服务器到客户的FIN和一个从客户到服务器的ACK】</li>
+</ol>
+<p><em>进程终止的另一部分内容</em>：服务器子进程终止时，给父进程发送一个SIGCHLD信号，本例没有在代码中捕获该信号，该信号的默认行为时被忽略，既然父进程未加处理，子进程于是进入僵死状态。</p>
+<h4 id="POSIX信号处理"><a href="#POSIX信号处理" class="headerlink" title="POSIX信号处理"></a>POSIX信号处理</h4><p>信号就是告知某个进程发生了某个时间的通知，有时也成为软中断</p>
+<p>信号可以：</p>
+<p>由一个进程发给另一个进程</p>
+<p>由内核发给某个进程</p>
+<p>我们通过调用sigaction函数来设定一个信号的处置，三种选择</p>
+<ol>
+<li>可以提供一个函数，只要有特定信号，他就被调用，这就是信号处理函数，行为叫捕获 【两个信号不能被捕获，是SIGKILL和SIGSTOP】（SIGIO、SIGPOLL、SIGURG这些个别信号还要求捕获他们的进程做些额外工作）</li>
+<li>可以把信号的处置设定为SIG_IGN来忽略，SIGKILL 和 SIGSTOP不能忽略</li>
+<li>可以把某个信号的处置设定为SIG_DFL来启用它的默认处置。（默认处置通常是在收到信号后终止进程，其中某些信号还会出core。SIGCHLD和SIGURG的默认处置是忽略）</li>
+</ol>
+<h4 id="signal函数"><a href="#signal函数" class="headerlink" title="signal函数"></a>signal函数</h4><p>第一个参数信号名，第二个参数为指向函数的指针</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"unp.h"</span></span></span><br><span class="line"></span><br><span class="line">Sigfunc * <span class="built_in">signal</span>(int signo,Sigfunc *func)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">struct</span> <span class="type">sigaction</span> act,oact;</span><br><span class="line">	</span><br><span class="line">	act.sa_handler = func;   <span class="comment">/*指向函数的指针*/</span></span><br><span class="line">	<span class="built_in">sigemptyset</span>(&amp;act.sa_mask);</span><br><span class="line">	act.sa_flags =<span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(signo == SIGALRM)</span><br><span class="line">	&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> SA_INTERRUPT</span></span><br><span class="line">	act.sa_flags |= SA_INTERRUPT;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> SA_RESTART</span></span><br><span class="line">    act.sa_flags |= SA_RESTART;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(<span class="built_in">sigaction</span>(signo,&amp;act,&amp;oact) &lt; <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> (SIG_ERR);</span><br><span class="line">	<span class="keyword">return</span> (oact.sa_handler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="POSIX信号语义"><a href="#POSIX信号语义" class="headerlink" title="POSIX信号语义"></a>POSIX信号语义</h4><ul>
+<li>一旦安装了信号处理函数，它便一直安装着</li>
+<li>在一个信号处理函数运行期间，正在被递交的信号是阻塞的</li>
+<li>如果一个信号在阻塞期间产生了一次或多次，那么该信号被解阻塞之后通常只递交一次，也就是说unix信号是不排队的</li>
+<li>利用sigpromask函数选择性地阻塞或解阻塞一组信号是可能的</li>
+</ul>
+<h4 id="处理SIGCHLD信号"><a href="#处理SIGCHLD信号" class="headerlink" title="处理SIGCHLD信号"></a>处理SIGCHLD信号</h4>
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/UNIX%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> UNIX网络编程</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/05/25/linux-4/" rel="prev" title="Linux（编写shell脚本）">
+      <i class="fa fa-chevron-left"></i> Linux（编写shell脚本）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/07/13/python-1/" rel="next" title="Python基础语法">
+      Python基础语法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP回射服务器程序"><span class="nav-number">1.</span> <span class="nav-text">TCP回射服务器程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP回射客户程序"><span class="nav-number">2.</span> <span class="nav-text">TCP回射客户程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正常启动"><span class="nav-number">3.</span> <span class="nav-text">正常启动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正常终止"><span class="nav-number">4.</span> <span class="nav-text">正常终止</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#POSIX信号处理"><span class="nav-number">5.</span> <span class="nav-text">POSIX信号处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#signal函数"><span class="nav-number">6.</span> <span class="nav-text">signal函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#POSIX信号语义"><span class="nav-number">7.</span> <span class="nav-text">POSIX信号语义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#处理SIGCHLD信号"><span class="nav-number">8.</span> <span class="nav-text">处理SIGCHLD信号</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

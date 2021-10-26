@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="一个纯面向对象的语言，优势非常明显，不得不了解">
+<meta name="keywords" content="JavaWeb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础（数组、字符串）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;08&#x2F;java-1&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="一个纯面向对象的语言，优势非常明显，不得不了解">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T06:03:49.403Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/01/08/java-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Java基础（数组、字符串） | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/java-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java基础（数组、字符串）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-08 16:22:21" itemprop="dateCreated datePublished" datetime="2020-01-08T16:22:21+08:00">2020-01-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 14:03:49" itemprop="dateModified" datetime="2021-07-18T14:03:49+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/01/08/java-1/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/08/java-1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>一个纯面向对象的语言，优势非常明显，不得不了解</p>
+<a id="more"></a>
+
+<p><strong>面向对象的语言</strong></p>
+<p>程序=对象+消息<br>程序=数据结构+算法</p>
+<p><strong>Java的特性</strong></p>
+<p>Java还是主要从C++学习并改写了一些内容，去除指针机制等等，所以很多特性是相对于C++来说的。</p>
+<p>1.简单性<br>Java语言风格类似C++，保留了C++的优点，摒弃了C++中不安全且易引发错误的指针，消除了操作符重载、多重继承、数据类型自动转换，简化了内存管理和文件管理，Java提供了自动内存垃圾收集机制，但是增加了系统运行时复杂性，需要内嵌一个内存管理模块，</p>
+<p>2.面向对象<br>面向对象和面向过程是一个巨大的转变，面向过程是从问题的解决办法着手，面向对象是从问题的属性和行为着手。</p>
+<p>3.平台无关性<br>C++代码编译–》目标文件.obj–》链接–》.exe可执行文件–》操作系统<br>所以c++源码在换平台后，其源码需要重新编译才能被操作系统运行。</p>
+<p>Java编译器–》字节码文件.class–》JVM虚拟机<br>这里虚拟机起了重要作用，有windows下的JVM虚拟机，linux下的虚拟机，只要有虚拟机，Java程序可以在任意操作系统内的JVM上执行，最终是由JVM虚拟机解释运行，和操作系统无关，<br>Java源码先编译，后被虚拟机解释运行，所以称Java既是编译型的又是解释型的</p>
+<p>4.高性能<br>a.高效的字节码，Java字节码经由JVM的解释器解释执行生成高效的机器码，据统计，Java编译器生成的字节码和机器码执行效率相差无几，且其字节码的执行效率非常接近于C/C++生成的机器码的执行效率</p>
+<p>但是这一点在acm中，通常允许java语言执行的时间是C/c++的2倍，这也是语言本身的特性</p>
+<p>b.多线程，C++是单线程的体系结构</p>
+<p>c.及时编译和嵌入c代码</p>
+<p>5.分布式<br>数据分布：数据可以分散存放于网络上不同主机中，解决海量存储问题<br>操作分布：把计算分散到不同主机上进行处理</p>
+<p>6.动态特性<br>Java采用动态链接机制，系统由多个模块组成，每个模块分别编译成各自的字节码文件，系统运行时按照程序运行的需要动态装载，当修改了某个类，只需要对这个类重新编译，其他类无需重新编译</p>
+<p>7.健壮性和安全性<br>Java设计目的用于网络/分布式计算环境<br>a.java语言本身的安全性设计<br>提供数组下标越界检查，异常处理，自动内存垃圾收集<br>b.编译检查 编译期间不分配内存，在运行时由解释器决定<br>c.运行检查<br>字节码校验器： Java字节码进入解释器，即使生成的是完全正确的字节码，解释器也必须再次对其进行检查，防止解释执行前被改动<br>运行时内存布局和类装载器：解释器将决定程序中类的内存布局，无法预先得知一个类的内存布局结构<br>文件访问限制：限制网络上装载的类智能访问某些允许的文件系统<br>d.网络接口级的安全检查</p>
+<p><strong>Java语言基础</strong></p>
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>字节数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>byte</td>
+<td>1</td>
+</tr>
+<tr>
+<td>short</td>
+<td>2</td>
+</tr>
+<tr>
+<td>int</td>
+<td>4</td>
+</tr>
+<tr>
+<td>long</td>
+<td>8</td>
+</tr>
+<tr>
+<td>float</td>
+<td>4</td>
+</tr>
+<tr>
+<td>double</td>
+<td>8</td>
+</tr>
+<tr>
+<td>char</td>
+<td>2</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>主要就是这最后一项，char类型为2个字节，为了统一汉字编码</p>
+<p>强制类型转换<br>a.隐式类型转换<br>（byte 或者 short） 与int型运算，转换为int型<br>（byte 或者 short 或 int） 与long型运算，转换为long型<br>（byte 或者 short 或 int 或 long） 与float型运算，转换为float型<br>（byte 或者 short 或 int 或 long 或 float ） 与double型运算，转换为double型</p>
+<p>Java不允许隐式把double转换为int</p>
+<p>b.显式类型转换<br>int i; float h=9.6;<br>i = (int)h;</p>
+<p>位运算</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>~</td>
+<td>取反</td>
+</tr>
+<tr>
+<td>单竖杠</td>
+<td>或</td>
+</tr>
+<tr>
+<td>&amp;</td>
+<td>与</td>
+</tr>
+<tr>
+<td>^</td>
+<td>异或</td>
+</tr>
+<tr>
+<td>&lt;&lt;</td>
+<td>左移</td>
+</tr>
+<tr>
+<td>&gt;&gt;</td>
+<td>右移</td>
+</tr>
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>无符号右移</td>
+</tr>
+</tbody></table>
+<p><strong>数组</strong></p>
+<p>一维数组<br>1.是为数组对象在对象存储区中分配存储空间，2.是对数组对象进行初始化，3.是将新创建的数组对象与已声明的引用数组的变量（数组名）关联起来<br>a.直接指定初值   int []a = {1,2,3};<br>b.用关键字new创建数组对象 int []a = new int[5];  5个默认初值0</p>
+<p>数据成员： length</p>
+<p><em>数组名之间的赋值</em></p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span> []a1=&#123;<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>&#125;;</span><br><span class="line"><span class="built_in">int</span> a3[]=&#123;<span class="number">2</span>,<span class="number">1</span>,<span class="number">3</span>&#125;;</span><br><span class="line">a3=a1;  <span class="comment">//赋值结果a3指向a1指向的数组，a3先前指向的含有3个元素的数组由于没有指向而消失</span></span><br></pre></td></tr></table></figure>
+<p><em>向成员方法传递数组元素</em></p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="symbol">F</span>&#123;</span><br><span class="line"><span class="built_in">int</span> aa(<span class="built_in">int</span> x,<span class="built_in">int</span> y)&#123;</span><br><span class="line"><span class="built_in">int</span> z;</span><br><span class="line">x=x+<span class="number">4</span>;y=y+<span class="number">2</span>;z=x*y;</span><br><span class="line"><span class="keyword">return</span> z;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="symbol">test</span>&#123;</span><br><span class="line"><span class="keyword">public</span> static <span class="built_in">void</span> main(String []args)&#123;</span><br><span class="line">	<span class="built_in">int</span> arr[]=&#123;<span class="number">6</span>,<span class="number">8</span>,<span class="number">9</span>&#125;;</span><br><span class="line">	F f = new F();</span><br><span class="line">	<span class="built_in">int</span> k =f.aa(arr[<span class="number">0</span>],arr[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>数组元素作为成员方法的实参，程序中对形参的任何修改都不改变数组元素的值</p>
+<p><em>向成员方法传递数组名</em><br>用数组名作为形参，则必须用具有相同数据类型的数组名作为实参<br>数组名作为实参时，是把实参数组对象的起始地址传递给形参数组名，两个数组共同引用同一对象，因此，在成员方法中对形参数组名指向的各元素值的修改，都会使实参数组名指向的各元素的值也发生同样的变化。</p>
+<p>排序</p>
+<p>冒泡：从前到后开始对相邻两个元素进行比较，如果后面的元素值小，则交换，否则不交换，第一趟排序中可以使得数组中值最达的元素移动下标为n-1的位置，</p>
+<p>选择：拿第一个元素和其他元素比较，若大于其他位置元素则交换，否则继续，第一趟下来，元素最小的在下标为0的位置，则前面是有序区，后面是无序区。</p>
+<p>对象数组</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span>&#123;</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">String</span> name;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">char</span> sex;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">double</span> score;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Student st1 = <span class="keyword">new</span> Student[<span class="number">3</span>];</span><br></pre></td></tr></table></figure>
+
+<p>st1为st1[0]的地址<br>st1[0]为第一个对象的首地址<br>str1[0].name 为String对象的首地址<br>str1[0].sex  为字符变量<br>str1[0].score 为double数</p>
+<p>二维数组</p>
+<p><em>声明二维数组时，系统只为二维数组的引用变量在内存的变量存储区分配存储空间，但并未创建具体的数组对象，所以这个值为null</em></p>
+<p><em>数组名.length 得到的是数组的行数<br>数组名[i].length 得到的是该行的列数</em></p>
+<p><strong>字符串</strong></p>
+<p>String 字符串常量<br>StringBuffer 字符串变量</p>
+<p>String<br>直接赋值  String str = “abcde”;<br>构造函数  </p>
+<table>
+<thead>
+<tr>
+<th>构造方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>String()</td>
+<td>创建一个空字符串对象</td>
+</tr>
+<tr>
+<td>String(String value)</td>
+<td>用value字符串创建的新字符串对象</td>
+</tr>
+<tr>
+<td>String(char value[])</td>
+<td>value字符数组创建字符串对象</td>
+</tr>
+<tr>
+<td>String(char value[],int offset,int count)</td>
+<td>value字符数组中下标为offset开始，创建有count个字符的对象</td>
+</tr>
+<tr>
+<td>String(byte[] bytes,String charsetName)</td>
+<td>通过指定的charset解码确定的byte数组，构造新String</td>
+</tr>
+<tr>
+<td>String(byte []b,int offset,int count)</td>
+<td>通过默认字符集解码byte数组</td>
+</tr>
+<tr>
+<td>String(StringBuffer b)</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>常用成员方法</p>
+<table>
+<thead>
+<tr>
+<th>成员方法</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>int length()</td>
+<td></td>
+</tr>
+<tr>
+<td>char charAt(int index)</td>
+<td></td>
+</tr>
+<tr>
+<td>int indexOf(int ch)</td>
+<td>返回指定字符在此字符串中第一次出现的索引</td>
+</tr>
+<tr>
+<td>String subString(int begin,int end)</td>
+<td>返回下标begin到end-1的子串</td>
+</tr>
+<tr>
+<td>boolean equals(Object obj)</td>
+<td>值的比较</td>
+</tr>
+<tr>
+<td>boolean equalsIgnoreCase(String s)</td>
+<td>值的比较,不区分大小写</td>
+</tr>
+<tr>
+<td>String toString()</td>
+<td></td>
+</tr>
+<tr>
+<td>int compareTo(String s)</td>
+<td>按字典顺序比较两个字符串</td>
+</tr>
+</tbody></table>
+<p><strong>main方法中的参数 (String []args)</strong></p>
+<p>StringBuffer</p>
+<table>
+<thead>
+<tr>
+<th>构造</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>StringBuffer()</td>
+<td>空字符串缓冲区，默认初始长度16字符</td>
+</tr>
+<tr>
+<td>StringBuffer(int length)</td>
+<td>length创建指定长度的字符串缓冲区</td>
+</tr>
+<tr>
+<td>StringBuffer(String str)</td>
+<td>用指定字符串str创建，长度为str长度加16字符</td>
+</tr>
+</tbody></table>
+<p>成员函数</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>StringBuffer append(Object obj)</td>
+<td>添加到字符串末尾</td>
+</tr>
+<tr>
+<td>int length()</td>
+<td></td>
+</tr>
+<tr>
+<td>char charAt(int index)</td>
+<td></td>
+</tr>
+<tr>
+<td>void setcharAt(int index,char ch)</td>
+<td>把下标index处字符设置为ch</td>
+</tr>
+<tr>
+<td>StringBuffer insert(int offset,Object obj)</td>
+<td>obj.toString()返回的字符串插入字符下标offset处</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>2019-04-11 11:51:46 星期四<br>萧逸小杨</em></p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaWeb/" rel="tag"><i class="fa fa-tag"></i> JavaWeb</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/01/08/qt-1/" rel="prev" title="QT---信号槽">
+      <i class="fa fa-chevron-left"></i> QT---信号槽
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/01/08/java-2/" rel="next" title="Java基础（类和对象）">
+      Java基础（类和对象） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

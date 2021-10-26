@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Servlet技术可以处理客户端传来的HTTP请求，并返回一个响应">
+<meta name="keywords" content="JavaWeb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaWeb（Servlet）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;08&#x2F;java-8&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="Servlet技术可以处理客户端传来的HTTP请求，并返回一个响应">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T06:03:49.451Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/01/08/java-8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>JavaWeb（Servlet） | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/java-8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaWeb（Servlet）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-08 16:30:57" itemprop="dateCreated datePublished" datetime="2020-01-08T16:30:57+08:00">2020-01-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 14:03:49" itemprop="dateModified" datetime="2021-07-18T14:03:49+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/01/08/java-8/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/08/java-8/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> Servlet技术可以处理客户端传来的HTTP请求，并返回一个响应</p>
+<a id="more"></a>
+
+<p><strong>设计Servlet</strong></p>
+<p>1.实现Servlet接口<br>创建一个Servlet类，必须直接或间接实现javax.servlet.Servlet接口</p>
+<p>2.继承GenericServlet<br>GenericServlet是Servlet接口的直接实现类</p>
+<p>3.继承HttpServlet<br>HttpServlet类是javax.servlet.GenericServlet类的一个子类</p>
+<p><strong>Servlet类基本结构</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> 类名 <span class="keyword">extends</span> <span class="title">HttpServlet</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request,HttpServletResponse response)</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest request,HttpServletResponse response)</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest request,HttpServletResponse response)</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">destroy</span><span class="params">()</span></span>&#123;&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>service方法:Servlet处理请求时自动执行service()方法，该方法根据请求的类型（get/post），调用doGet()或doPost()方法，因此，在建立Servlet时，一般只需重写doGet()和doPost()方法</p>
+<p><strong>配置Servlet</strong></p>
+<p>新建web工程时，自动在WebRoot/WEB-INF目录下创建配置文件web.xml</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="params">&lt;servlet&gt;</span></span><br><span class="line"><span class="params">&lt;description&gt;</span>This is the description of my J2EE component<span class="params">&lt;/description&gt;</span></span><br><span class="line"><span class="params">&lt;display-name&gt;</span>This is the display name of my J2EE component<span class="params">&lt;/display-name&gt;</span></span><br><span class="line"><span class="params">&lt;servlet-name&gt;</span>NewsServlet<span class="params">&lt;/servlet-name&gt;</span>               <span class="comment">//Servlet名称</span></span><br><span class="line"><span class="params">&lt;servlet-class&gt;</span>servlets.NewsServlet<span class="params">&lt;/servlet-class&gt;</span>   <span class="comment">//完整的类路径</span></span><br><span class="line"><span class="params">&lt;/servlet&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="params">&lt;servlet-mapping&gt;</span></span><br><span class="line"><span class="params">&lt;servlet-name&gt;</span>NewsServlet<span class="params">&lt;/servlet-name&gt;</span>			<span class="comment">//Servlet名称，和上面名称要一致</span></span><br><span class="line"><span class="params">&lt;url-pattern&gt;</span>/NewsServlet<span class="params">&lt;/url-pattern&gt;</span>		<span class="comment">//访问地址</span></span><br><span class="line"><span class="params">&lt;/servlet-mapping&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>Servlet常用对象及其方法</p>
+<table>
+<thead>
+<tr>
+<th>JSP内置对象</th>
+<th>Servlet类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>request</td>
+<td>HttpServletRequest</td>
+</tr>
+<tr>
+<td>response</td>
+<td>HttpServletRsponse</td>
+</tr>
+<tr>
+<td>session</td>
+<td>HttpSession</td>
+</tr>
+<tr>
+<td>application</td>
+<td>ServletContext</td>
+</tr>
+<tr>
+<td>out</td>
+<td>PrintWriter</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>对应关系</th>
+<th>获取对象方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>类HttpServletRequest的对象对应JSP的request对象</td>
+<td></td>
+</tr>
+<tr>
+<td>类HttpServletResponse对象对应JSP的response对象</td>
+<td></td>
+</tr>
+<tr>
+<td>类HttpSession的对象对应JSP的session对象</td>
+<td>HttpSession session =request.getSession()：获取session对象</td>
+</tr>
+<tr>
+<td>类ServletContext的对象对应JSP的application对象</td>
+<td>ServletContext app= this.getServletContext()</td>
+</tr>
+<tr>
+<td>类PrintWriter的对象对应JSP的out对象</td>
+<td>PrintWriter out=response.getWriter();</td>
+</tr>
+</tbody></table>
+<p><strong>在Servlet中使用JavaBean</strong></p>
+<p>在Servlet使用JavaBean有两种方式：<br>（1）在一个Servlet中单独使用JavaBean(普通类的使用方法)<br>一般需要完成的操作是：<br>在Servlet中实例化JavaBean。<br>通过实例化的对象调用JavaBean方法，完成业务处理，并获得处理结果。<br>将获得的结果交给Servlet继续处理。</p>
+<p>（2）在Servlet与JSP之间或Servlet之间实现共享的JavaBean</p>
+<p><strong>Jsp与Servlet的关联关系</strong></p>
+<p>JSP可以调用Servlet，Servlet也可以调用JSP；同时，一个JSP可以调用另一个JSP，一个Servle也可以调用另一个Servlet</p>
+<ol>
+<li>JSP页面调用Servlet</li>
+</ol>
+<p>（1）通过表单提交调用Servlet</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"servlet访问地址"</span>&gt;</span>……<span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里的访问地址是在web.xml中配置的地址。</p>
+<p>（2）通过超链接调用Servlet</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"servlet访问地址"</span>&gt;</span>提示信息<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">或  <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"servlet访问地址?要传递的参数"</span>&gt;</span>提示信息<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Servlet跳转到JSP页面</li>
+</ol>
+<p>转向：是在一个Web工程内部，各组件之间的调用，在调用时，request对象中的信息不丢失，可在新组件中继续使用。</p>
+<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RequestDispatcher rd=<span class="built_in">request</span>.getRequestDispatcher(<span class="string">"jsp网页"</span>)</span><br><span class="line">rd.forward(<span class="built_in">request</span>,<span class="built_in">response</span>);</span><br></pre></td></tr></table></figure>
+
+<p>类似于JSP动作&lt;jsp:forward page=“url”&gt;，只在网站内部跳转，携带request信息。</p>
+<p>重定向：可以在一个Web工程内部，各组件之间实现调用，也可以直接跳转到其他Web工程的JSP页面。并且，在跳转到新组件后，重新创建request对象。</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">response.sendRedirect(<span class="string">"JSP网页地址"</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>Servlet调用另一个Servlet</li>
+</ol>
+<p>其调用格式同Servlet调用JSP（转发和重定向），只是将JSP网页地址更换为Servlet映射地址即可。</p>
+<ol start="4">
+<li>JSP跳转到另一个JSP</li>
+</ol>
+<p>&lt;jsp:forward page=“jsp页面”&gt;<br>表单提交，action=“jsp页面”<br>超链接jsp页面<br>response.sendRedirect(“jsp页面”)</p>
+<p><strong>Cookie管理</strong></p>
+<p>Cookie对象是由服务器产生并保存到客户端(内存或文件中)的信息</p>
+<p>Cookie不是JSP的内置对象，在页面中使用时需要通过其构造方法创建。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cookie(String name, String value)</td>
+<td>构造函数，创建一个Cookie对象</td>
+</tr>
+<tr>
+<td><strong>void response.addCookie(Cookie c)</strong></td>
+<td>向客户机添加一个Cookie对象</td>
+</tr>
+<tr>
+<td><strong>Cookie[]   request.getCookies()</strong></td>
+<td>用于取得所有Cookie对象的数据，存放到一个数组中（不能直接获取某一个单独的Cookie对象，只能一次性将全部Cookie对象拿到）</td>
+</tr>
+<tr>
+<td>String getName()</td>
+<td>获取cookie对象的属性名</td>
+</tr>
+<tr>
+<td>String getValue()</td>
+<td>取得Cookie对象的属性对应的属性值</td>
+</tr>
+<tr>
+<td>setMaxAge(int expiry)</td>
+<td>设置cookie有效时间,以秒为单位，<strong>设置了有效时间的cookie将以文件形式保存在客户端，否则只是存储在浏览器的内存区域中</strong></td>
+</tr>
+</tbody></table>
+<p><strong>案例：Cookie实现自动登录</strong></p>
+<p>登录页面：输入账号密码</p>
+<p>logincheck页面：接收用户输入并创建cookie保存用户输入的用户名密码，同时在session中保存用户名，转入主页面</p>
+<p>主页面：需要登录才能访问，先检验用户是否已经登录，如果已经登录则显示欢迎消息，如果没登录，则启动自动登录，读取cookie信息，如果读取到用户名信息，则显示欢迎信息，否则转登录页面。</p>
+<p><strong>常用开发模式</strong></p>
+<p>单纯的JSP页面开发</p>
+<p>JSP+JavaBean</p>
+<p>JSP+Servlet</p>
+<p>JSP+JavaBean+Servlet</p>
+<p>DAO设计模式与数据库访问</p>
+<hr>
+<p>2019-06-23 17:46:40 星期日</p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaWeb/" rel="tag"><i class="fa fa-tag"></i> JavaWeb</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/01/08/java-7/" rel="prev" title="JavaWeb（JDBC）">
+      <i class="fa fa-chevron-left"></i> JavaWeb（JDBC）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/01/08/java-9/" rel="next" title="JavaWeb（过滤器）">
+      JavaWeb（过滤器） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="分享复习PHP的笔记">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP基础（概念、基本语法）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;08&#x2F;php-1&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="分享复习PHP的笔记">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T06:03:49.566Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/01/08/php-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>PHP基础（概念、基本语法） | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/08/php-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PHP基础（概念、基本语法）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-08 11:19:29" itemprop="dateCreated datePublished" datetime="2020-01-08T11:19:29+08:00">2020-01-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 14:03:49" itemprop="dateModified" datetime="2021-07-18T14:03:49+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/01/08/php-1/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/08/php-1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> 分享复习PHP的笔记</p>
+<a id="more"></a>
+
+
+
+<ul>
+<li><p>之前数据库课设使用的wamp环境，对PHP进行了简单的学习，<a href="http://www.yteng3456.xyz" target="_blank" rel="noopener">www.yteng3456.xyz</a> 网站的搭建也是基于ThinkPHP5.0框架，但是我对PHP的语法掌握的还不是很好，所以特地复习一些基础知识。虽然很基础，但是很重要。</p>
+</li>
+<li><p>初识PHP</p>
+</li>
+</ul>
+<p>主要讲解了PHP的发展，PHP声称是世界上最好的语言，它是由全世界免费代码开发者的共同努力开发，其主流版本为PHP5，现在最新版本是PHP7，其主要搭配Apache服务器和MySQL数据库共同开发Web应用。</p>
+<ul>
+<li>PHP程序运行的基本流程</li>
+</ul>
+<p>网页浏览者首先在浏览器的地址栏输入要访问的主页地址，按回车键触发这个申请；<br>浏览者将申请发送到PHP网站服务器，网站服务器根据申请读取数据库中的页面；<br>通过Web服务器向客户端发送处理结果，客户端的浏览器显示最终页面。</p>
+<ul>
+<li>WampServer</li>
+</ul>
+<p>wamp是Windows服务器上使用Apache、MySQL。PHP和phpmydamin的集成安装环境，安装简单、速度较快、运行稳定。</p>
+<ul>
+<li>PHP标识符</li>
+</ul>
+<p>默认<br><?php     ?></p>
+<p>1.短风格  </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?</span>        <span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>2.script风格</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">language</span>=<span class="string">"php"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>3.asp</p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="meta">%</span>         <span class="meta">%</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>编码规范</li>
+</ul>
+<p>1.表述<br>每一句PHP语句都是以“；”结尾，这个规范就告诉PHP要执行此语句</p>
+<p>2.指令分隔符<br>PHP代码段中的最后一句可以不用分号结束</p>
+<p>3.空白符</p>
+<p>下面情况应该用两个空白行<br>两个类之间<br>一个源文件的两个代码片段之间</p>
+<p>下面情况用一个空白行<br>两个函数声明之间<br>函数内的局部变量和函数的第一个语句之间</p>
+<p>合理利用空格可以提高代码的缩进，提高可读性<br>空格通常使用于关键字与括号之间，但是函数名称与左括号之间不适用空格分开<br>函数参数列表中的逗号后面通常会插入空格<br>for语句的表达式应该用逗号分开，后面添加空格</p>
+<p>4.注释<br>“/**/”   C风格<br>“//”     C++风格<br>“#”      SHELL风格</p>
+<ul>
+<li>常量</li>
+</ul>
+<p>define() 声明常量<br>define(“常量名”,常量值)；<br>常量的值只能设定一次，并且无论在代码的任何位置，他都不能被改动，<br>内置常量(PHP在系统建立之初就定义好的一些量，可以随时被调用)</p>
+<ul>
+<li>变量</li>
+</ul>
+<p>PHP中的变量是弱类型<br>（1）传值赋值：使用“=”直接将赋值表达式的值赋给另一个变量<br>（2）引用赋值：将赋值表达式内存的空间的引用赋给另一个变量，会在=后变量前加上一个“&amp;”符号，<strong>两个变量指向同一块内存空间</strong>，其中一个改变，另外一个也改变</p>
+<ul>
+<li>可变变量与变量的引用</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$value0</span>=<span class="string">"guest"</span></span><br><span class="line">$<span class="variable">$value0</span>=<span class="string">"cuntomer"</span>;</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$guest</span></span><br></pre></td></tr></table></figure>
+
+<p>$value0被赋值guest，则$$value0相当于$guest,则打印$guest得到customer<br>可变变量:其实是允许改变一个变量的变量名，允许使用一个变量的值作为另外一个变量的名</p>
+<ul>
+<li>变量作用域</li>
+</ul>
+<p>超全局变量：在代码任意位置都能访问到<br>全局变量：在代码间声明，在代码间可以访问，但是不能在函数内访问</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$room = <span class="number">20</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">showrooms</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">echo</span> $room;</span><br><span class="line">&#125;</span><br><span class="line">showroom();  <span class="comment">//报错，函数内不能访问全局变量</span></span><br><span class="line"><span class="keyword">echo</span> $room.<span class="string">"间房子"</span>;</span><br></pre></td></tr></table></figure>
+
+<p>解决办法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$room = <span class="number">20</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">showrooms</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">global</span> $room;  <span class="comment">//用global关键字来声明，告诉函数他要调用的变量是已经存在的全局变量</span></span><br><span class="line">	<span class="keyword">echo</span> $room;</span><br><span class="line">&#125;</span><br><span class="line">showroom();  </span><br><span class="line"><span class="keyword">echo</span> $room.<span class="string">"间房子"</span>;</span><br></pre></td></tr></table></figure>
+
+<p>静态变量：只在函数内存在，在函数外无法访问，但是执行后其值保留，<br>也就是说这一次执行完毕后，静态变量的值保留，下一次再执行此函数，这个值还可以调用。</p>
+<p>变量的销毁<br>PHP有自动回收垃圾的机制<br>手动销毁 void unset(变量)</p>
+<ul>
+<li>数据的类型</li>
+</ul>
+<p>整型（integer） -2147483648  ~  +2147483647<br>浮点型（float或double）<br>布尔型（boolean）   true和false<br>为0 为false   为0.0 为false   为空字符串为零字符串“0”  为false 数组不含元素 为false  空型 为false  对象型，资源型为true</p>
+<p>字符串型（string）<br>双引号 在其中的变量显示变量值<br>单引号 所有的字符都是直接表示出来</p>
+<p>数组型（array）   <strong>按照“键值”与“值”的对应关系组织数据<br>数组不特意表明键值的情况下，数组元素键值从零开始</strong></p>
+<p>对象型（object）  类的实例<br>NULL型<br>资源类型（resource）</p>
+<ul>
+<li>数据类型转换</li>
+</ul>
+<p>自动转换<br>强制转换  settype（var,string type）</p>
+<pre><code>settype($info,&quot;int&quot;);   //强制转换为整数</code></pre><ul>
+<li><p>运算符</p>
+</li>
+<li><p>命名空间</p>
+</li>
+</ul>
+<p>命名空间作为一个比较宽泛的概念，可以理解为封装各个项目的方法，它主要用于“类的命名”，“函数命名”及“常量命名”中避免代码冲突和在命名空间下管理变量名和常量名</p>
+<p><em>2019-03-06 20:09:29 星期三<br>萧逸小杨</em></p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/30/network-12/" rel="prev" title="计算机网络--SMTP、DHCP、RTSP">
+      <i class="fa fa-chevron-left"></i> 计算机网络--SMTP、DHCP、RTSP
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/01/08/php-2/" rel="next" title="PHP基础（函数、字符串、数组、时间）">
+      PHP基础（函数、字符串、数组、时间） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

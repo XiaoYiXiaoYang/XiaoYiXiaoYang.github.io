@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="介绍编写一个完整的TCP客户&#x2F;服务器程序所需要的基本套接字函数">
+<meta name="keywords" content="UNIX网络编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unix网络编程--TCP套接字编程">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;13&#x2F;unixnetwork-3&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="介绍编写一个完整的TCP客户&#x2F;服务器程序所需要的基本套接字函数">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T06:03:49.677Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/03/13/unixnetwork-3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Unix网络编程--TCP套接字编程 | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/unixnetwork-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Unix网络编程--TCP套接字编程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-13 22:06:20" itemprop="dateCreated datePublished" datetime="2020-03-13T22:06:20+08:00">2020-03-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 14:03:49" itemprop="dateModified" datetime="2021-07-18T14:03:49+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/03/13/unixnetwork-3/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/13/unixnetwork-3/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>介绍编写一个完整的TCP客户/服务器程序所需要的基本套接字函数</p>
+<a id="more"></a>
+
+
+
+<h4 id="socket函数"><a href="#socket函数" class="headerlink" title="socket函数"></a>socket函数</h4><p>为了执行网络I/O，进程必须调用socket函数，指定期望的通信协议类型</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> family,<span class="keyword">int</span> type,<span class="keyword">int</span> protocol)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>family指明协议族，type指明套接字类型，protocol指明协议类型</p>
+<table>
+<thead>
+<tr>
+<th align="center">family</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">AF_INET</td>
+<td align="center">IPv4协议</td>
+</tr>
+<tr>
+<td align="center">AF_INET6</td>
+<td align="center">IPv6协议</td>
+</tr>
+<tr>
+<td align="center">AF_LOCAL</td>
+<td align="center">Unix域协议</td>
+</tr>
+<tr>
+<td align="center">AF_ROUTE</td>
+<td align="center">路由套接字</td>
+</tr>
+<tr>
+<td align="center">AF_KEY</td>
+<td align="center">秘钥套接字</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">type</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">SOCK_STREAM</td>
+<td align="center">字节流套接字</td>
+</tr>
+<tr>
+<td align="center">SOCK_DGRAM</td>
+<td align="center">数据报套接字</td>
+</tr>
+<tr>
+<td align="center">SOCK_SEQPACKET</td>
+<td align="center">有序分组套接字</td>
+</tr>
+<tr>
+<td align="center">SOCK_RAM</td>
+<td align="center">原始套接字</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">protocol</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">IPPROTO_TCP</td>
+<td align="center">TCP传输协议</td>
+</tr>
+<tr>
+<td align="center">IPPROTO_UDP</td>
+<td align="center">UDP传输协议</td>
+</tr>
+<tr>
+<td align="center">IPPROTO_SCTP</td>
+<td align="center">SCTP传输协议</td>
+</tr>
+</tbody></table>
+<p><strong>对比AF_XXX和PF_XXX</strong></p>
+<p>AF_前缀表示地址族，PF_前缀表示协议族</p>
+<p>曾经有想法：单个协议族可以支持多个地址族，PF_值用来创建套接字，AF_值用于套接字地址结构，但是支持多个地址族的协议族没有实现过</p>
+<h4 id="connect函数"><a href="#connect函数" class="headerlink" title="connect函数"></a>connect函数</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> sockfd,<span class="keyword">const</span> struct sockaddr *servaddr,<span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>客户在调用connect函数前不必非得调用bind函数，因为如果需要的话，内核会确定源IP地址，并选择一个临时端口作为源端口。</p>
+<p>connect函数将触发三次握手过程，</p>
+<ol>
+<li>若TCP客户没有收到SYN分节的响应，，则返回ETIMEDOUT错误</li>
+<li>若对客户的SYN响应的RST，则表明服务器主机在我们的指定的端口与上没有进程在与之等待</li>
+<li>若客户发生的SYN在中间的某个路由器上引发一个”destination unreachable”，则认为是一种软错误</li>
+</ol>
+<h4 id="bind函数"><a href="#bind函数" class="headerlink" title="bind函数"></a>bind函数</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bind</span><span class="params">(<span class="keyword">int</span> sockfd,<span class="keyword">const</span> struct sockaddr *myaddr,<span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>bind函数把一个本地协议地址赋予一个套接字</p>
+<p>调用bind可以指定IP地址或端口，可以两者都指定，也可以都不指定</p>
+<p>如果指定端口号为0，那么内核就在bind被调用时选择一个临时端口</p>
+<h4 id="listen函数"><a href="#listen函数" class="headerlink" title="listen函数"></a>listen函数</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">listen</span><span class="params">(<span class="keyword">int</span> sockfd,<span class="keyword">int</span> backlog)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>listen函数把一个未连接的套接字转换成一个被动套接字，表示内核应接受指向该套接字的连接请求</p>
+<h4 id="accept函数"><a href="#accept函数" class="headerlink" title="accept函数"></a>accept函数</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">accept</span><span class="params">(<span class="keyword">int</span> sockfd,struct sockaddr *aliaddr,<span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>addrlen是一个值-结果参数，调用前addrlen所引用的整数值置为cliaddr所指套接字地址结构的长度，返回时，该整数值即为有内核存放在该套接字地址结构内的确切字节数。</p>
+<h5 id="fork函数"><a href="#fork函数" class="headerlink" title="fork函数"></a>fork函数</h5><p>fork函数调用一次，返回两次</p>
+<p>在子进程中返回0</p>
+<p>在父进程中返回该进程的进程ID</p>
+<h5 id="exec函数"><a href="#exec函数" class="headerlink" title="exec函数"></a>exec函数</h5><p>exec函数把当前进程映像替换成新的程序文件，而且该新程序通常从main函数开始执行，进程ID并不改变。</p>
+<p>我们称调用exec的进程为调用进程，称新执行的程序为新程序。</p>
+<h4 id="并发服务器"><a href="#并发服务器" class="headerlink" title="并发服务器"></a>并发服务器</h4><p>UNIX中编写并发服务器程序最简单的办法就是fork一个子进程来服务每个客户</p>
+<p>我们必须知道每个文件或套接字都有一个引用计数，他是当前打开着的引用该文件或套接字的描述符的个数</p>
+<h4 id="close函数"><a href="#close函数" class="headerlink" title="close函数"></a>close函数</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">colse</span><span class="params">(<span class="keyword">int</span> sockfd)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>colse一个TCP套接字的默认行为是把套接字标记成已关闭，然后立即返回到调用进程，该套接字描述符不能再由调用进程使用，</p>
+<p>并发服务器中父进程关闭已连接套接字只是导致相应描述符的引用计数值减去一，既然引用计数值仍大于0，这个colse调用并不引发TCP的四分组连接终止序列</p>
+<p>如果父进程对每个由accept返回的已连接套接字都不调用close，那么并发服务器中将会发生什么。首先，父进程最终将耗尽可用描述符，因为任何进程在任何时刻可拥有的打开着的描述符通常都是有限制的。</p>
+<p>没有一个客户会被终止，当子进程关闭已连接套接字时，他的引用计数值将由2递减为1，且保持为1，因为父进程永不关闭任何已连接套接字。</p>
+<h4 id="gethostname和getpeername函数"><a href="#gethostname和getpeername函数" class="headerlink" title="gethostname和getpeername函数"></a>gethostname和getpeername函数</h4><p>这两个函数或者返回与某个套接字关联的本地协议地址，或者返回与某个套接字关联的外地协议地址</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getsockname</span><span class="params">(<span class="keyword">int</span> sockfd,struct sockaddr *localaddr,<span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getpeername</span><span class="params">(<span class="keyword">int</span> sockfd,struct sockaddr *peeraddr,<span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>这两个函数最后一个参数都是值结果参数</p>
+<ul>
+<li>在一个没有调用bind的TCP客户上，connect成功返回后，gethostname用于返回由内核赋予该连接的本地IP地址和本地端口号</li>
+<li>在以端口号为0调用bind后，getsockname用于返回由内核赋予本地的端口号</li>
+<li>在一个以通配IP地址调用bind的TCP服务器上，与某个客户的连接一旦建立，getsockname就可以用于返回由内核赋予该连接的本地IP地址</li>
+<li>当一个服务器是由通过accept的某个进程通过调用exec执行程序时，它能够获取客户身份的唯一途径便是调用getpeername</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/UNIX%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> UNIX网络编程</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/10/unixnetwork-2/" rel="prev" title="Unix网络编程--套接字编程简介">
+      <i class="fa fa-chevron-left"></i> Unix网络编程--套接字编程简介
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/15/memorycard-1/" rel="next" title="购买电脑内存条">
+      购买电脑内存条 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#socket函数"><span class="nav-number">1.</span> <span class="nav-text">socket函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#connect函数"><span class="nav-number">2.</span> <span class="nav-text">connect函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bind函数"><span class="nav-number">3.</span> <span class="nav-text">bind函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#listen函数"><span class="nav-number">4.</span> <span class="nav-text">listen函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#accept函数"><span class="nav-number">5.</span> <span class="nav-text">accept函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#fork函数"><span class="nav-number">5.1.</span> <span class="nav-text">fork函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#exec函数"><span class="nav-number">5.2.</span> <span class="nav-text">exec函数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#并发服务器"><span class="nav-number">6.</span> <span class="nav-text">并发服务器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#close函数"><span class="nav-number">7.</span> <span class="nav-text">close函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gethostname和getpeername函数"><span class="nav-number">8.</span> <span class="nav-text">gethostname和getpeername函数</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="人生苦短，我学Python">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python基础语法">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;07&#x2F;13&#x2F;python-1&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="人生苦短，我学Python">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T08:20:53.438Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/07/13/python-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Python基础语法 | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/13/python-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python基础语法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-13 22:24:57" itemprop="dateCreated datePublished" datetime="2020-07-13T22:24:57+08:00">2020-07-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 16:20:53" itemprop="dateModified" datetime="2021-07-18T16:20:53+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/13/python-1/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/13/python-1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <center>
+人生苦短，我学Python
+</center>
+
+<a id="more"></a>
+
+
+
+<p>import this  展示 Python之禅</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">The Zen of Python, by Tim Peters</span><br><span class="line"></span><br><span class="line">Beautiful <span class="keyword">is</span> better than ugly.</span><br><span class="line">Explicit <span class="keyword">is</span> better than implicit.</span><br><span class="line">Simple <span class="keyword">is</span> better than complex.</span><br><span class="line">Complex <span class="keyword">is</span> better than complicated.</span><br><span class="line">Flat <span class="keyword">is</span> better than nested.</span><br><span class="line">Sparse <span class="keyword">is</span> better than dense.</span><br><span class="line">Readability counts.</span><br><span class="line">Special cases aren<span class="string">'t special enough to break the rules.</span></span><br><span class="line"><span class="string">Although practicality beats purity.</span></span><br><span class="line"><span class="string">Errors should never pass silently.</span></span><br><span class="line"><span class="string">Unless explicitly silenced.</span></span><br><span class="line"><span class="string">In the face of ambiguity, refuse the temptation to guess.</span></span><br><span class="line"><span class="string">There should be one-- and preferably only one --obvious way to do it.</span></span><br><span class="line"><span class="string">Although that way may not be obvious at first unless you'</span>re Dutch.</span><br><span class="line">Now <span class="keyword">is</span> better than never.</span><br><span class="line">Although never <span class="keyword">is</span> often better than *right* now.</span><br><span class="line">If the implementation <span class="keyword">is</span> hard to explain, it<span class="string">'s a bad idea.</span></span><br><span class="line"><span class="string">If the implementation is easy to explain, it may be a good idea.</span></span><br><span class="line"><span class="string">Namespaces are one honking great idea -- let'</span>s do more of those!</span><br></pre></td></tr></table></figure>
+
+
+
+<p>变量名</p>
+<p>只能包含字母、数字、下划线，可以字母或下划线打头</p>
+<p>不能包含空格、但可以使用下划线来分割其中的单词</p>
+<p>不要将Python关键字和函数名用作变量名</p>
+<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>单引号、双引号</p>
+<p>name = “aabbC”</p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">name</span>.<span class="built_in">title</span>()         <span class="comment">//AabbC</span></span><br><span class="line"><span class="keyword">name</span>.upper()     	 <span class="comment">//AABBC</span></span><br><span class="line"><span class="keyword">name</span>.lower()      	 <span class="comment">//aabbc</span></span><br><span class="line"><span class="keyword">name</span> + <span class="string">"212"</span>    	 <span class="comment">//aabbC212</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">name</span> = "  aa bb  "</span><br><span class="line"><span class="type">name</span>.lstrip()        //<span class="string">'aa bb  '</span></span><br><span class="line"><span class="type">name</span>.rstrip() 		 //<span class="string">'  aa bb'</span></span><br><span class="line"><span class="type">name</span>.strip()         //<span class="string">'aa bb'</span></span><br><span class="line"></span><br><span class="line">a = <span class="number">5</span></span><br><span class="line"><span class="type">name</span> + str(a)       //<span class="string">'  aa bb  5'</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h3><p>nums = [1,2,3]</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nums[<span class="number">0</span>]        <span class="comment">//1</span></span><br><span class="line">nums[<span class="number">-1</span>]       <span class="comment">//3</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>修改</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">nums[0]</span> <span class="string">=</span> <span class="number">0</span>   <span class="string">//nums为</span> <span class="number">0</span> <span class="number">2</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>添加</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">nums.append(4)</span>   <span class="string">//nums为0</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span></span><br><span class="line"><span class="string">nums.insert(1,1)</span>  <span class="string">//nums为0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>删除</strong></p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">del</span> <span class="selector-tag">nums</span><span class="selector-attr">[0]</span>     <span class="comment">//nums为1 2 3 4</span></span><br><span class="line"><span class="selector-tag">nums</span><span class="selector-class">.pop</span>()      <span class="comment">//nums为1 2 3</span></span><br><span class="line"><span class="selector-tag">nums</span><span class="selector-class">.remove</span>(<span class="number">1</span>)  <span class="comment">//nums为2 3</span></span><br><span class="line"><span class="selector-tag">nums</span><span class="selector-class">.pop</span>(<span class="number">0</span>)  <span class="comment">//nums为3</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>排序</strong></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nums.sort()                <span class="comment">//nums 为2 3</span></span><br><span class="line">nums.sort(reverse = True)  <span class="comment">//nums为3 2</span></span><br><span class="line"><span class="function"><span class="title">sorted</span><span class="params">(nums)</span></span>               <span class="comment">//nums为2 3   保留列表元素原来的排列顺序，同时以特定的顺序呈现它们</span></span><br><span class="line">nums.reverse()             <span class="comment">//nums为3 2</span></span><br><span class="line"><span class="function"><span class="title">len</span><span class="params">(nums)</span></span>                  <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>使用列表时避免索引错误，如果索引错误，会报错</p>
+<p><strong>操作列表</strong></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="built_in">num</span> <span class="keyword">in</span> nums:</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">num</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>创建列表</strong></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">list</span><span class="params">(range(<span class="number">1</span>,<span class="number">6</span>)</span></span>)   <span class="comment">//[1,2,3,4,5]</span></span><br><span class="line"><span class="function"><span class="title">list</span><span class="params">(range(<span class="number">1</span>,<span class="number">5</span>,<span class="number">2</span>)</span></span>) <span class="comment">//[1,3]   2是步长</span></span><br><span class="line"></span><br><span class="line">nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line"><span class="function"><span class="title">min</span><span class="params">(nums)</span></span>    <span class="comment">//1</span></span><br><span class="line"><span class="function"><span class="title">max</span><span class="params">(nums)</span></span>    <span class="comment">//5</span></span><br><span class="line"><span class="function"><span class="title">sum</span><span class="params">(nums)</span></span>    <span class="comment">//15</span></span><br><span class="line"></span><br><span class="line">squares = [value**<span class="number">2</span> <span class="keyword">for</span> value <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">5</span>)]    <span class="comment">//squares为 [1,4,9,16]</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>切片</strong></p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">nums[<span class="number">0</span>:<span class="number">3</span>]   <span class="comment">//[1,2,3]</span></span><br><span class="line">nums[:<span class="number">3</span>]    <span class="comment">//[1,2,3]</span></span><br><span class="line">nums[<span class="number">1</span>:]    <span class="comment">//[2,3,4,5]</span></span><br><span class="line">nums[<span class="number">-3</span>:]   <span class="comment">//[3,4,5]</span></span><br><span class="line"><span class="keyword">for</span> num <span class="keyword">in</span> nums[:<span class="number">3</span>]:</span><br><span class="line">	...</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>复制</strong></p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">new_nums = nums[:]  <span class="comment">//new_nums为[1,2,3]</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>赋值</strong></p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">new_nums = nums    <span class="comment">//new_nums 和num都指向 [1,2,3]</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="元组"><a href="#元组" class="headerlink" title="元组"></a>元组</h3><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nums = (<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line">nums[<span class="number">1</span>]   <span class="comment">//2   元组的值不可被修改</span></span><br><span class="line"></span><br><span class="line">但是nums = (<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ytt = &#123;<span class="string">'color'</span>:<span class="string">'red'</span>,<span class="string">'height'</span>:<span class="number">180</span>&#125;</span><br><span class="line"></span><br><span class="line">ytt[<span class="string">'color'</span>]    		//访问</span><br><span class="line">ytt[<span class="string">'color'</span>] = <span class="string">'green'</span>	//修改</span><br><span class="line">ytt[<span class="string">'weight'</span>] = <span class="number">55</span>      //添加</span><br><span class="line"><span class="keyword">del</span> ytt[<span class="string">'color'</span>]       //删除</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> key,value <span class="keyword">in</span> ytt.items():   //键值对不一定按顺序</span><br><span class="line">	print(key,value)</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> key <span class="keyword">in</span> ytt.keys():</span><br><span class="line">    print(key)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> key <span class="keyword">in</span> ytt:</span><br><span class="line">    print(key)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> value <span class="keyword">in</span> ytt.values():</span><br><span class="line">    print(key)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> value <span class="keyword">in</span> ytt:</span><br><span class="line">    print(key)</span><br><span class="line">    </span><br><span class="line">set(ytt.values())   //去重</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">ytts</span> = [ytt1,ytt2,ytt3]         //列表嵌套字典</span><br><span class="line"><span class="attr">ytt</span> = &#123;<span class="string">'color'</span>:[red,green]&#125;     //字典嵌套列表</span><br><span class="line"><span class="attr">users</span> = &#123;<span class="string">'ytt1'</span>:&#123;<span class="string">'height'</span>:<span class="number">180</span>&#125;,<span class="string">'ytt2'</span>:&#123;<span class="string">'height'</span>:<span class="number">150</span>&#125;&#125;   //字典嵌套字典</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="IF语句"><a href="#IF语句" class="headerlink" title="IF语句"></a>IF语句</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> car ==<span class="string">'bmw'</span>:</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"这是宝马"</span>)</span><br><span class="line"></span><br><span class="line">and</span><br><span class="line">or</span><br><span class="line"><span class="keyword">in</span>   //判断值是否在列表中</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span></span><br><span class="line"><span class="keyword">elif</span></span><br><span class="line"><span class="keyword">else</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="WHILE循环"><a href="#WHILE循环" class="headerlink" title="WHILE循环"></a>WHILE循环</h3><p>Python 2.7  raw_input</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name</span> = input(<span class="string">"输入名字"</span>)        //name以字符串读取</span><br><span class="line"><span class="attr">age</span> = input(<span class="string">"输入年龄"</span>)</span><br><span class="line"><span class="attr">age</span> = int(age)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>break</p>
+<p>continue</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cars = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> car<span class="variable">s:</span></span><br><span class="line">	cars.<span class="keyword">pop</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">dic</span> = &#123;&#125;</span><br><span class="line"><span class="variable">flag</span> = <span class="variable"><span class="literal">True</span></span></span><br><span class="line"><span class="variable"><span class="keyword">while</span></span> <span class="variable">flag</span>:</span><br><span class="line">	<span class="variable">key</span> = <span class="function"><span class="title">input</span>(<span class="string">""</span>)</span></span><br><span class="line">	<span class="variable">value</span> = <span class="function"><span class="title">input</span>(<span class="string">""</span>)</span></span><br><span class="line">	<span class="variable">dic</span>[<span class="variable">key</span>] = <span class="variable">value</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><p><strong>位置实参</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">(a,b)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">hello</span><span class="params">(<span class="number">1</span>,<span class="number">2</span>)</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>关键字实参</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">(a,b)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">hello</span><span class="params">(a = <span class="number">1</span>,b = <span class="number">2</span>)</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>默认值</strong></p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def hello<span class="comment">(a, b = 2)</span></span><br><span class="line"></span><br><span class="line">hello<span class="comment">(a = 1)</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>返回值</strong></p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def build<span class="constructor">_person(<span class="params">first_name</span>, <span class="params">last_name</span>)</span>:</span><br><span class="line">	person = build<span class="constructor">_person('<span class="params">first</span>':<span class="params">first_name</span>,'<span class="params">last_name</span>',<span class="params">last_name</span>)</span></span><br><span class="line">	return person</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>传递列表</strong></p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在函数中修改列表是永久的</span></span><br><span class="line">def greet<span class="constructor">_users(<span class="params">names</span>)</span>:</span><br><span class="line">	names.append(<span class="string">"修改"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//禁止函数修改列表，可以切片传递副本</span></span><br><span class="line"><span class="comment">//调用方式</span></span><br><span class="line"><span class="keyword">function</span><span class="constructor">_name(<span class="params">list_name</span>[:])</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>传递任意数量的实参</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make</span><span class="params">(*items)</span>    			//函数将实参封装到元组中</span></span><br><span class="line"><span class="function"><span class="title">def</span> <span class="title">make</span><span class="params">(size,*items)</span> 			//</span></span><br><span class="line"><span class="function"><span class="title">def</span> <span class="title">people</span><span class="params">(first,last,**items)</span>	//</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>导入模块</strong></p>
+<p>模块是扩展名为.py的文件</p>
+<p>pizza.py文件有make_pizza函数</p>
+<p>在新文件中</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pizza</span><br><span class="line"></span><br><span class="line">//调用</span><br><span class="line">pizza.make_pizza</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>as指定别名</strong></p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">from</span> pizza <span class="keyword">import</span> make_pizza <span class="keyword">as</span> mp</span><br><span class="line"><span class="keyword">import</span> pizza <span class="keyword">as</span> p</span><br><span class="line"><span class="title">from</span> pizza <span class="keyword">import</span>*</span><br></pre></td></tr></table></figure>
+
+
+
+<p>注意：给形参默认值，等号两边不能有空格</p>
+<p><strong>类</strong></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span>():</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>,name,age)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">self</span>.name = name</span><br><span class="line">		<span class="keyword">self</span>.age = age</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">sit</span><span class="params">()</span></span><span class="symbol">:</span></span><br><span class="line">		print(<span class="keyword">self</span>.name.title() + <span class="string">""</span>)</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">roll_over</span><span class="params">()</span></span><span class="symbol">:</span></span><br><span class="line">		print(<span class="keyword">self</span>.name.title() + <span class="string">""</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>属性要有初始值</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span>():</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>,name,age,size)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">self</span>.name = name</span><br><span class="line">		<span class="keyword">self</span>.age = age</span><br><span class="line">		<span class="keyword">self</span>.size = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>修改初始值：</p>
+<p>1.通过实例直接修改</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">dog</span> = Dog(<span class="string">'zz'</span>,<span class="number">2</span>,<span class="number">5</span>)</span><br><span class="line"><span class="attr">dog.size</span> = <span class="number">10</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>2.通过方法进行设置</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span>():</span></span><br><span class="line">	<span class="comment">#略</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">set_size</span><span class="params">(newsize)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">self</span>.size = newsize</span><br><span class="line"></span><br><span class="line">dog = Dog(<span class="string">'zz'</span>,<span class="number">2</span>,<span class="number">5</span>)</span><br><span class="line">dog.set_size(<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>3.通过方法进行递增</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span>():</span></span><br><span class="line">	<span class="comment">#略</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">add_size_year</span><span class="params">()</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">self</span>.size +=<span class="number">1</span> </span><br><span class="line"></span><br><span class="line">dog = Dog(<span class="string">'zz'</span>,<span class="number">2</span>,<span class="number">5</span>)</span><br><span class="line">dog.set_size()</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>继承</strong></p>
+<p>1.子类的方法<strong>init()</strong></p>
+<p>子类首先要完成的任务是给父类所有属性赋值</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Car</span>():</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>,make,model,year)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">self</span>.make = make</span><br><span class="line">		<span class="keyword">self</span>.model = model</span><br><span class="line">		<span class="keyword">self</span>.year = year</span><br><span class="line">		<span class="keyword">self</span>.size = <span class="number">0</span></span><br><span class="line">	<span class="comment">#略	</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ElectriCar</span>(<span class="title">Car</span>):  <span class="comment">#定义子类时，必须在括号内指定父类名称</span></span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>,make,model,year)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="comment">#初始化父类的属性</span></span><br><span class="line">		<span class="keyword">super</span>().init(make,model,year)</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Python2.7中的继承</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Car</span>():</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>,make,model,year)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="comment">#略	</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ElectriCar</span>(<span class="title">Car</span>):  </span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>,make,model,year)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="comment">#初始化父类的属性</span></span><br><span class="line">		<span class="keyword">super</span>(ElectriCar,<span class="keyword">self</span>).init(make,model,year)   <span class="comment">#需要指定子类名和对象self</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#给子类定义属性和方法</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Car</span>():</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>,make,model,year)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">self</span>.make = make</span><br><span class="line">		<span class="keyword">self</span>.model = model</span><br><span class="line">		<span class="keyword">self</span>.year = year</span><br><span class="line">		<span class="keyword">self</span>.size = <span class="number">0</span></span><br><span class="line">	<span class="comment">#略	</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ElectriCar</span>(<span class="title">Car</span>):  <span class="comment">#定义子类时，必须在括号内指定父类名称</span></span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>,make,model,year)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="comment">#初始化父类的属性</span></span><br><span class="line">		<span class="keyword">super</span>().init(make,model,year)</span><br><span class="line">		<span class="keyword">self</span>.battery = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#重写父类的方法</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Car</span>():</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>,make,model,year)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">self</span>.make = make</span><br><span class="line">		<span class="keyword">self</span>.model = model</span><br><span class="line">		<span class="keyword">self</span>.year = year</span><br><span class="line">		<span class="keyword">self</span>.size = <span class="number">0</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">read_size</span><span class="params">()</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">return</span> size</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ElectriCar</span>(<span class="title">Car</span>): </span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>,make,model,year)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">super</span>().init(make,model,year)</span><br><span class="line">		<span class="keyword">self</span>.battery = <span class="number">0</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">read_size</span><span class="params">(<span class="keyword">self</span>)</span></span>:  <span class="comment">#这里重写需要加参数self吗？？</span></span><br><span class="line">		<span class="keyword">return</span> battery</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#实例用作属性 (就是类成员变量)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Car</span>():</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>,make,model,year)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">self</span>.make = make</span><br><span class="line">		<span class="keyword">self</span>.model = model</span><br><span class="line">		<span class="keyword">self</span>.year = year</span><br><span class="line">		<span class="keyword">self</span>.size = <span class="number">0</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">read_size</span><span class="params">()</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">return</span> size</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Battery</span>():</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>,battery = <span class="number">0</span>)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">self</span>.battery = battery</span><br><span class="line">		</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ElectriCar</span>(<span class="title">Car</span>): </span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>,make,model,year)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">super</span>().init(make,model,year)</span><br><span class="line">		<span class="keyword">self</span>.battery = Battery()     <span class="comment">#实例用作属性</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#导入类</span></span><br><span class="line"><span class="comment">#car.py</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Car</span><span class="params">()</span>:</span></span><br><span class="line">	<span class="comment">#xxx</span></span><br><span class="line">	</span><br><span class="line"></span><br><span class="line"><span class="comment">#my_car.py</span></span><br><span class="line"><span class="keyword">from</span> car <span class="keyword">import</span> Car    <span class="comment">#一个模块导入一个类</span></span><br><span class="line">xxx</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> car <span class="keyword">import</span> car,EletricCar   <span class="comment">#一个模块导入多个类</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> car           <span class="comment">#导入整个模块</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> car <span class="keyword">import</span> *   <span class="comment">#导入模块中所有类</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>文件和异常</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#读文件</span></span><br><span class="line"><span class="keyword">with</span> <span class="keyword">open</span>(<span class="string">'a.txt'</span>) <span class="keyword">as</span> <span class="keyword">object</span>:</span><br><span class="line">	<span class="keyword">contents</span> = object.read()   <span class="comment">#read到达文件末尾的时返回一个空字符串</span></span><br><span class="line">	print(<span class="keyword">contents</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#逐行读取</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">'a.txt'</span>) <span class="keyword">as</span> object:</span><br><span class="line">	<span class="keyword">for</span> <span class="built_in">line</span> <span class="keyword">in</span> object    <span class="comment">#读取每行时返回一个空字符串</span></span><br><span class="line">	print(<span class="built_in">line</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#使用with时，open()返回的文件对象只能在with代码块内可用，如果要在代码块外访问，可将其存储至列表中</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">'a.txt'</span>) <span class="keyword">as</span> object:</span><br><span class="line">	<span class="keyword">lines</span> = object.readlines()    <span class="comment">#读取每行存储在列表中</span></span><br><span class="line">	</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">line</span> <span class="keyword">in</span> <span class="keyword">lines</span>：</span><br><span class="line">	print(<span class="built_in">line</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#写入文件</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">write</span>(<span class="string">'a.txt'</span>,<span class="string">'w'</span>) <span class="keyword">as</span> object:</span><br><span class="line">	object.<span class="built_in">write</span>(<span class="string">'yes ok'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#打开模式  读取r  写入w  附加a   读取和写入r+</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#写入多行</span><br><span class="line"><span class="keyword">with</span> <span class="keyword">write</span>(<span class="string">'a.txt'</span>,<span class="string">'w'</span>) <span class="keyword">as</span> <span class="keyword">object</span>:</span><br><span class="line">	<span class="keyword">object</span>.<span class="keyword">write</span>(<span class="string">'yes ok\n'</span>)</span><br><span class="line">	<span class="keyword">object</span>.<span class="keyword">write</span>(<span class="string">'no'</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#追加到文件 用附加模式打开</span><br><span class="line"><span class="keyword">with</span> <span class="keyword">write</span>(<span class="string">'a.txt'</span>,<span class="string">'a'</span>) <span class="keyword">as</span> <span class="keyword">object</span>:</span><br><span class="line">	<span class="keyword">object</span>.<span class="keyword">write</span>(<span class="string">'yes ok\n'</span>)</span><br><span class="line">	<span class="keyword">object</span>.<span class="keyword">write</span>(<span class="string">'no'</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>异常</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#try-except </span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	print(<span class="number">5</span>/<span class="number">0</span>)</span><br><span class="line"><span class="keyword">except</span> ZeroDicisionError:</span><br><span class="line">	print(<span class="string">"zero error"</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">else</span> 代码块</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	ans = <span class="number">5</span>/<span class="number">0</span></span><br><span class="line">except ZeroDicisionError:</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"zero error"</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	<span class="built_in">print</span>(ans)</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#处理FileNotFoundError</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	<span class="keyword">with</span> open(<span class="string">'b.txt'</span>) <span class="keyword">as</span> obj:</span><br><span class="line"><span class="keyword">except</span> FileNotFoundError:</span><br><span class="line">	print(<span class="string">'file not found'</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#捕获异常 什么都不做</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	<span class="keyword">with</span> open(<span class="string">'b.txt'</span>) <span class="keyword">as</span> obj:</span><br><span class="line"><span class="keyword">except</span> FileNotFoundError:</span><br><span class="line">	<span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#存储数据</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line">nums = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>]</span><br><span class="line"></span><br><span class="line">filename = <span class="string">'nums.json'</span></span><br><span class="line">with open(filename,<span class="string">'w'</span>) as obj:</span><br><span class="line">	json.dump(nums.obj)     #将数字列表存储到文件中</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#读取json</span></span><br><span class="line">import json</span><br><span class="line"></span><br><span class="line">filename = <span class="string">'nums.json'</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(filename) <span class="keyword">as</span> obj:</span><br><span class="line">	nums = json.<span class="built_in">load</span>(nums.obj)     <span class="comment">#将数字列表读取</span></span><br><span class="line">	</span><br><span class="line">print(nums)</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>测试代码</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#name_function.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(first,last)</span>:</span></span><br><span class="line">	full_name = first + <span class="string">' '</span> +last</span><br><span class="line">	<span class="keyword">return</span> full_name</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#test_name_function.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"><span class="keyword">from</span> name_function <span class="keyword">import</span> get_name</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NamesTestCase</span><span class="params">(unittest.TestCase)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">test_first_last_name</span><span class="params">(self)</span>:</span></span><br><span class="line">		name = get_name(<span class="string">'y'</span>,<span class="string">'tt'</span>)</span><br><span class="line">		self.assertEqual(name,<span class="string">'y tt'</span>)</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">unittest.main()   <span class="comment">#让Python运行这个文件中的测试</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><em>断言方法</em></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#survey.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AnonymousSurvey</span>():</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>,question)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">self</span>.question = question</span><br><span class="line">		<span class="keyword">self</span>.response =[]</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">show_question</span><span class="params">(<span class="keyword">self</span>)</span></span><span class="symbol">:</span></span><br><span class="line">		print(<span class="keyword">self</span>.question)</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">store_response</span><span class="params">(<span class="keyword">self</span>,new_response)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">self</span>.response.append(new_response)</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">show_results</span><span class="params">(<span class="keyword">self</span>)</span></span><span class="symbol">:</span></span><br><span class="line">		print(<span class="string">"result"</span>)</span><br><span class="line">		<span class="keyword">for</span> response <span class="keyword">in</span> <span class="keyword">self</span>.<span class="symbol">response:</span></span><br><span class="line">			print(<span class="string">'-'</span> + response)</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#test_survey.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"><span class="title">from</span> survey <span class="keyword">import</span> AnonymousSurvey</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">TestAnonymousSurvey</span>(<span class="title">unittest</span>.<span class="type">TestCase</span>):</span></span><br><span class="line"><span class="class">	#测试单个答案会被妥善的存储</span></span><br><span class="line"><span class="class">	def test_score_single_response(<span class="title">self</span>):</span></span><br><span class="line"><span class="class">		question = '<span class="type">What</span> ....'</span></span><br><span class="line"><span class="class">		my_survey = <span class="type">AnonymousSurvey</span>(<span class="title">question</span>)</span></span><br><span class="line"><span class="class">		my_survey.store_response('<span class="type">English</span>')</span></span><br><span class="line"><span class="class">		</span></span><br><span class="line"><span class="class">        self.assertIn('<span class="type">English</span>',<span class="title">my_survey</span>.<span class="title">response</span>)</span></span><br><span class="line"><span class="class">        </span></span><br><span class="line"><span class="class"> unittest.main()</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><em>SetUp方法</em></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#如果你在TestCase类中包含了方法setUp，Python将先运行它，再运行各个以test_打头的方法，这样，在你编写的每个测试方法中都可以使用在方法setUp中创建的对象了</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import unittest</span><br><span class="line">from survey import AnonymousSurvey</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestAnonymousSurvey</span>(<span class="title">unittest</span>.<span class="title">TestCase</span>):</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">setUp</span><span class="params">(<span class="keyword">self</span>)</span></span><span class="symbol">:</span></span><br><span class="line">		question = <span class="string">'What ....'</span></span><br><span class="line">		<span class="keyword">self</span>.my_survey = AnonymousSurvey(question)</span><br><span class="line">		<span class="keyword">self</span>.responses = [<span class="string">'dsadsa'</span>,<span class="string">'dad'</span>,<span class="string">'sa'</span>]</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">test_store_single_response</span><span class="params">(<span class="keyword">self</span>)</span></span><span class="symbol">:</span></span><br><span class="line">		<span class="keyword">self</span>.my_survey.store_response(<span class="keyword">self</span>.responses[<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">self</span>.assertIn(<span class="keyword">self</span>.response[<span class="number">0</span>],<span class="keyword">self</span>.my_survey.response)</span><br><span class="line">        </span><br><span class="line"> unittest.main()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/06/06/unixnetwork-4/" rel="prev" title="UNIX网络编程--·TCP客户服务器">
+      <i class="fa fa-chevron-left"></i> UNIX网络编程--·TCP客户服务器
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/07/16/git-3/" rel="next" title="git学习">
+      git学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串"><span class="nav-number">1.</span> <span class="nav-text">字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#列表"><span class="nav-number">2.</span> <span class="nav-text">列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元组"><span class="nav-number">3.</span> <span class="nav-text">元组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字典"><span class="nav-number">4.</span> <span class="nav-text">字典</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IF语句"><span class="nav-number">5.</span> <span class="nav-text">IF语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WHILE循环"><span class="nav-number">6.</span> <span class="nav-text">WHILE循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数"><span class="nav-number">7.</span> <span class="nav-text">函数</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

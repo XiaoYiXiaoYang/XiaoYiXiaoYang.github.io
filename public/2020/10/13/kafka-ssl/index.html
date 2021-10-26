@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="翻译 http:&#x2F;&#x2F;kafka.apache.org&#x2F;documentation&#x2F;">
+<meta name="keywords" content="Kafka">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kafka SSL加密通信相关">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;10&#x2F;13&#x2F;kafka-ssl&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="翻译 http:&#x2F;&#x2F;kafka.apache.org&#x2F;documentation&#x2F;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T08:32:10.251Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/10/13/kafka-ssl/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>kafka SSL加密通信相关 | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/13/kafka-ssl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          kafka SSL加密通信相关
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-13 22:36:00" itemprop="dateCreated datePublished" datetime="2020-10-13T22:36:00+08:00">2020-10-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 16:32:10" itemprop="dateModified" datetime="2021-07-18T16:32:10+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/10/13/kafka-ssl/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/10/13/kafka-ssl/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <center>
+翻译 http://kafka.apache.org/documentation/
+</center>
+
+<a id="more"></a> 
+
+<h3 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h3><h4 id="安全概述"><a href="#安全概述" class="headerlink" title="安全概述"></a>安全概述</h4><p>在0.9.0.0版中，Kafka社区添加了许多功能，这些功能可以单独使用或一起使用，从而提高了Kafka集群的安全性。当前支持以下安全措施：</p>
+<ol>
+<li>使用SSL或SASL对来自客户端（生产者和消费者），其他broker和工具的的连接进行身份验证。Kafka支持以下SASL机制：<ul>
+<li>SASL / GSSAPI（Kerberos）-从0.9.0.0版本开始</li>
+<li>SASL / PLAIN-从版本0.10.0.0开始</li>
+<li>SASL / SCRAM-SHA-256和SASL / SCRAM-SHA-512-从版本0.10.2.0开始</li>
+<li>SASL / OAUTHBEARER-从2.0版开始</li>
+</ul>
+</li>
+<li>从broker到ZooKeeper的连接的身份验证</li>
+<li>使用SSL加密在节点和客户端之间，集群broker之间或broker和工具之间传输的数据（请注意，启用SSL时性能会降低，其大小取决于CPU类型和JVM实现。）</li>
+<li>客户授权的读/写操作</li>
+<li>授权是可插入的，并支持与外部授权服务的集成</li>
+</ol>
+<p>值得注意的是，安全性是可选的-支持不安全的集群，以及经过身份验证，未经身份验证，加密和未加密的客户端的混合。以下指南说明了如何在客户端和broker中配置和使用安全功能。</p>
+<h4 id="使用SSL的加密和身份认证"><a href="#使用SSL的加密和身份认证" class="headerlink" title="使用SSL的加密和身份认证"></a>使用SSL的加密和身份认证</h4><p>Apache Kafka允许客户端使用SSL进行流量加密和身份验证。默认情况下，SSL是禁用的，但可以根据需要打开。以下各段详细说明了如何设置自己的PKI基础结构，如何使用它来创建证书以及如何配置Kafka以使用它们。</p>
+<h5 id="1-为每个kafka-broker生成SSL秘钥和证书"><a href="#1-为每个kafka-broker生成SSL秘钥和证书" class="headerlink" title="1.为每个kafka broker生成SSL秘钥和证书"></a>1.为每个kafka broker生成SSL秘钥和证书</h5><p>部署一个或多个具有SSL支持的brokers的第一步是为每个服务器生成一个公共/私有密钥对。由于Kafka希望所有密钥和证书都存储在密钥库中，因此我们将使用Java的keytool命令来执行此任务。该工具支持两种不同的密钥库格式，即现已弃用的Java特定的jks格式以及PKCS12。PKCS12是Java版本9的默认格式，为确保无论使用的Java版本如何都使用此格式，所有以下命令均明确指定PKCS12格式。</p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">keytool</span> -keystore &#123;keystorefile&#125; -<span class="keyword">alias</span> localhost -validity &#123;validity&#125; -genkey -keyalg <span class="type">RSA</span> -store<span class="keyword">type</span> pkcs12</span><br></pre></td></tr></table></figure>
+
+
+
+<p>您需要在上面的命令中指定两个参数：</p>
+<ol>
+<li><p>keystorefile：存储此broker的密钥（以及以后的证书）的密钥库文件。密钥库文件包含此broker的私钥和公钥，因此需要确保其安全。理想情况下，此步骤是在将使用该密钥的Kafka broker上运行的，因为该密钥永远不会被传输/离开它打算用于的服务器。</p>
+</li>
+<li><p>validity：密钥的有效时间（天）。请注意，这与证书的有效期不同，有效期将在“签署证书”中确定。您可以使用同一密钥来请求多个证书：如果密钥的有效期为10年，但是您的CA仅会签署有效期为一年的证书，则随着时间的推移，您可以将同一密钥与10个证书一起使用。</p>
+</li>
+</ol>
+<p>为了获得可以与刚刚创建的私钥一起使用的证书，需要创建一个证书签名请求。由受信任的CA签名后，此签名请求将生成实际证书，然后可以将其安装在密钥库中并用于身份验证。<br>要生成证书签名请求，请对到目前为止创建的所有服务器密钥库运行以下命令。</p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">keytool</span> -keystore server.keystore.jks -<span class="keyword">alias</span> localhost -validity &#123;validity&#125; -genkey -keyalg <span class="type">RSA</span> -destkeystore<span class="keyword">type</span> pkcs12 -ext <span class="type">SAN</span>=<span class="type">DNS</span>:&#123;<span class="type">FQDN</span>&#125;,<span class="type">IP</span>:&#123;<span class="type">IPADDRESS1</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该命令假定您要向证书添加主机名信息，如果不是这种情况，则可以省略extension参数<code>-ext SAN=DNS:{FQDN},IP:{IPADDRESS1}</code>。请参阅下面的详细信息。</p>
+<h5 id="主机名验证"><a href="#主机名验证" class="headerlink" title="主机名验证"></a>主机名验证</h5><p>启用主机名验证是指根据要连接的服务器提供的证书中的属性，对该服务器的实际主机名或IP地址进行检查，以确保您确实连接至正确的服务器。</p>
+<p>进行此检查的主要原因是为了防止中间人攻击。对于Kafka，默认情况下已禁用此检查很长时间，但自Kafka 2.0.0起，默认情况下已为客户端连接以及broker间连接启用服务器的主机名验证。</p>
+<p>可以通过设置<code>ssl.endpoint.identification.algorithm</code>为空字符串来禁用服务器主机名验证。</p>
+<p>对于动态配置的broker listeners，可以使用<code>kafka-configs.sh</code>以下命令禁用主机名验证：</p>
+<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">bin/</span><span class="string">kafka-configs.</span><span class="string">sh </span><span class="built_in">--bootstrap-server</span> <span class="string">localhost:9093 </span><span class="built_in">--entity-type</span> <span class="string">brokers </span><span class="built_in">--entity-name</span> 0 <span class="built_in">--alter</span> <span class="built_in">--add-config</span> <span class="string">"listener.name.internal.ssl.endpoint.identification.algorithm="</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong></p>
+<p>正常情况下，除了作为最快的“禁用主机名”方法，然后承诺“有更多时间以后修复它”之外，没有充分的理由禁用主机名验证！</p>
+<p>在正确的时间完成正确的主机名验证并不困难，但是一旦集群启动并运行，则变得更加困难-帮自己一个忙，现在就开始吧！</p>
+<p>如果启用了主机名验证，则客户端将根据以下两个字段之一验证服务器的标准域名（FQDN）或IP地址：</p>
+<ol>
+<li>Common Name（CN）</li>
+<li>Subject Alternative Name（SAN）</li>
+</ol>
+<p>尽管Kafka选中了这两个字段，但自2000年以来，不赞成将CN段用于主机名验证 ，因此应尽可能避免使用。此外，SAN字段更加灵活，允许在证书中声明多个DNS和IP条目。</p>
+<p>另一个优点是，如果将SAN字段用于主机名验证，则可以将common name设置为更有意义的值以进行授权。由于我们需要将SAN字段包含在签名证书中，因此将在生成签名请求时指定它。也可以在生成密钥对时指定它，但不会自动将其复制到签名请求中。</p>
+<p>要添加SAN字段<code>-ext SAN=DNS:{FQDN},IP:{IPADDRESS}</code>，请在keytool命令后附加以下参数：</p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">keytool</span> -keystore server.keystore.jks -<span class="keyword">alias</span> localhost -validity &#123;validity&#125; -genkey -keyalg <span class="type">RSA</span> -destkeystore<span class="keyword">type</span> pkcs12 -ext <span class="type">SAN</span>=<span class="type">DNS</span>:&#123;<span class="type">FQDN</span>&#125;,<span class="type">IP</span>:&#123;<span class="type">IPADDRESS1</span>&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-创建自己的CA"><a href="#2-创建自己的CA" class="headerlink" title="2.创建自己的CA"></a>2.创建自己的CA</h4><p>完成此步骤后，集群中的每台计算机都具有一个公钥/私钥对，可以将其用于加密通信和证书签名请求，这是创建证书的基础。要添加身份验证功能，此签名请求需要由受信任的机构签名，该机构将在此步骤中创建。</p>
+<p>证书颁发机构（CA）负责签署证书。CA就像颁发护照的政府一样，政府会在每本护照上盖章（签名），以使护照变得难以伪造。其他政府则对邮票进行核实，以确保护照是真实的。同样，CA对证书进行签名，而加密技术则保证了签名的证书在计算上难以伪造。因此，只要CA是真实可信的授权机构，客户就可以有力保证他们正在连接到真正的计算机。</p>
+<p>对于本指南，我们将成为我们自己的证书颁发机构。在公司环境中建立生产集群时，这些证书通常由整个公司范围内受信任的公司CA签名。请参阅生产中的常见陷阱，以了解此案例的一些注意事项。</p>
+<p>由于OpenSSL中的错误，x509模块不会将请求的扩展字段从CSR复制到最终证书中。由于我们希望SAN扩展出现在我们的证书中以启用主机名验证，因此我们将使用<em>CA</em>模块。这需要在生成CA密钥对之前进行一些其他配置。</p>
+<p>将以下清单保存到一个名为openssl-ca.cnf的文件中，并根据需要调整有效性和通用属性的值。</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">HOME</span>            = .</span><br><span class="line"><span class="attr">RANDFILE</span>        = <span class="variable">$ENV</span>::HOME/.rnd</span><br><span class="line"></span><br><span class="line"><span class="comment">####################################################################</span></span><br><span class="line"><span class="section">[ ca ]</span></span><br><span class="line"><span class="attr">default_ca</span>    = CA_default      <span class="comment"># The default ca section</span></span><br><span class="line"></span><br><span class="line"><span class="section">[ CA_default ]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">base_dir</span>      = .</span><br><span class="line"><span class="attr">certificate</span>   = <span class="variable">$base_dir</span>/cacert.pem   <span class="comment"># The CA certifcate</span></span><br><span class="line"><span class="attr">private_key</span>   = <span class="variable">$base_dir</span>/cakey.pem    <span class="comment"># The CA private key</span></span><br><span class="line"><span class="attr">new_certs_dir</span> = <span class="variable">$base_dir</span>              <span class="comment"># Location for new certs after signing</span></span><br><span class="line"><span class="attr">database</span>      = <span class="variable">$base_dir</span>/index.txt    <span class="comment"># Database index file</span></span><br><span class="line"><span class="attr">serial</span>        = <span class="variable">$base_dir</span>/serial.txt   <span class="comment"># The current serial number</span></span><br><span class="line"></span><br><span class="line"><span class="attr">default_days</span>     = <span class="number">1000</span>         <span class="comment"># How long to certify for</span></span><br><span class="line"><span class="attr">default_crl_days</span> = <span class="number">30</span>           <span class="comment"># How long before next CRL</span></span><br><span class="line"><span class="attr">default_md</span>       = sha256       <span class="comment"># Use public key default MD</span></span><br><span class="line"><span class="attr">preserve</span>         = <span class="literal">no</span>           <span class="comment"># Keep passed DN ordering</span></span><br><span class="line"></span><br><span class="line"><span class="attr">x509_extensions</span> = ca_extensions <span class="comment"># The extensions to add to the cert</span></span><br><span class="line"></span><br><span class="line"><span class="attr">email_in_dn</span>     = <span class="literal">no</span>            <span class="comment"># Don't concat the email in the DN</span></span><br><span class="line"><span class="attr">copy_extensions</span> = copy          <span class="comment"># Required to copy SANs from CSR to cert</span></span><br><span class="line"></span><br><span class="line"><span class="comment">####################################################################</span></span><br><span class="line"><span class="section">[ req ]</span></span><br><span class="line"><span class="attr">default_bits</span>       = <span class="number">4096</span></span><br><span class="line"><span class="attr">default_keyfile</span>    = cakey.pem</span><br><span class="line"><span class="attr">distinguished_name</span> = ca_distinguished_name</span><br><span class="line"><span class="attr">x509_extensions</span>    = ca_extensions</span><br><span class="line"><span class="attr">string_mask</span>        = utf8only</span><br><span class="line"></span><br><span class="line"><span class="comment">####################################################################</span></span><br><span class="line"><span class="section">[ ca_distinguished_name ]</span></span><br><span class="line"><span class="attr">countryName</span>         = Country Name (<span class="number">2</span> letter code)</span><br><span class="line"><span class="attr">countryName_default</span> = DE</span><br><span class="line"></span><br><span class="line"><span class="attr">stateOrProvinceName</span>         = State or Province Name (full name)</span><br><span class="line"><span class="attr">stateOrProvinceName_default</span> = Test Province</span><br><span class="line"></span><br><span class="line"><span class="attr">localityName</span>                = Locality Name (eg, city)</span><br><span class="line"><span class="attr">localityName_default</span>        = Test Town</span><br><span class="line"></span><br><span class="line"><span class="attr">organizationName</span>            = Organization Name (eg, company)</span><br><span class="line"><span class="attr">organizationName_default</span>    = Test Company</span><br><span class="line"></span><br><span class="line"><span class="attr">organizationalUnitName</span>         = Organizational Unit (eg, division)</span><br><span class="line"><span class="attr">organizationalUnitName_default</span> = Test Unit</span><br><span class="line"></span><br><span class="line"><span class="attr">commonName</span>         = Common Name (e.g. server FQDN or YOUR name)</span><br><span class="line"><span class="attr">commonName_default</span> = Test Name</span><br><span class="line"></span><br><span class="line"><span class="attr">emailAddress</span>         = Email Address</span><br><span class="line"><span class="attr">emailAddress_default</span> = test@test.com</span><br><span class="line"></span><br><span class="line"><span class="comment">####################################################################</span></span><br><span class="line"><span class="section">[ ca_extensions ]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">subjectKeyIdentifier</span>   = hash</span><br><span class="line"><span class="attr">authorityKeyIdentifier</span> = keyid:always, issuer</span><br><span class="line"><span class="attr">basicConstraints</span>       = critical, CA:<span class="literal">true</span></span><br><span class="line"><span class="attr">keyUsage</span>               = keyCertSign, cRLSign</span><br><span class="line"></span><br><span class="line"><span class="comment">####################################################################</span></span><br><span class="line"><span class="section">[ signing_policy ]</span></span><br><span class="line"><span class="attr">countryName</span>            = optional</span><br><span class="line"><span class="attr">stateOrProvinceName</span>    = optional</span><br><span class="line"><span class="attr">localityName</span>           = optional</span><br><span class="line"><span class="attr">organizationName</span>       = optional</span><br><span class="line"><span class="attr">organizationalUnitName</span> = optional</span><br><span class="line"><span class="attr">commonName</span>             = supplied</span><br><span class="line"><span class="attr">emailAddress</span>           = optional</span><br><span class="line"></span><br><span class="line"><span class="comment">####################################################################</span></span><br><span class="line"><span class="section">[ signing_req ]</span></span><br><span class="line"><span class="attr">subjectKeyIdentifier</span>   = hash</span><br><span class="line"><span class="attr">authorityKeyIdentifier</span> = keyid,issuer</span><br><span class="line"><span class="attr">basicConstraints</span>       = CA:<span class="literal">FALSE</span></span><br><span class="line"><span class="attr">keyUsage</span>               = digitalSignature, keyEncipherment</span><br></pre></td></tr></table></figure>
+
+<p>然后创建一个数据库和序列号文件，这些文件将用于跟踪使用此CA签名的证书。这两个都是简单的文本文件，与CA密钥位于同一目录中。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">echo</span> 01 &gt; <span class="selector-tag">serial</span><span class="selector-class">.txt</span></span><br><span class="line"><span class="selector-tag">touch</span> <span class="selector-tag">index</span><span class="selector-class">.txt</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>完成这些步骤后，您现在即可生成您的CA，该CA将在以后用于签署证书。</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -x509 -config openssl-<span class="keyword">ca</span>.<span class="keyword">cnf</span> -newkey rs<span class="variable">a:4096</span> -<span class="built_in">sha256</span> -nodes -out cacert.pem -outform PEM</span><br></pre></td></tr></table></figure>
+
+<p>CA只是由其自身签名的公钥/私钥对和证书，仅用于签署其他证书。<br>此密钥对应该保持非常安全，如果有人可以访问它，他们可以创建并签署将由您的基础结构信任的证书，这意味着当连接到信任此CA的任何服务时，他们将可以模拟任何人。</p>
+<p>下一步是将生成的CA添加到“客户端的信任库”中，以便客户端可以信任此CA：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keytool -keystore client.truststore.jks -<span class="built_in">alias</span> CARoot -import -file ca-cert</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>注意：</strong> 如果通过在Kafka broker配置中将ssl.client.auth设置为“ requested”或“ required”，则kafka broker配置为要求客户端身份验证， 则您还必须为Kafka代理提供信任库，并且该库应具有全部客户端密钥签名的CA证书。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keytool -keystore server.truststore.jks -<span class="built_in">alias</span> CARoot -import -file ca-cert</span><br></pre></td></tr></table></figure>
+
+<p>与步骤1中存储每台计算机自己的身份的密钥库不同，客户端的信任库存储客户端应信任的所有证书。将证书导入一个人的信任库也意味着信任该证书签名的所有证书。</p>
+<p>与上面的类推类似，信任政府（CA）也意味着信任它已颁发的所有护照（证书）。此属性称为信任链，在大型Kafka群集上部署SSL时特别有用。您可以使用单个CA对群集中的所有证书进行签名，并使所有计算机共享信任该CA的同一信任库。这样，所有计算机都可以对所有其他计算机进行身份验证。</p>
+<h3 id="签署证书"><a href="#签署证书" class="headerlink" title="签署证书"></a>签署证书</h3><p>然后与CA签署</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl ca -config openssl-ca.cnf -policy signing_policy -extensions signing_req -out &#123;server certificate&#125; -infiles &#123;certificate signing request&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>最后，您需要将CA的证书和已签名的证书都导入到密钥库中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">keytool -keystore &#123;keystore&#125; -<span class="built_in">alias</span> CARoot -import -file &#123;CA certificate&#125;</span><br><span class="line"> keytool -keystore &#123;keystore&#125; -<span class="built_in">alias</span> localhost -import -file cert-signed</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>参数的定义如下：</p>
+<ol>
+<li>keystore：密钥库的位置</li>
+<li>CA certificate：CA的证书</li>
+<li>certificate signing request：使用服务器密钥创建的csr</li>
+<li>server certificate：将服务器的签名证书写入的文件</li>
+</ol>
+<p>这将为您提供一个名为<em>truststore.jks的信任库</em>-对于所有客户端和broker而言，该<em>信任库</em>可以相同，并且不包含任何敏感信息，因此无需保护此信息。</p>
+<p>此外，每个节点将有一个<em>server.keystore.jks</em>文件，其中包含该节点的密钥，证书和您的CA证书， 有关如何使用这些文件的信息，请参阅配置kafka broker和 配置kafka 客户端</p>
+<p>要获得有关此主题的一些工具帮助，请查看easyRSA项目，该项目具有大量的脚本来帮助执行这些步骤。</p>
+<h3 id="生产中常见陷阱"><a href="#生产中常见陷阱" class="headerlink" title="生产中常见陷阱"></a>生产中常见陷阱</h3><p>上面的段落显示了创建自己的CA并将其用于为集群签名证书的过程。尽管对于沙盒，开发，测试和类似系统非常有用，但这通常不是在公司环境中为生产集群创建证书的正确过程。企业通常将运行自己的CA，用户可以发送要与此CA签署的CSR，这样做的好处是，用户无需负责确保CA的安全以及每个人都可以信任的中央权威。但是，它也剥夺了对用户签署证书的过程的大量控制。</p>
+<ol>
+<li><p>扩展秘钥使用</p>
+<p>证书可能包含扩展字段，用于控制可以<strong><a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.12" target="_blank" rel="noopener">使用</a></strong>证书的目的。如果此字段为空，则不会限制使用，但是如果在此处指定了任何用法，则有效的SSL实现必须强制执行这些用法。</p>
+<p>Kafka的相关用法是：</p>
+<ul>
+<li>Client authentication  客户端认证</li>
+<li>Server authentication 服务端认证</li>
+</ul>
+<p>Kafka broker需要同时允许这两种用法，</p>
+<p>因为对于集群内通信，每个broker都会充当其他broker的客户端和服务器。</p>
+<p>公司CA具有用于Web服务器的签名配置文件并将其用于Kafka的情况并不少见，该配置文件仅包含serverAuth的使用值，并且会导致SSL握手失败。</p>
+</li>
+</ol>
+<ol start="2">
+<li><p>中间证书</p>
+<p>出于安全原因，<strong>中间证书公司</strong>和CA通常保持脱机状态。为了启用日常使用，创建了所谓的中间CA，然后将它们用于签署最终证书。将证书导入由中间CA签名的密钥库中时，有必要提供完整的信任链，直到根CA。这可以通过简单地完成cating的证书文件荷兰国际集团合并为一个证书文件，然后使用密钥工具导入此。</p>
+</li>
+<li><p>复制扩展字段的失败</p>
+<p>CA运营商通常不愿从CSR复制和请求扩展字段，而是倾向于自己指定这些字段，因为这会使恶意方更难获得具有潜在误导性或欺诈性价值的证书。建议仔细检查已签名的证书，这些证书是否包含所有请求的SAN字段以启用正确的主机名验证。可以使用以下命令将证书详细信息打印到控制台，该证书详细信息应与最初请求的内容进行比较：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -<span class="keyword">in</span> certificate.crt -text -noout</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<h3 id="配置kafka-broker"><a href="#配置kafka-broker" class="headerlink" title="配置kafka broker"></a>配置kafka broker</h3><p>Kafka Brokers支持侦听多个端口上的连接。我们需要在server.properties中配置以下属性，该属性必须具有一个或多个逗号分隔的值：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">listeners</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果没有为broker之间的通信启用SSL（请参见下面的启用方法），则PLAINTEXT和SSL端口都是必需的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">listeners=PLAINTEXT://host.name:port,SSL://host.name:port</span><br></pre></td></tr></table></figure>
+
+
+
+<p>broker端需要以下SSL配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">            ssl.keystore.location=/var/private/ssl/server.keystore.jks</span><br><span class="line">ssl.keystore.password=test1234</span><br><span class="line">ssl.key.password=test1234</span><br><span class="line">            ssl.truststore.location=/var/private/ssl/server.truststore.jks</span><br><span class="line">ssl.truststore.password=test1234</span><br></pre></td></tr></table></figure>
+
+<p>注意：ssl.truststore.password在技术上是可选的，但强烈建议使用。如果未设置密码，则仍然可以访问信任库，但是将禁用完整性检查。值得考虑的可选设置：</p>
+<ol>
+<li>ssl.client.auth = none（“ required” =&gt;需要客户端身份验证，“ requested” =&gt;请求客户端身份验证，并且没有证书的客户端仍然可以连接。不鼓励使用“ requested”，因为它提供了错误的含义安全性和配置错误的客户端仍将成功连接。）</li>
+<li>ssl.cipher.suites（可选）。密码套件是认证，加密，MAC和密钥交换算法的命名组合，用于协商使用TLS或SSL网络协议的网络连接的安全设置。（默认为空列表）</li>
+<li>ssl.enabled.protocols = TLSv1.2，TLSv1.1，TLSv1（列出要从客户端接受的SSL协议。请注意，不建议使用SSL，而建议使用TLS，不建议在生产中使用SSL）</li>
+<li>ssl.keystore.type = JKS</li>
+<li>ssl.truststore.type = JKS</li>
+<li>ssl.secure.random.implementation = SHA1PRNG</li>
+</ol>
+<p>如果要启用SSL进行broker之间的通信，请将以下内容添加到server.properties文件中（默认为PLAINTEXT）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">security.inter.broker.protocol=SSL</span><br></pre></td></tr></table></figure>
+
+<p>由于某些国家/地区的进口法规，Oracle实施限制了默认情况下可用的加密算法的强度。如果需要更强大的算法（例如，具有256位密钥的AES），则必须获取<a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="noopener">JCE无限强度管辖权策略文件</a>并将其安装在JDK / JRE中。有关更多信息，请参见 <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/SunProviders.html" target="_blank" rel="noopener">JCA提供者文档</a>。</p>
+<p>JRE / JDK将具有用于加密操作的默认伪随机数生成器（PRNG），因此不需要配置与一起使用的实现<code>ssl.secure.random.implementation</code>。但是，某些实现存在性能问题（值得注意的是，在Linux系统上选择的默认设置<code>NativePRNG</code>使用全局锁定）。如果SSL连接的性能成为问题，请考虑明确设置要使用的实现。该<code>SHA1PRNG</code>实现是非阻塞的，并且在高负载（产生的消息每秒50 MB，加上每个代理的复制流量）下表现出非常好的性能。</p>
+<p>启动broker后，您应该可以在server.log中看到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">with addresses: PLAINTEXT -&gt; EndPoint(192.168.64.1,9092,PLAINTEXT),SSL -&gt; EndPoint(192.168.64.1,9093,SSL)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>要快速检查服务器密钥库和信任库是否正确设置，可以运行以下命令</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">openssl</span> s_client -<span class="literal">debug</span> -connect localhost：<span class="number">9093</span> -tls1</span><br></pre></td></tr></table></figure>
+
+<p>（注意：TLSv1应该列在ssl.enabled.protocols下）。<br>在此命令的输出中，您应该看到服务器的证书：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> -----BEGIN CERTIFICATE-----</span><br><span class="line">&#123;variable sized random bytes&#125;</span><br><span class="line"> -----END CERTIFICATE-----</span><br><span class="line">subject=/C=US/ST=CA/L=Santa Clara/O=org/OU=org/CN=Sriharsha Chintalapani</span><br><span class="line">issuer=/C=US/ST=CA/L=Santa Clara/O=org/OU=org/CN=kafka/emailAddress=test@test.com</span><br></pre></td></tr></table></figure>
+
+<p>如果未显示证书或存在任何其他错误消息，则说明密钥库设置不正确。</p>
+<h3 id="配置Kafka-客户端"><a href="#配置Kafka-客户端" class="headerlink" title="配置Kafka 客户端"></a>配置Kafka 客户端</h3><p>仅新的Kafka Producer和Consumer支持SSL，不支持旧的API。对于生产者和使用者，SSL的配置将相同。</p>
+<p>如果broker中不需要客户端身份验证，则以下是最小配置示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">security.protocol=SSL          ssl.truststore.location=/var/private/ssl/client.truststore.jks</span><br><span class="line">ssl.truststore.password=test1234</span><br></pre></td></tr></table></figure>
+
+<p>注意：ssl.truststore.password在技术上是可选的，但强烈建议使用。如果未设置密码，则仍然可以访问信任库，但是将禁用完整性检查。</p>
+<p>如果需要客户端身份验证，则必须像步骤1一样创建密钥库，并且还必须配置以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssl.keystore.location=/var/private/ssl/client.keystore.jks</span><br><span class="line">ssl.keystore.password=test1234</span><br><span class="line">ssl.key.password=test1234</span><br></pre></td></tr></table></figure>
+
+<p>根据我们的要求和代理配置，可能还需要其他配置设置：</p>
+<ol>
+<li><p>ssl.provider（可选）。用于SSL连接的安全提供程序的名称。默认值为JVM的默认安全提供程序。</p>
+</li>
+<li><p>ssl.cipher.suites（可选）。密码套件是认证，加密，MAC和密钥交换算法的命名组合，用于协商使用TLS或SSL网络协议的网络连接的安全设置。</p>
+</li>
+<li><p>ssl.enabled.protocols = TLSv1.2，TLSv1.1，TLSv1。它应列出在代理方配置的至少一种协议</p>
+</li>
+<li><p>ssl.truststore.type = JKS</p>
+</li>
+<li><p>ssl.keystore.type = JKS</p>
+</li>
+</ol>
+<p>使用console-producer和console-consumer的示例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kafka-console-producer.sh --bootstrap-server localhost:9093 --topic <span class="built_in">test</span> --producer.config client-ssl.properties</span><br><span class="line"> </span><br><span class="line">kafka-console-consumer.sh --bootstrap-server localhost:9093 --topic <span class="built_in">test</span> --consumer.config client-ssl.properties</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Kafka/" rel="tag"><i class="fa fa-tag"></i> Kafka</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/09/c-1/" rel="prev" title="C Primer（）">
+      <i class="fa fa-chevron-left"></i> C Primer（）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/15/kafka-config/" rel="next" title="Kafka 配置">
+      Kafka 配置 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安全性"><span class="nav-number">1.</span> <span class="nav-text">安全性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安全概述"><span class="nav-number">1.1.</span> <span class="nav-text">安全概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用SSL的加密和身份认证"><span class="nav-number">1.2.</span> <span class="nav-text">使用SSL的加密和身份认证</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-为每个kafka-broker生成SSL秘钥和证书"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.为每个kafka broker生成SSL秘钥和证书</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#主机名验证"><span class="nav-number">1.2.2.</span> <span class="nav-text">主机名验证</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-创建自己的CA"><span class="nav-number">1.3.</span> <span class="nav-text">2.创建自己的CA</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#签署证书"><span class="nav-number">2.</span> <span class="nav-text">签署证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生产中常见陷阱"><span class="nav-number">3.</span> <span class="nav-text">生产中常见陷阱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置kafka-broker"><span class="nav-number">4.</span> <span class="nav-text">配置kafka broker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Kafka-客户端"><span class="nav-number">5.</span> <span class="nav-text">配置Kafka 客户端</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

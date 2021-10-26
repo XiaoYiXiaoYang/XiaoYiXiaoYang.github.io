@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="作为资源分配和独立运行的基本单位">
+<meta name="keywords" content="操作系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统复习(进程)">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;22&#x2F;os-2&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="作为资源分配和独立运行的基本单位">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T06:03:49.549Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/22/os-2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>操作系统复习(进程) | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/os-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          操作系统复习(进程)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-22 19:19:14" itemprop="dateCreated datePublished" datetime="2019-12-22T19:19:14+08:00">2019-12-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 14:03:49" itemprop="dateModified" datetime="2021-07-18T14:03:49+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/22/os-2/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/22/os-2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> 作为资源分配和独立运行的基本单位</p>
+<a id="more"></a>
+
+<p><strong>前趋图</strong></p>
+<p>前趋图是一个有向无循环图，DAG，用于描述进程之间执行的前后关系。结点间的有向边则用于表示两个结点之间存在的前趋关系</p>
+<p><strong>程序顺序执行的特征</strong></p>
+<p>顺序性、封闭性、可再现性</p>
+<p><strong>程序并发执行的特征</strong></p>
+<p>间断性、失去封闭性、不可再现性</p>
+<p><strong>进程</strong></p>
+<p>进程是程序的一次执行。<br>进程是一个程序及其数据在处理机上顺序执行时所发生的活动。<br>进程是程序在一个数据集合上运行的过程，它是系统进行资源分配和调度的一个独立单位。 </p>
+<p>进程是一个正在执行中的程序<br>进程是一个正在计算机上执行的程序实例<br>能分配给处理器并由处理器执行的实体<br>一个具有以下特征的活动单元：一组指令序列的执行、一个当前状态和相关的系统资源</p>
+<p><strong>进程状态</strong></p>
+<p>创建状态：申请一个空白PCB，向PCB写信息，分配运行时必须的资源，转入就绪状态</p>
+<p>终止状态：将PCB清空，将PCB空间返还给系统</p>
+<p>就绪状态：进程已经分配到除CPU外所有必要资源，只要得到CPU即可运行，自己排成就绪队列</p>
+<p>阻塞状态：正在执行的进程由于发生某事件暂时无法继续执行时的状态</p>
+<p>执行状态：进程已获得CPU正在执行的状态</p>
+<p>挂起状态：进程处于静止状态（就绪挂起、阻塞挂起）</p>
+<p>两态模型：运行&lt;—-&gt;未运行</p>
+<p>三态模型：就绪 &lt;—–&gt; 阻塞 &lt;—–&gt; 执行</p>
+<p>五态模型：创建 &lt;—–&gt; 就绪 &lt;—–&gt; 阻塞 &lt;—–&gt; 执行 &lt;—–&gt; 终止</p>
+<p>七态模型： 创建 &lt;—–&gt; 就绪 &lt;—–&gt; 就绪挂起 &lt;—–&gt; 阻塞 &lt;—–&gt; 阻塞挂起 &lt;—–&gt; 执行 &lt;—–&gt; 终止</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>原因</th>
+<th>过程</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>创建</td>
+<td>1.用户登录  2.作业调度 3.提供服务 4.应用请求</td>
+<td>1.申请空白PCB 2.为新进程分配其运行所需资源 3.初始化PCB 4.插入就绪队列</td>
+</tr>
+<tr>
+<td>终止</td>
+<td>1.正常结束 2.异常结束 3.外界干预</td>
+<td>1.根据终止进程标识符读取该进程的PCB 2.若该进程在执行则结束 3.若有子孙进程则终止他们 4.将终止的资源归还该父进程或系统 5.将PCB移出</td>
+</tr>
+<tr>
+<td>阻塞</td>
+<td>1.向系统请求资源失败 2.等待某种操作完成 3.新数据尚未到达 4.等待新任务的到达</td>
+<td>1.调用阻塞原语block将自己阻塞 2.修改PCB状态 3.插入阻塞队列</td>
+</tr>
+<tr>
+<td>唤醒</td>
+<td></td>
+<td>1.调用唤醒原语block将自己唤醒 2.修改PCB状态 3.插入就绪队列</td>
+</tr>
+<tr>
+<td>挂起</td>
+<td></td>
+<td>1.调用挂起原语suspend将自己挂起 2.修改PCB状态</td>
+</tr>
+<tr>
+<td>激活</td>
+<td></td>
+<td>1.调用激活原语active将自己激活 2.修改PCB状态</td>
+</tr>
+</tbody></table>
+<p><strong>进程描述</strong></p>
+<ul>
+<li>PCB</li>
+</ul>
+<p>进程标识符<br>处理机状态<br>进程调度信息<br>进程控制信息</p>
+<ul>
+<li>组织方式</li>
+</ul>
+<p>线性<br>链接<br>索引</p>
+<p>系统态(管态)：具有较高的特权，能执行一切执行，访问所有寄存器和存储区</p>
+<p>用户态（目态）：具有较低特权的执行状态，仅能执行规定的指令，访问指定的寄存器和存储区</p>
+<p><strong>进程同步</strong></p>
+<p>临界资源：一段时间只能被一个进程访问的资源</p>
+<p>临界区：访问临界资源的代码</p>
+<ul>
+<li>同步机制准则</li>
+</ul>
+<p>空闲让进<br>忙则等待<br>有限等待<br>让权等待</p>
+<ul>
+<li>硬件同步机制</li>
+</ul>
+<p>关中断</p>
+<p>Test Set指令</p>
+<p>Swap指令</p>
+<ul>
+<li>信号量机制</li>
+</ul>
+<p>整型信号量</p>
+<p>记录型信号量</p>
+<p>AND型信号量</p>
+<p>信号量集</p>
+<ul>
+<li>管程机制</li>
+</ul>
+<p>管程是由一个或多个过程、一个初始化序列和局部数据组成的软件模块</p>
+<p>1.局部数据变量只能被管程访问，任何外部过程都不能访问，<br>2.一个进程通过调用管程的一个过程进入管程<br>3.在任何时候，只能有一个进程在管程中执行，调用管程的任何其他进程被挂起，以等待管程变为可用</p>
+<ul>
+<li>经典问题</li>
+</ul>
+<p>生产者-消费者<br>哲学家进餐<br>读者-写者</p>
+<p><strong>进程通信</strong></p>
+<p>共享存储区、消息传递、管道通信</p>
+<p><strong>线程</strong></p>
+<p>每个线程有</p>
+<p>线程的执行状态(就绪、运行)<br>在未运行时保存的线程上下文<br>一个执行栈<br>用于每个线程局部变量的静态存储空间<br>对所属进程的内存和资源进行访问，并与该进程中其他线程共享这些资源</p>
+<p><strong>处理机调度的层次</strong></p>
+<p>高级调度：作业调度</p>
+<p>低级调度：进程调度</p>
+<p>中级调度：内存调度</p>
+<p><strong>调度算法的目标</strong></p>
+<p>1.资源利用率</p>
+<p>2.公平性</p>
+<p>3.平衡性</p>
+<p>4.策略强制执行</p>
+<p><strong>调度算法</strong></p>
+<ul>
+<li><p>先来先服务</p>
+</li>
+<li><p>短作业优先</p>
+</li>
+<li><p>优先级调度(等待时间越长，优先级越高)</p>
+</li>
+<li><p>高响应比优先调度(优先权 = (等待时间+要求服务时间)/ 要求服务时间)</p>
+</li>
+<li><p>时间片轮转法(时间片略大于一次典型交互所需时间)</p>
+</li>
+<li><p>多级反馈队列(优先级+时间片)</p>
+</li>
+</ul>
+<p><strong>实时调度</strong>(不讲)</p>
+<ul>
+<li><p>最早截止时间优先</p>
+</li>
+<li><p>最低松弛度优先</p>
+</li>
+<li><p>优先级倒置</p>
+</li>
+</ul>
+<p><strong>死锁</strong></p>
+<p>1.竞争资源</p>
+<p>2.进程间推进顺序非法</p>
+<ul>
+<li>产生死锁的必要条件</li>
+</ul>
+<p>1.互斥条件</p>
+<p>2.请求和保持条件(已经保持了一个资源，再请求另一个资源)</p>
+<p>3.不可抢占条件(资源没有使用完之前不能被抢占)</p>
+<p>4.循环等待条件(进程-资源循环链)</p>
+<ul>
+<li>处理死锁方法</li>
+</ul>
+<p>1.预防死锁</p>
+<p>2.避免死锁</p>
+<p>3.检测死锁</p>
+<p>4.解除死锁</p>
+<ul>
+<li>预防死锁</li>
+</ul>
+<p>破坏“请求和保持”条件</p>
+<p><strong>协议1：一次性申请其在整个运行过程中所需的全部资源</strong></p>
+<p><strong>协议2：允许进程只获得运行初期所需的资源后，便开始运行，运行中再逐步释放已分配给自己的、且用完毕的资源，再请求新的资源</strong></p>
+<p>破坏“不可抢占”条件</p>
+<p><strong>当一个已经保持了某些不可被抢占资源的进程，提出新的资源请求而不能得到满足时，它必须释放已经保持的所有资源，待以后需要时再重新申请</strong></p>
+<p>破坏“循环等待”条件</p>
+<p><strong>对系统所有资源类型进行线性排序，并赋予不同的序号规定每个进程只能按序号递增的顺序请求资源</strong></p>
+<ul>
+<li>避免死锁</li>
+</ul>
+<p>银行家算法</p>
+<ul>
+<li>检测死锁</li>
+</ul>
+<p>资源分配图</p>
+<p>用圆圈代表一个进程，用方框代表一类资源。</p>
+<p>资源—-&gt;进程  进程已经分得了一个资源<br>进程—&gt;资源  进程请求一个资源</p>
+<p>死锁定理：S为死锁状态的充分条件是：当且仅当S状态的资源分配图是不可完全简化的。</p>
+<ul>
+<li>解除死锁</li>
+</ul>
+<p>剥夺资源</p>
+<p>撤销进程</p>
+<hr>
+<p>2019-07-02 14:50:18 星期二</p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"><i class="fa fa-tag"></i> 操作系统</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/22/os-1/" rel="prev" title="操作系统复习(引论)">
+      <i class="fa fa-chevron-left"></i> 操作系统复习(引论)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/22/os-3/" rel="next" title="操作系统复习（存储管理）">
+      操作系统复习（存储管理） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

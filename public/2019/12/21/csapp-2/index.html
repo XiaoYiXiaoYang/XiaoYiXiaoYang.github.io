@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="链接器的行为和功能">
+<meta name="keywords" content="深入理解计算机系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSAPP-(链接)">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;21&#x2F;csapp-2&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="链接器的行为和功能">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T06:03:48.870Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/21/csapp-2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>CSAPP-(链接) | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/21/csapp-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CSAPP-(链接)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-21 20:48:02" itemprop="dateCreated datePublished" datetime="2019-12-21T20:48:02+08:00">2019-12-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 14:03:48" itemprop="dateModified" datetime="2021-07-18T14:03:48+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/21/csapp-2/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/21/csapp-2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>链接器的行为和功能</p>
+<a id="more"></a>
+
+
+
+<p>链接可以用于编译时、加载时、运行时</p>
+<p>链接：静态链接、动态链接</p>
+<p>装入：静态装入、静态重定位、动态重定位</p>
+<h4 id="编译器驱动程序"><a href="#编译器驱动程序" class="headerlink" title="编译器驱动程序"></a>编译器驱动程序</h4><p>编译系统提供编译器驱动程序，它代表用户在需要时调用语言预处理器、编译器、汇编器和链接器</p>
+<h4 id="静态链接"><a href="#静态链接" class="headerlink" title="静态链接"></a>静态链接</h4><p>以一组可重定位目标文件和命令行作为参数输入，生成一个完全链接的、可以加载和运行的可执行目标文件作为输出。输入的可重定位目标文件由各种不同的代码和数据节组成</p>
+<ul>
+<li><p>符号解析</p>
+<p>目标文件定义和引用符号，每个符号对应于一个函数、一个全局变量或一个静态变量。符号解析的目的是将每个符号引用和一个符号定义关联起来</p>
+</li>
+<li><p>重定位</p>
+<p>编译器和汇编器生成从地址0开始的代码和数据节。链接器通过把每个符号定义与内存位置关联起来，从而重定位这些节，然后修改所有对于这些符号的引用，使得他们指向这个内存位置。链接器使用汇编器产生的重定位条目的详细指令</p>
+</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">比如call function</span><br><span class="line">变成 JMP  <span class="function"><span class="keyword">fun</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="目标文件"><a href="#目标文件" class="headerlink" title="目标文件"></a>目标文件</h4><ul>
+<li>可重定位目标文件</li>
+<li>可执行目标文件</li>
+<li>共享目标文件</li>
+</ul>
+<p>编译器和汇编器生成可重定位目标文件，链接器生成可执行目标文件</p>
+<h4 id="可重定位目标文件"><a href="#可重定位目标文件" class="headerlink" title="可重定位目标文件"></a>可重定位目标文件</h4><p>典型的ELF可重定位目标文件的格式</p>
+<table>
+<thead>
+<tr>
+<th align="center">ELF头</th>
+<th>描述了生成该文件的系统的字的大小和字节顺序</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">.text</td>
+<td>已编译程序的机器代码</td>
+</tr>
+<tr>
+<td align="center">.rodata</td>
+<td>只读数据</td>
+</tr>
+<tr>
+<td align="center">.data</td>
+<td>已初始化的全局变量和静态变量</td>
+</tr>
+<tr>
+<td align="center">.bss</td>
+<td>未初始化的全局变量和静态变量</td>
+</tr>
+<tr>
+<td align="center">.symtab</td>
+<td>符号表，存放程序中定义和引用的函数和全局变量的信息</td>
+</tr>
+<tr>
+<td align="center">.rel.text</td>
+<td>一个.text节中位置的列表</td>
+</tr>
+<tr>
+<td align="center">.debug</td>
+<td>一个调试符号表</td>
+</tr>
+<tr>
+<td align="center">.line</td>
+<td>原始源程序中的行号和.text节中机器指令之间的映射</td>
+</tr>
+<tr>
+<td align="center">.strtab</td>
+<td>一个字符串表</td>
+</tr>
+<tr>
+<td align="center">节头部表</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>.bss 叫“块存储开始”  “Blocking Storage Start”</p>
+<h4 id="符号和符号表"><a href="#符号和符号表" class="headerlink" title="符号和符号表"></a>符号和符号表</h4><p>每个可重定位目标模块都有一个符号表</p>
+<ul>
+<li>由模块m定义并能被其他模块引用的全局符号</li>
+<li>由其他模块定义并被模块m引用的全局符号</li>
+<li>只被模块m定义和引用的全局符号</li>
+</ul>
+<h4 id="符号解析"><a href="#符号解析" class="headerlink" title="符号解析"></a>符号解析</h4><p>方法：将每个引用与它输入的可重定位目标文件的符号表中的一个确定的符号定义关联起来。</p>
+<p>全局符号：如果编译器遇到一个不是在当前模块定义的符号时，会假设该符号是在其他某个模块定义的，生成一个链接器符号条目，并把它交给链接器处理</p>
+<h5 id="链接器如何解析多重定义的全局符号"><a href="#链接器如何解析多重定义的全局符号" class="headerlink" title="链接器如何解析多重定义的全局符号"></a>链接器如何解析多重定义的全局符号</h5><p>函数和已初始化的全局变量是强符号，未初始化的全局变量是弱符号</p>
+<ul>
+<li>不允许有多个同名的强符号</li>
+<li>如果有一个强符号和多个弱符号同名，那么选择强符号</li>
+<li>如果有多个弱符号同名，那么从这些弱符号中任意选择一个</li>
+</ul>
+<h5 id="与静态库链接"><a href="#与静态库链接" class="headerlink" title="与静态库链接"></a>与静态库链接</h5><p>将所有相关的目标模块打包成为一个单独的文件，称为静态库，它可以用作链接器的输入，当链接器构造一个输出的可执行文件时，它只复制静态库里被应用程序引用的目标模块</p>
+<p><strong>链接时，链接器将只复制被程序引用的目标模块</strong></p>
+<h5 id="链接器如何使用静态库来解析引用"><a href="#链接器如何使用静态库来解析引用" class="headerlink" title="链接器如何使用静态库来解析引用"></a>链接器如何使用静态库来解析引用</h5><p>在Linux系统中，静态库以一种称为存档的特殊文件格式存放在磁盘中，存档文件是一组连接起来的可重定位目标文件的集合</p>
+<p>在符号解析阶段，链接器从右到左按照他们在编译器驱动程序命令行上出现的顺序来扫描可重定位目标文件和存档文件</p>
+<p><em>可重定位目标文件集合E、未解析的符号集合U、在前面输入文件已经定义的符号集合D</em></p>
+<ul>
+<li>对命令行上输入的文件f，链接器判断f是一个目标文件还是存档文件，如果是目标文件，添加到E；</li>
+<li>如果f是一个存档文件，那么链接器尝试匹配U中未解析的符号和由存档文件成员定义的符号</li>
+<li>如果链接器完成对命令行上输入文件的扫描后，U是非空的，那么链接器就会输出一个错误并终止</li>
+</ul>
+<h4 id="重定位"><a href="#重定位" class="headerlink" title="重定位"></a>重定位</h4><p>合并输入模块，并为每个符号分配运行时地址</p>
+<ul>
+<li>重定位节和符号定义。将所有相同类型的节合并为同一类型的新的聚合节</li>
+<li>重定位节中的符号引用。链接器修改代码节和数据节中对每个符号的引用，使得他们指向正确的运行时地址</li>
+</ul>
+<h5 id="重定位条目"><a href="#重定位条目" class="headerlink" title="重定位条目"></a>重定位条目</h5><p>汇编器生成一个目标模块时候，它不知道数据和代码的最终位置，所以，它就会生成一个重定位条目，告诉链接器在将目标文件合并成可执行文件时如何修改这个引用</p>
+<h5 id="重定位符号引用"><a href="#重定位符号引用" class="headerlink" title="重定位符号引用"></a>重定位符号引用</h5><p>1.重定位PC相对引用</p>
+<p>2.重定位绝对引用</p>
+<h4 id="可执行目标文件"><a href="#可执行目标文件" class="headerlink" title="可执行目标文件"></a>可执行目标文件</h4><p>ELF可执行目标文件被设计的很容易加载到内存，可执行文件的连续的片被映射到连续的内存端倪。</p>
+<h4 id="加载可执行目标文件"><a href="#加载可执行目标文件" class="headerlink" title="加载可执行目标文件"></a>加载可执行目标文件</h4><p>加载器将可执行目标文件的数据和代码从磁盘赋值到内存，然后通过跳转到程序的第一条指令或入口点来运行该程序。这个过程叫加载</p>
+<p>每个Linux程序有一个运行时内存映像</p>
+<table>
+<thead>
+<tr>
+<th align="center">内核内存</th>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">栈</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">内存映射区</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">堆</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">读/写段</td>
+<td align="center">.data，.bss(全局/静态存储区)</td>
+</tr>
+<tr>
+<td align="center">只读代码段</td>
+<td align="center">.init， .text，.rodata(文本常量区)</td>
+</tr>
+</tbody></table>
+<p>代码段总是从地址0x400000处开始，后面是数据段。</p>
+<p>运行时堆在数据段之后，通过调用malloc库往上增长</p>
+<p>堆后面的区你敢信的域是为共享模块保留的</p>
+<p>用户占总是从最大的合法用户地址(2^48 - 1)开始，向较小内存地址增长</p>
+<p>从地址2^48开始，是为内核中的代码和数据保留的，所谓内核就是操作系统驻留在内存的部分</p>
+<h4 id="动态链接共享库"><a href="#动态链接共享库" class="headerlink" title="动态链接共享库"></a>动态链接共享库</h4><p>静态库缺点：</p>
+<p>1.需要定期维护和更新，必须显式的重新让程序和更新了的库重新连接</p>
+<p>2.调用的每个静态库的函数，每次都要复制到内存中去</p>
+<p>共享库致力于解决静态库缺陷的产物，在运行和加载时，可以加载到任意的内存地址，并和一个在内存中的程序链接起来，这个过程叫<strong>动态链接</strong>，是由一个叫<strong>动态链接器</strong>的程序执行</p>
+<p>共享库也称为共享目标，在Linux目标系统中常用.so后缀来表示，微软的操作系统使用了大量共享库，称为DLL</p>
+<p>所有引用共享库的可执行目标文件共享这个so文件中的代码和数据，而不是像静态库的内容那样被赋值和嵌入到引用它们的可执行文件中</p>
+<ul>
+<li><p>当创建可执行目标文件时，静态执行一些链接，然后在程序加载时，动态完成链接过程</p>
+</li>
+<li><p>当加载器加载和执行可执行文件时，它注意到目标文件包含一个.interp节，这一节包含动态链接器的路径名，加载器不会像它通常那样将控制传递给应用，而是加载和运行这个动态链接器，动态链接器执行重定位完成链接</p>
+</li>
+</ul>
+<p>1.重定位lib.so的文本和数据到某个内存段</p>
+<p>2.重定位可执行目标文件对由共享库定义的符号的引用</p>
+<p>此时开始，共享库的位置就固定了并且在程序执行的过程中都不会改变</p>
+<h4 id="从应用程序中加载和链接共享库"><a href="#从应用程序中加载和链接共享库" class="headerlink" title="从应用程序中加载和链接共享库"></a>从应用程序中加载和链接共享库</h4><h4 id="位置无关代码"><a href="#位置无关代码" class="headerlink" title="位置无关代码"></a>位置无关代码</h4><h4 id="库打桩机制"><a href="#库打桩机制" class="headerlink" title="库打桩机制"></a>库打桩机制</h4>
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" rel="tag"><i class="fa fa-tag"></i> 深入理解计算机系统</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/21/csapp-1/" rel="prev" title="CSAPP-(漫游)">
+      <i class="fa fa-chevron-left"></i> CSAPP-(漫游)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/22/os-1/" rel="next" title="操作系统复习(引论)">
+      操作系统复习(引论) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#编译器驱动程序"><span class="nav-number">1.</span> <span class="nav-text">编译器驱动程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#静态链接"><span class="nav-number">2.</span> <span class="nav-text">静态链接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#目标文件"><span class="nav-number">3.</span> <span class="nav-text">目标文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可重定位目标文件"><span class="nav-number">4.</span> <span class="nav-text">可重定位目标文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#符号和符号表"><span class="nav-number">5.</span> <span class="nav-text">符号和符号表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#符号解析"><span class="nav-number">6.</span> <span class="nav-text">符号解析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#链接器如何解析多重定义的全局符号"><span class="nav-number">6.1.</span> <span class="nav-text">链接器如何解析多重定义的全局符号</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#与静态库链接"><span class="nav-number">6.2.</span> <span class="nav-text">与静态库链接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#链接器如何使用静态库来解析引用"><span class="nav-number">6.3.</span> <span class="nav-text">链接器如何使用静态库来解析引用</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重定位"><span class="nav-number">7.</span> <span class="nav-text">重定位</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#重定位条目"><span class="nav-number">7.1.</span> <span class="nav-text">重定位条目</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#重定位符号引用"><span class="nav-number">7.2.</span> <span class="nav-text">重定位符号引用</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可执行目标文件"><span class="nav-number">8.</span> <span class="nav-text">可执行目标文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#加载可执行目标文件"><span class="nav-number">9.</span> <span class="nav-text">加载可执行目标文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态链接共享库"><span class="nav-number">10.</span> <span class="nav-text">动态链接共享库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#从应用程序中加载和链接共享库"><span class="nav-number">11.</span> <span class="nav-text">从应用程序中加载和链接共享库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#位置无关代码"><span class="nav-number">12.</span> <span class="nav-text">位置无关代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#库打桩机制"><span class="nav-number">13.</span> <span class="nav-text">库打桩机制</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

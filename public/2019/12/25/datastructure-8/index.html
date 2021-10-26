@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="顺序查找、折半查找、二叉排序树、平衡二叉树‘、Hash表">
+<meta name="keywords" content="数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构（查找）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;25&#x2F;datastructure-8&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="顺序查找、折半查找、二叉排序树、平衡二叉树‘、Hash表">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T06:03:48.906Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/25/datastructure-8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>数据结构（查找） | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/25/datastructure-8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据结构（查找）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-25 11:19:24" itemprop="dateCreated datePublished" datetime="2019-12-25T11:19:24+08:00">2019-12-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 14:03:48" itemprop="dateModified" datetime="2021-07-18T14:03:48+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/25/datastructure-8/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/25/datastructure-8/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p> 顺序查找、折半查找、二叉排序树、平衡二叉树‘、Hash表</p>
+<a id="more"></a>
+
+
+
+<p><strong>时间复杂度</strong></p>
+<p>基本语句：执行次数与整个算法的执行次数成正比的语句，基本语句对算法运行时间的贡献最大，是算法中最重要的操作。</p>
+<p>为了客观反映一个算法的执行时间，可以用算法中基本语句的执行次数来度量算法的工作量，这种衡量效率的方法得出的不是时间量，而是一种增长趋势的度量。<br>当问题的规模足够大，算法中基本语句的执行次数在渐近意义下的阶，称作算法的渐近时间复杂度。</p>
+<p><strong>ASL</strong></p>
+<p>Average Search Lenth:平均查找长度<br>ASL = € Pi * Ci<br>pi 为查找第i个记录的概率；ci为查找第i个记录所需的关键码比较次数</p>
+<p><strong>顺序查找</strong></p>
+<p>从线性表的一端向另一端逐个将关键码与给定值进行比较.<br>特殊的手段是哨兵技术，将待查集合设置在数组的1-n，将要查的元素k放在数组第0个下标处，当查找成功则返回下标值，查找失败则返回下标0</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Seqsearch</span><span class="params">(<span class="keyword">int</span> r[],<span class="keyword">int</span> n,<span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">    r[<span class="number">0</span>]=k;   <span class="comment">//数组配合一点，数组从下标1开始存放待查集合</span></span><br><span class="line">    <span class="keyword">int</span> i= n;</span><br><span class="line">    <span class="keyword">while</span>(r[i] !=k)</span><br><span class="line">        i--;</span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>折半查找</strong></p>
+<p>要求有序表，在有序表中取中间记录作为比较对象，若与中间记录的关键码相等，则查找成功；若给定值小于中间值，则在左半区查找，若给定值大于中间值，则在右半区查找。</p>
+<p>两个思考：<br>1.如果（low+high）/2 是单数<br>2.为什么循环结束条件是low&lt;=high</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BindSearch</span><span class="params">(<span class="keyword">int</span> r[],<span class="keyword">int</span> n,<span class="keyword">int</span> k)</span></span>&#123;<span class="comment">//还是从下标1开始存储</span></span><br><span class="line">   <span class="keyword">int</span> low =<span class="number">1</span>;</span><br><span class="line">   <span class="keyword">int</span> high =n;</span><br><span class="line">   <span class="keyword">int</span> mid=<span class="number">0</span>;</span><br><span class="line">   <span class="keyword">while</span>(low&lt;high)&#123;</span><br><span class="line">    mid = (low+high)/<span class="number">2</span>;</span><br><span class="line">    <span class="keyword">if</span>(k&lt;r[mid])    high = mid<span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(k&gt;r[mid]) low = mid+<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> mid;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>回答问题：<br>1.如果是单数，取整就完了，中间会有很多次取整的机会<br>2.low&lt;=high就是结束循环条件，例子走一走</p>
+<p>有序表<br>0 1  2  3  4  5  6  7<br>0 7 14 18 21 23 29 31   查14 low = 1  high = 7</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mid = <span class="number">4</span>   (low =<span class="number">1</span> high =<span class="number">3</span> )</span><br><span class="line">mid = <span class="number">2</span>   查找成功</span><br></pre></td></tr></table></figure>
+
+<p>查22</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mid = <span class="number">4</span>   (low = <span class="number">5</span>  high =<span class="number">7</span>)</span><br><span class="line">mid = <span class="number">6</span>   (low = <span class="number">5</span>  high = <span class="number">5</span>)</span><br><span class="line">mid = <span class="number">5</span>   (low = <span class="number">5</span>   high = <span class="number">4</span>)</span><br><span class="line">low&gt;high  返回<span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>折半查找判定树</li>
+</ul>
+<p>用二叉树来描述折半查找,<strong>判定树的根节点是mid = (1+n)/2 的记录</strong>，根节点左子树是r[1]<del>r[mid-1] 的判定树 ,根节点的右子树是r[mid+1]</del>r[n]的记录</p>
+<p>和给定值的比较次数等于该记录结点在树中的层数，折半查找判定树的深度为[log2 n] + 1,折半查找的平均时间复杂度也是O(log2 n)</p>
+<p>ASL = 1/n * (1<em>2^0 + 2</em>2^1 +… + k*2^k-1)<br>    = log2 (n+1) -1</p>
+<p>折半查找判定树也是二叉排序树</p>
+<ul>
+<li>二叉排序树</li>
+</ul>
+<p>性质：<br>左子树不空，则左子树上所有结点小于根节点的值<br>右子树不空，则右子树上所有结点大于根节点的值<br>左右子树也是二叉排序树</p>
+<p><strong>中序遍历</strong>序列即为一个<strong>有序</strong>序列</p>
+<p>插入：（递归）<br>若root是空树，则作为根节点插入<br>非空：若小于根节点，则插入左子树<br>      若大于根节点，则插入右子树</p>
+<p>删除：（删除后仍保持二叉排序树的特性）</p>
+<p>删除值最小的结点：<br>左子树的最左下结点s，把s的父结点中原来指向s的指针改为指向s的右孩子（s肯定没有左孩子，否则就不是值最小的结点）</p>
+<p>删除结点p为叶子结点<br>删除叶子结点不影响二叉排序树的特性，将被删除结点的双亲结点的相应指针域改为空指针</p>
+<p>删除结点p只有左子树或只有右子树<br>只需要将删除结点左子树或者右子树替换为其双亲结点的左子树，仍保持二叉排序树的特性；<br>若p只有左子树，将p删除，把p的左子树接上<br>若p只有右子树，将p删除，把p的右子树接上</p>
+<p>删除结点p既有左子树也有右子树<br>坏方法：让父节点的左指针指向p的任意一个子树，然后将另一个子树中结点重新插入，这将使二叉排序树的结构发生变化并增加高度</p>
+<p><strong>好方法</strong>：从某个子树中找出一个结点s，其值能代替p的值，这样就可以用结点s的值去替换结点p的值，再删除结点s</p>
+<p><strong>选出s结点</strong>：这个值应该是大于结点p的最小值（中序遍历 结点p的下一个）<br>或者小于结点p的最大值（中序遍历 结点p的前一个）</p>
+<p><strong>查找:</strong>若k = root-&gt;data，则查找成功<br>若k &lt; root-&gt;data 则在root的左子树上查找<br>若k &gt; root-&gt;data 则在root的右子树上查找<br>直到查找到待查找的子树为空，则查找失败</p>
+<p><strong>查找性能：</strong>具有n个结点的折半查找判定树唯一，根节点为r[mid]，但是含有n个结点的二叉排序树不唯一，其形状取决于各记录被插入二叉排序树的先后顺序,如果二叉排序树是平衡的，则查找效率O(log2 n)<br>如果二叉排序树完全不平衡（斜树），则查找效率为O(n)</p>
+<ul>
+<li>二叉平衡树</li>
+</ul>
+<p>由二叉排序树引出了二叉平衡树，一棵平衡的的二叉树可以保证查找效率较好的维持和折半查找相近为O(log2 n)</p>
+<p><strong>二叉平衡树性质</strong>：<br>1.首先他一定是二叉排序树（递归定义 左子树的小  右子树的大）<br>2.根节点的左右子树深度最多相差1<br>3.左右子树也是二叉平衡树</p>
+<p>平衡因子：该节点的左子树深度与右子树深度之差<br>最小不平衡子树：在平衡二叉树的构造过程中，以距离插入节点最近的，且平衡因子绝对值大于1的结点为根的树</p>
+<p>构造思想：每插入一个结点都检查是否破坏了平衡性，若破坏，则调整</p>
+<p>调整的例子<br>LL型：插入地方为根节点左孩子的左子树，调整为旋转优先<br>RR型：插入地方为根节点右孩子的右子树<br>RL型：插入地方为根节点的右孩子的左子树，调整两步<br>LR型：插入地方为根节点的左孩子的右子树</p>
+<p>练手排序树和平衡树{20，35,40,15,30,25,38}   {12,24,36,90,52,30}<br>{24,15,38,27，76，130，121}</p>
+<p><strong>Hash查找</strong></p>
+<p>理想情况：不经过比较，直接找到带查值的存储位置下标</p>
+<p>key 和 H(key)   key为关键码；H为散列函数（Hash函数、杂凑函数、哈希函数）；H(key)值为所得的存储位置</p>
+<p>存储记录：通过散列函数计算记录的散列地址，并按此散列地址存储该记录<br>查找记录：通过散列函数计算散列地址，并用该散列地址访问该记录</p>
+<p><strong>不适用</strong>：不适用于多个记录有相同的关键码，不适用于范围查找<br>散列函数的设计：简单、均匀、存储利用率高的散列函数<br>冲突的处理：两个不同的记录需要存放在同一存储位置，采取方法解决冲突</p>
+<p>1.直接定址法        H(key) = a*key +b<br>    适合关键码集合不大且连续性较好时</p>
+<p>2.除留余数法        H(key) = key mod p<br>    p选的不好增加冲突</p>
+<p>3.数字分析法       取关键码位数中的某几位作为散列地址<br>    适合知道关键码分布的情况</p>
+<p>4.平方取中法       对关键码平方，取中间几位作为散列地址<br>    一个数平方后，中间几位分布较均匀</p>
+<p>5.折叠法           从左到右分割成位数相等的部分，几部分叠加求和，求和的最后几位作为散列地址<br>移位叠加：将各部分最后一位对齐相加<br>间接叠加：各部分折叠相加</p>
+<p>冲突处理</p>
+<p><strong>闭散列表</strong>：无需附加指针域，因此存储效率较高。但由此带来的问题是容易产生堆积，而且某些基本运算不易实现。<br><strong>开散列表</strong>：利用链接方法存储同义词，不产生堆积现象，且使得动态查找的基本运算特别是查找、播入和删除易于现实。但由于附加指针域而增加了存储开销。</p>
+<p>1.开放定址法   <em>得到的叫闭散列表</em><br>a.线性探测法    Hi = （H(key)+di） % m （di=1,2,..）<br>   从冲突位置的下一个位置起依次寻找空的散列地址<br>   处理冲突过程中出现的非同义词之间对同一个散列地址争夺的现象称为<strong>堆积</strong><br>b.二次探测法     Hi = （H(key)+di） % m （di=1^2 ,2^2 ,..）<br>   位置冲突则向前移动i^2 个单位</p>
+<p>c.随机探测法     Hi = （H(key)+di） % m （di=随机数列）<br>    位置冲突则向前移动i个位置</p>
+<p>2.拉链法（链地址法）  <em>得到的叫开散列表</em><br>将所有冲突的记录存储在一个单链表中</p>
+<p><em>2019-04-18 16:43:47 星期四<br>萧逸小杨</em></p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"><i class="fa fa-tag"></i> 数据结构</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/25/datastructure-7/" rel="prev" title="数据结构（邻接矩阵、邻接表）">
+      <i class="fa fa-chevron-left"></i> 数据结构（邻接矩阵、邻接表）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/25/datastructure-9/" rel="next" title="数据结构（排序）">
+      数据结构（排序） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

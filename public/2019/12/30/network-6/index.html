@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/yteng.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/yteng.jpg">
+  <link rel="mask-icon" href="/images/yteng.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="路由表中的路由是怎么样得出的">
+<meta name="keywords" content="计算机网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络--路由选择协议">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;30&#x2F;network-6&#x2F;index.html">
+<meta property="og:site_name" content="萧逸小杨的个人博客">
+<meta property="og:description" content="路由表中的路由是怎么样得出的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-07-18T08:19:48.151Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/30/network-6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>计算机网络--路由选择协议 | 萧逸小杨的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">萧逸小杨的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">个人成长&技术学习</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/30/network-6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yteng.jpg">
+      <meta itemprop="name" content="萧逸小杨">
+      <meta itemprop="description" content="不断学习、不断更新">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="萧逸小杨的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机网络--路由选择协议
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-30 20:43:05" itemprop="dateCreated datePublished" datetime="2019-12-30T20:43:05+08:00">2019-12-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-18 16:19:48" itemprop="dateModified" datetime="2021-07-18T16:19:48+08:00">2021-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/30/network-6/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/30/network-6/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <center>
+路由表中的路由是怎么样得出的
+</center>
+
+<a id="more"></a>
+
+<h4 id="理想的路由算法"><a href="#理想的路由算法" class="headerlink" title="理想的路由算法"></a>理想的路由算法</h4><h4 id="分层次的路由选择协议"><a href="#分层次的路由选择协议" class="headerlink" title="分层次的路由选择协议"></a>分层次的路由选择协议</h4><p>1.互联网规模非常大</p>
+<p>2.许多单位不愿意外界了解自己单位网络的布局细节</p>
+<p>把整个互联网划分为许多较小的<strong>自治系统AS</strong></p>
+<p>两大类：</p>
+<p>内部网关协议IGP：在一个自治系统内部使用的路由选择协议</p>
+<p>外部网关协议EGP：若源主机和目的主机处在不同呢的自治系统中，当数据报传到一个自治系统的边界时，就需要使用一种协议将路由选择信息传递到另一个自治系统中，这就是外部网关协议EGP</p>
+<p>自治系统之间的路由选择叫域间路由选择，而在自治系统内部的路由选择叫域内路由选择</p>
+<h4 id="内部网关协议RIP"><a href="#内部网关协议RIP" class="headerlink" title="内部网关协议RIP"></a>内部网关协议RIP</h4><p>是内部网关协议IGP中最先得到广泛使用的协议</p>
+<p>是一种分布式的<strong>基于距离向量的路由选择协议</strong></p>
+<p>每一个路由器维护从它自己到其他每一个目的网络的距离记录，也是跳数</p>
+<p>RIP选择一条具有最少路由器的路由</p>
+<p>特点</p>
+<p><strong>1.仅和相邻的路由器交换信息</strong></p>
+<p><strong>2.路由器交换的信息是当前本路由器所知道的全部信息，即自己现在的路由表</strong></p>
+<p><strong>3.按固定的时间间隔交换路由信息</strong></p>
+<p>路由表更新的原则就是找出每个目的网络的最短距离</p>
+<p>这种更新算法又称为<strong>距离向量算法</strong></p>
+<p>R6路由表</p>
+<table>
+<thead>
+<tr>
+<th>到目的网络N</th>
+<th>距离d</th>
+<th>下一跳路由器X</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>net2</td>
+<td>3</td>
+<td>R4</td>
+</tr>
+<tr>
+<td>net3</td>
+<td>4</td>
+<td>R5</td>
+</tr>
+</tbody></table>
+<p>R4路由表</p>
+<table>
+<thead>
+<tr>
+<th>到目的网络N</th>
+<th>距离d</th>
+<th>下一跳路由器X</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>net1</td>
+<td>3</td>
+<td>R1</td>
+</tr>
+<tr>
+<td>net2</td>
+<td>4</td>
+<td>R2</td>
+</tr>
+<tr>
+<td>net3</td>
+<td>1</td>
+<td>直接交付</td>
+</tr>
+</tbody></table>
+<p>则更新R6路由表</p>
+<p>R6路由表</p>
+<table>
+<thead>
+<tr>
+<th>到目的网络N</th>
+<th>距离d</th>
+<th>下一跳路由器X</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>net1</td>
+<td>4</td>
+<td>R4</td>
+</tr>
+<tr>
+<td>net2</td>
+<td>5</td>
+<td>R4</td>
+</tr>
+<tr>
+<td>net3</td>
+<td>2</td>
+<td>R4</td>
+</tr>
+</tbody></table>
+<p>解释：<strong>第一行R6没有，所以要更新</strong></p>
+<p><strong>第二行R6有，且下一跳也是R4，因此要更新（距离增大了）</strong></p>
+<p><strong>第三行在R6中有，但下一跳路由器不同，那么比较距离，新的路由距离2，距离变小了，要更新</strong></p>
+<p>RIP协议让一个自治系统中的所有路由表都和自己相邻的路由器定期交换路由信息，并不断更新其路由表，使得每一个路由器到每一个目的网络的路由都是最短的。</p>
+<p><strong>RI2P协议支持变长子网掩码和无分类域间路由选择CIDR</strong></p>
+<p><strong>RIP协议使用运输层的用户数据报UDP进行传送</strong></p>
+<p>一个RIP报文最多25个路由</p>
+<p>缺点:当一个网络出现故障时，需要经过比较长的时间才能将此信息传送到所有路由器</p>
+<h4 id="内部网关协议OSPF"><a href="#内部网关协议OSPF" class="headerlink" title="内部网关协议OSPF"></a>内部网关协议OSPF</h4><p><strong>开放最短路径优先OSPF</strong></p>
+<p>1.向本自治系统中所有路由器发送信息，使用<strong>洪泛法</strong>，路由器通过所有输出端口向所有相邻的路由器发送信息</p>
+<p>2.发送的信息就是与本路由器相邻的所有路由器的链路状态</p>
+<p>3.只有当链路发生变化时，路由器才向所有路由器使用<strong>洪泛法</strong>发送此信息</p>
+<p>各路由器之间频繁的交换链路状态信息，因此所有的路由器最终都能建立一个链路状态数据库</p>
+<p>为了使OSPF能够用于规模很大的网络，OSPF将一个自治系统再划分为若干个更小的范围，叫区域</p>
+<p>限定<strong>洪泛法</strong>在区域内，在上层的区域叫<strong>主干区域</strong>，从其他区域来的信息都由<strong>区域边界路由器</strong>概括….</p>
+<p>OSPF不用UDP而<strong>直接使用IP数据报传送</strong></p>
+<p>…</p>
+<h4 id="外部网关协议BGP"><a href="#外部网关协议BGP" class="headerlink" title="外部网关协议BGP"></a>外部网关协议BGP</h4><p>每一个自治系统的管理员至少选择一个路由器作为该自治系统的BGP发言人</p>
+<p>一般两个BGP发言人通过一个共享网络连接在一起</p>
+<p>BGP发言人往往就是BGP边界路由器</p>
+<p>一个BGP发言人要和其他自治系统的BGP发言人交换路由信息，首先要建立TCP连接（端口号179），然后在此连接上交换BGP报文建立BGP会话</p>
+<h4 id="路由器的组成"><a href="#路由器的组成" class="headerlink" title="路由器的组成"></a>路由器的组成</h4><p><strong>路由选择部分</strong></p>
+<p>也叫控制部分，其核心部件是路由选择处理机。</p>
+<p>路由选择处理机：<strong>所选定的路由选择协议构造出路由表，同时经常或定期的和相邻路由器交换路由信息而不断地更新和维护路由表。</strong></p>
+<p><strong>分组转发部分</strong></p>
+<p>交换结构：根据路由表对分组进行处理，将某个<strong>输入端口</strong>进入的分组从一个合适的<strong>输出端口</strong>转发出去。</p>
+<p>输入端口：</p>
+<p>输出端口：</p>
+<h5 id="路由选择和转发"><a href="#路由选择和转发" class="headerlink" title="路由选择和转发"></a>路由选择和转发</h5><p>路由选择涉及到很多路由器，路由表则是许多路由器协同工作的结果。这些路由器按照复杂的路由算法，得出整个网络的拓扑变化情况，因而能够动态的改变所选择的路由，并由此构造出整个的路由表。</p>
+<p>而转发表是从路由表所得的，转发表必须包含完成转发功能所必须的信息，这就是说在转发表的每一行必须包含从要到达的目的网络到输出端口和某些MAC地址信息的映射。</p>
+<p>当一个分组正在查找转发表时，后面又紧跟着从这个输入端口收到另一个分组。这个后到的分组就必须在队列中排队等待，因而产生了一定的时延。</p>
+<p>输出端口从交换结构接收分组，然后把它们发送到路由器外面的线路上，在网络层的处理模块中设有一个缓冲区，实际上它就是一个队列，当交换结构传送过来的分组的速率超过输出链路的发送速率时，来不及发送的分组就必须暂时存放在这个队列中。</p>
+<p>2019-10-25 21:31:55 星期五</p>
+
+    </div>
+
+    
+    
+    
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+	  
+	</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"><i class="fa fa-tag"></i> 计算机网络</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/30/network-5/" rel="prev" title="计算机网络--ICMP">
+      <i class="fa fa-chevron-left"></i> 计算机网络--ICMP
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/30/network-7/" rel="next" title="计算机网络--VPN和NAT">
+      计算机网络--VPN和NAT <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#理想的路由算法"><span class="nav-number">1.</span> <span class="nav-text">理想的路由算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分层次的路由选择协议"><span class="nav-number">2.</span> <span class="nav-text">分层次的路由选择协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内部网关协议RIP"><span class="nav-number">3.</span> <span class="nav-text">内部网关协议RIP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内部网关协议OSPF"><span class="nav-number">4.</span> <span class="nav-text">内部网关协议OSPF</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#外部网关协议BGP"><span class="nav-number">5.</span> <span class="nav-text">外部网关协议BGP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#路由器的组成"><span class="nav-number">6.</span> <span class="nav-text">路由器的组成</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#路由选择和转发"><span class="nav-number">6.1.</span> <span class="nav-text">路由选择和转发</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="萧逸小杨"
+      src="/images/yteng.jpg">
+  <p class="site-author-name" itemprop="name">萧逸小杨</p>
+  <div class="site-description" itemprop="description">不断学习、不断更新</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/XiaoYiXiaoYang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;XiaoYiXiaoYang" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1409026014@qq.com" title="QQ邮箱 → 1409026014@qq.com"><i class="fa fa-fw fa-envelope"></i>QQ邮箱</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.yteng3456.xyz/" title="http:&#x2F;&#x2F;www.yteng3456.xyz" rel="noopener" target="_blank">个人网站</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">萧逸小杨</span>
+</div>
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: '4zqRlLDezT2DPxCpoU8FYiPN-gzGzoHsz# Your leancloud application appid',
+    appKey: 'saQbdXsTkRfwnmsossKSYMcW# Your leancloud application appkey',
+    placeholder: "欢迎评论指点",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
