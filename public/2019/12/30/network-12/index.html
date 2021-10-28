@@ -54,7 +54,7 @@
 <meta property="og:site_name" content="萧逸小杨的个人博客">
 <meta property="og:description" content="补充几个应用层协议">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-07-18T08:17:18.773Z">
+<meta property="og:updated_time" content="2021-10-28T15:11:13.801Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/30/network-12/">
@@ -216,7 +216,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-18 16:17:18" itemprop="dateModified" datetime="2021-07-18T16:17:18+08:00">2021-07-18</time>
+                <time title="修改时间：2021-10-28 23:11:13" itemprop="dateModified" datetime="2021-10-28T23:11:13+08:00">2021-10-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -224,8 +224,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">学习笔记</span>
+                  <a href="/categories/Network/" itemprop="url" rel="index">
+                    <span itemprop="name">Network</span>
                   </a>
                 </span>
             </span>
@@ -264,20 +264,16 @@
 
 
 <h3 id="SMTP"><a href="#SMTP" class="headerlink" title="SMTP"></a>SMTP</h3><p>简单邮件传输协议</p>
-<p>发送方电子邮件客户端</p>
-<p>发送方邮件服务器</p>
-<p>接收方邮件服务器</p>
-<p>接收方电子邮件客户端</p>
+<p>发送方电子邮件客户端，发送方邮件服务器</p>
+<p>接收方邮件服务器，接收方电子邮件客户端</p>
 <p><strong>SMTP 用于邮件客户端向邮件服务器，邮件服务器向邮件服务器之间发送邮件的协议</strong></p>
 <p><strong>POP3 用于邮件客户端从邮件服务器读取邮件的协议</strong></p>
 <p>发邮件：发送发邮件客户端发送给发送方邮件服务器，发送方邮件服务器发送给接收方<br>邮件服务器，</p>
 <p>收邮件：邮件客户端从邮件服务器上下载邮件</p>
 <h3 id="DHCP-动态主机配置协议"><a href="#DHCP-动态主机配置协议" class="headerlink" title="DHCP 动态主机配置协议"></a>DHCP 动态主机配置协议</h3><p>需配置的项目<br>1.IP地址<br>2.子网掩码<br>3.默认路由器的IP地址<br>4.域名服务器的IP地址</p>
-<p><strong>需要IP的主机向DHCP服务器广播发送发现报文，(255.255.255.255)</strong></p>
-<p><strong>只有DHCP服务器才对此广播报文回答</strong></p>
-<p>DHCP先在数据库中查找有无此计算机的配置信息，找到则返回；没找到，则从服务器的IP地址池中取一个IP地址分配给该计算机</p>
-<h3 id="RTSP"><a href="#RTSP" class="headerlink" title="RTSP"></a>RTSP</h3><p>等时的</p>
-<p>非等时的</p>
+<p><strong>需要分配IP的主机向DHCP服务器广播发送发现报文，(255.255.255.255)</strong>，<strong>只有DHCP服务器才对此广播报文回答</strong>。</p>
+<p>DHCP先在数据库中查找有无此计算机的配置信息，找到则返回；没找到，则从服务器的IP地址池中取一个IP地址分配给该计算机。</p>
+<h3 id="RTSP"><a href="#RTSP" class="headerlink" title="RTSP"></a>RTSP</h3><p>等时的和非等时的</p>
 <p>播放时延：非等时的分组经过缓存后再以恒定的速率读出，就变成等时的分组</p>
 <p>丢失容忍：宁可丢失部分分组，也不要太晚到达</p>
 <p>流式存储音频/视频：边下载边播放</p>
@@ -372,14 +368,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-count">162</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">

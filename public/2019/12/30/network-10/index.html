@@ -54,7 +54,7 @@
 <meta property="og:site_name" content="萧逸小杨的个人博客">
 <meta property="og:description" content="应用层的文件传输协议FTP和远程终端协议TELNET">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-07-18T08:20:01.573Z">
+<meta property="og:updated_time" content="2021-10-28T15:05:11.157Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/30/network-10/">
@@ -216,7 +216,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-18 16:20:01" itemprop="dateModified" datetime="2021-07-18T16:20:01+08:00">2021-07-18</time>
+                <time title="修改时间：2021-10-28 23:05:11" itemprop="dateModified" datetime="2021-10-28T23:05:11+08:00">2021-10-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -224,8 +224,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">学习笔记</span>
+                  <a href="/categories/Network/" itemprop="url" rel="index">
+                    <span itemprop="name">Network</span>
                   </a>
                 </span>
             </span>
@@ -264,25 +264,18 @@
 <h3 id="文件传输协议FTP"><a href="#文件传输协议FTP" class="headerlink" title="文件传输协议FTP"></a>文件传输协议FTP</h3><h4 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h4><p>一个FTP服务器有一个<strong>主进程负责接收新的请求</strong>，另外有<strong>若干个从属进程负责处理单个请求</strong></p>
 <p>端口号：21</p>
 <p>协议：<strong>使用TCP可靠的运输服务</strong></p>
-<p>进行数据传输时，FTP客户和服务器维持两个并行的TCP连接，<strong>控制连接</strong>和<strong>数据连接</strong></p>
-<p>FTP客户发出连接请求通过控制连接传送给FTP服务器的控制进程，</p>
-<p>FTP服务器收到文件传输请求后创建<strong>数据传输进程</strong> 和 <strong>数据连接</strong></p>
-<hr>
-<p>向FTP服务器发起连接请求时，需要连接服务器进程的熟知端口号21</p>
-<p>同时告诉服务器进程自己的另一个端口</p>
-<p>服务器进程使用自己传送数据的熟知端口20和客户进程进行数据传送连接</p>
-<hr>
+<p>进行数据传输时，FTP客户和服务器维持两个并行的TCP连接，<strong>控制连接</strong>和<strong>数据连接</strong>；FTP客户发出连接请求通过控制连接传送给FTP服务器的控制进程，FTP服务器收到文件传输请求后创建<strong>数据传输进程</strong> 和 <strong>数据连接</strong>。</p>
+<p>向FTP服务器发起连接请求时，需要连接服务器进程的熟知端口号21，同时告诉服务器进程自己的另一个端口，服务器进程使用自己传送数据的熟知端口20和客户进程进行数据传送连接。</p>
 <h3 id="简单文件传输协议TFTP"><a href="#简单文件传输协议TFTP" class="headerlink" title="简单文件传输协议TFTP"></a>简单文件传输协议TFTP</h3><p>端口：69</p>
 <p>协议：<strong>使用UDP用户数据报</strong></p>
 <p>缺点：只支持文件传输而不支持交互</p>
-<p>优点;TFTP可用于UDP环境</p>
+<p>优点：TFTP可用于UDP环境</p>
 <p>TFTP所占内存较小</p>
 <hr>
 <h3 id="远程终端协议TELNET"><a href="#远程终端协议TELNET" class="headerlink" title="远程终端协议TELNET"></a>远程终端协议TELNET</h3><p>协议：通过TCP连接</p>
 <p>TELNET服务器主进程负责接收连接请求，从属进程负责处理请求</p>
 <p><strong>命令转换</strong></p>
-<p>TELNET客户端软件把用户的命令等转换成<strong>网络虚拟终端NVT</strong>格式</p>
-<p>TELNET服务器软件把NVT格式命令转换成远地系统所需的格式</p>
+<p>TELNET客户端软件把用户的命令等转换成<strong>网络虚拟终端NVT</strong>格式，TELNET服务器软件把NVT格式命令转换成远地系统所需的格式。</p>
 <p>2019-11-03 21:38:46 星期日</p>
 
     </div>
@@ -372,14 +365,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-count">162</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">

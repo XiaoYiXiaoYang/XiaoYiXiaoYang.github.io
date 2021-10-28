@@ -54,7 +54,7 @@
 <meta property="og:site_name" content="萧逸小杨的个人博客">
 <meta property="og:description" content="万维网www和应用层协议HTTP">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-07-18T08:20:04.881Z">
+<meta property="og:updated_time" content="2021-10-28T15:14:53.567Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/30/network-11/">
@@ -216,7 +216,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-18 16:20:04" itemprop="dateModified" datetime="2021-07-18T16:20:04+08:00">2021-07-18</time>
+                <time title="修改时间：2021-10-28 23:14:53" itemprop="dateModified" datetime="2021-10-28T23:14:53+08:00">2021-10-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -224,8 +224,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">学习笔记</span>
+                  <a href="/categories/Network/" itemprop="url" rel="index">
+                    <span itemprop="name">Network</span>
                   </a>
                 </span>
             </span>
@@ -267,32 +267,23 @@
 <p>超文本：包含其他文档的链接的文本</p>
 <p>URL：统一资源定位符，用来表示万维网上的各种文档</p>
 <p>&lt;协议&gt;://&lt;主机&gt;:&lt;端口&gt;/&lt;路径&gt;</p>
-<hr>
-<h3 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h3><p>超文本传输协议HTTP：</p>
-<p>应用层协议</p>
-<p>使用TCP连接进行可靠传输</p>
+<h3 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h3><p>超文本传输协议HTTP：应用层协议，使用TCP连接进行可靠传输。</p>
 <p><strong>默认端口号80</strong></p>
-<p>万维网网点有一个服务器进程，它一直监听TCP的端口80，以便发现是否有路蓝旗向它发出连接请求</p>
-<p>HTTP报文通常使用TCP连接传送</p>
-<p>HTTP协议是无连接的、无状态的</p>
+<p>万维网网点有一个服务器进程，它一直监听TCP的端口80，以便发现是否有程序向它发出连接请求。</p>
+<p>HTTP报文通常使用TCP连接传送，HTTP协议是无连接的、无状态的。</p>
 <p><strong>HTTP1.0</strong></p>
 <p><strong>三次握手的前两次完成后，第三次握手携带HTTP请求报文 发送给服务器</strong></p>
 <p><strong>服务器将请求文档作为响应报文返回</strong></p>
 <p>时间：两个往返时间RTT + 响应文档传输时间</p>
 <p>*<em>HTTP1.1 *</em></p>
-<p><strong>持续连接：三次握手后，保持连接，使得统一浏览器和服务器可以继续在这条连接上发送HTTP请求和相应</strong></p>
-<p>流水线和非流水线</p>
+<p><strong>持续连接：三次握手后，保持连接，使得统一浏览器和服务器可以继续在这条连接上发送HTTP请求和响应</strong></p>
 <p><strong>代理服务器</strong></p>
-<p>把最近的请求和相应暂存</p>
-<p>如果收到旧的请求，则直接将缓存数据返回响应</p>
-<p>如果收到新的请求，则代表浏览器去请求源点服务器，把返回的数据本地存一份，另一份发浏览器</p>
+<p>把最近的请求和相应暂存，如果收到旧的请求，则直接将缓存数据返回响应；如果收到新的请求，则代表浏览器去请求源点服务器，把返回的数据本地存一份，另一份发浏览器。</p>
 <p><strong>HTTP报文</strong></p>
 <p>开始行：<br>在HTTP请求报文中叫<strong>请求行</strong><br><strong>请求行</strong>内容：方法、请求资源的URL、HTTP的版本</p>
 <p>例：POST /imewis/msugg?ifc=4&amp;em=4 HTTP/1.1</p>
 <p>在HTTP响应报文中叫<strong>状态行</strong><br><strong>状态行</strong>内容：HTTP版本、状态码，解释状态码的短语</p>
 <p>例:HTTP/1.1 200 OK</p>
-<p>首部行</p>
-<p>实体主体</p>
 <p>2019-11-18 20:06:03 星期一</p>
 
     </div>
@@ -382,14 +373,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-count">162</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">

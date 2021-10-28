@@ -72,7 +72,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2021&#x2F;09&#x2F;08&#x2F;container-network-1&#x2F;image-20210912154159822.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2021&#x2F;09&#x2F;08&#x2F;container-network-1&#x2F;image-20210912154235036.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2021&#x2F;09&#x2F;08&#x2F;container-network-1&#x2F;image-20210912154957014.png">
-<meta property="og:updated_time" content="2021-09-12T08:24:20.837Z">
+<meta property="og:updated_time" content="2021-09-22T12:42:08.427Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2021&#x2F;09&#x2F;08&#x2F;container-network-1&#x2F;image-20210908224057340.png">
 
@@ -235,7 +235,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-12 16:24:20" itemprop="dateModified" datetime="2021-09-12T16:24:20+08:00">2021-09-12</time>
+                <time title="修改时间：2021-09-22 20:42:08" itemprop="dateModified" datetime="2021-09-22T20:42:08+08:00">2021-09-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -283,7 +283,7 @@
 
 
 
-<h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>容器已经成为托管大规模分布式应用程序的实际方法。容器覆盖网络对于为容器提供可移植性至关重要，但它们在吞吐量、延迟和CPU使用方面造成了巨大的开销。关键问题是依赖于数据包转换来实现网络虚拟化。因此，每个数据包必须在发送方和接收方的主机操作系统内核中同时遍历该网络堆栈两次。我们设计并实现了Slim，这是一个低开销的容器覆盖网络，通过操作连接级元数据（<em>connection-level metadata</em>）来实现网络虚拟化。我们的解决方案与今天的容器化应用程序保持兼容性。评估结果表明，Slim将内存中key-value存储 Memcached的吞吐量（throughput）提高了71%，同时减少了42%的延迟（latency）。Slim将内存中key-value存储Memcached的CPU使用降低了56%。Slim还可以将web服务器 Nginx的CPU使用降低22%-24%，将数据库服务器 PostgreSQL降低22%，将流处理框架Apache Kafka 的降低10%。</p>
+<h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>容器已经成为托管大规模分布式应用程序的实际方法。容器覆盖网络对于为容器提供可移植性至关重要，但它们在吞吐量、延迟和CPU使用方面造成了巨大的开销。关键问题是依赖于数据包转换来实现网络虚拟化。因此，每个数据包必须在发送方和接收方的主机操作系统内核中同时遍历该网络堆栈两次。我们设计并实现了Slim，这是一个低开销的容器覆盖网络，通过操作连接级元数据（<em>connection-level metadata</em>）来实现网络虚拟化。我们的解决方案与今天的容器化应用程序保持兼容性。评估结果表明，Slim将内存中key-value存储 Memcached的吞吐量（throughput）提高了71%，同时减少了42%的延迟（latency）。Slim将内存中key-value存储的CPU使用降低了56%。Slim还可以将web服务器 Nginx的CPU使用降低22%-24%，将数据库服务器 PostgreSQL降低22%，将流处理框架Apache Kafka 的降低10%。</p>
 <h3 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h3><p>容器已经迅速成为管理和部署大规模分布式应用程序的实际方法，包括内存中的key-value存储、web服务器、数据库和数据处理框架。容器很有吸引力，因为它们又轻又便携。单台物理机器可以轻松托管标准虚拟机十倍以上的容器，从而节省大量成本。</p>
 <p>Container overlay networks——为分布式容器应用程序提供可移植性的关键组件——允许一组容器使用自己独立的IP地址和端口号进行通信，无论它们分配在哪里或其他容器放置在同一个物理机器上。overlay network消除了在应用程序开发人员之间协调端口和IP地址的负担，并大大简化了将遗留的企业应用程序向云计算的迁移。今天，容器编排器，如DockerSwarm，需要使用overlay network来托管容器化的应用程序。</p>
 <p><img src="/2021/09/08/container-network-1/image-20210908224057340.png" alt="image-20210908224057340"></p>
@@ -292,7 +292,7 @@
 <p>关键问题是，今天的容器overlay network依赖于操作系统中的多个数据包转换来实现网络虚拟化（图a），这意味着每个数据包必须遍历两次网络堆栈，并且在发送端和接收端都有一个虚拟交换机。以发送一个数据包为例。容器应用程序发送的包首先遍历虚拟网络接口上的覆盖网络堆栈。然后，包穿越一个虚拟交换机进行包转换（例如，添加主机网络头）。最后，数据包遍历主机网络堆栈，并在主机网络接口上发送出去。在接收服务器上，这些图层以相反的顺序重复。</p>
 <p>这种设计在很大程度上类似于虚拟机的覆盖网络(图1b)。由于虚拟机有自己的网络堆栈，管理程序必须发送/接收无需网络连接的原始覆盖数据报文，而不需要网络连接的上下文。但是，对于容器，操作系统内核对每个网络连接都有充分的交互。</p>
 <p>在本文中，我们问我们是否可以设计和实现一个容器覆盖网络，在那里数据包通过操作系统内核的网络堆栈只有一次。这要求我们从覆盖网络的数据平面上删除数据包转换。我们通过在connection setup时操作连接级元数据、节省CPU周期和减少数据包延迟来实现网络虚拟化。</p>
-<p>实现这样一个容器覆盖网络具有挑战性，因为：（1)网络虚拟化必须与今天未修改的容器应用程序兼容；(2)我们需要支持今天容器覆盖网络在数据平面上执行的相同网络策略；(3）我们需要执行与今天容器覆盖网络相同的安全模型。</p>
+<p>实现这样一个容器覆盖网络具有挑战性，因为：（1)网络虚拟化必须与今天未修改的容器应用程序兼容；(2)我们需要支持今天容器覆盖网络在数据平面上执行的相同网络策略；(3）我们需要保证与今天容器覆盖网络相同的安全模型。</p>
 <p>我们设计并实现了Slim，这是一个低开销的容器覆盖网络，通过操作连接级元数据来提供网络虚拟化。我们的评估表明，与基于包转换的良好容器覆盖网络相比，Slim将key-value存储内存缓存的吞吐量（throughput）提高了71%，延迟（latency）减少了42%。Slim将内存缓存的CPU使用（CPU utilization）降低了56%。Slim还将Web服务器Nginx的CPU使用降低了22%-24%；数据库服务器PostgreSQL的降低了22%；而流处理框架Apache Kafka的则降低了10%。但是，Slim增加了connection setup的复杂性，导致connection setup时间延长了106%。Slim的其他限制：Slim支持静态容器迁移，但不支持容器实时迁移；基于连接的网络策略，但不支持基于数据包的网络策略；以及TCP，默认为UDP套接字的标准处理。</p>
 <p>本文的贡献如下：</p>
 <ul>
@@ -305,8 +305,7 @@
 <h3 id="2-背景"><a href="#2-背景" class="headerlink" title="2 背景"></a>2 背景</h3><p>我们首先描述了传统的容器覆盖网络的体系结构，以及为什么它们对容器化的应用程序有用。然后，我们从吞吐量、延迟和CPU使用来量化今天的容器覆盖网络解决方案的开销。最后，我们证明了即使在应用已知的开销降低技术（例如，包转向）之后，开销也是显著的。</p>
 <h4 id="2-1-Container-Overlay-Network"><a href="#2-1-Container-Overlay-Network" class="headerlink" title="2.1 Container Overlay Network"></a>2.1 Container Overlay Network</h4><p>容器通常有四种通信选项：bridge模式、host模式、macvlan模式和overlay模式。bridge模式仅用于在同一主机上通信的容器。使用桥接模式时，每个容器都有一个独立的IP地址。操作系统内核在不同容器之间转发流量。</p>
 <p>我们如何启用不同主机上的容器之间的通信？在host模式下，容器直接使用其主机网络接口的IP地址。主机模式的网络性能接近直接使用主机操作系统网络栈的进程的性能。但是，主机模式会带来许多管理和部署挑战。首先，容器不能配置它们自己的IP地址；它们必须使用主机网络接口的IP地址。这使得移植变得复杂：分布式应用程序必须重写（re-writen）以发现和使用主机IP地址，如果容器可以迁移（例如，在检查点之后），应用程序必须能够适应其IP地址的动态变化。更糟糕的是，由于同一主机上的所有容器都共享相同的主机IP地址，因此只有一个容器可以绑定到给定的端口.(比如端口80)。从而导致在同一主机上运行的不同应用程序之间的协调复杂。事实上，由于这些问题，容器编排器，kubernetes，不允许使用主机模式。</p>
-<p>Macvlan模式或类似的硬件机制(例如，SRIOV)允许容器具有不同于其主机的自己的IP地址。Macvlan或SR-IOV允许物理网卡模拟多个NIC与不同的MAC地址和IP地址，Macvlan通过使容器IP在主机网络上可路由，将主机网络扩展到容器中。然而，这种方法从根本上讲使数据中心网络路由复杂化。假设一个IP地址为IP1.2.3.[1-10]的分布式应用程序。[1-10]不共同位于同一主机，或者启动时在同一主机，但是一些容器被迁移。然后，主机的IP地址将不会是连续的。</p>
-<p>例如，一个可能在主机5.6.7.8上，而另一个可能在主机9.10.11.12上。Macvlan要求云提供商更改其核心网络路由，以重定向到IP1.2.3[1-10]的流量到5.6.7.8和9.10.11.12，可能需要为在数据中心中运行的数百万个容器中的每个容器提供一个单独的路由表条目。另一个限制是，容器必须选择与任何其他容器（或主机）的IP地址不重叠的IP地址。由于这些复杂的问题，今天，大多数云提供商都阻止了macvlan模式。</p>
+<p>Macvlan模式或类似的硬件机制(例如，SRIOV)允许容器具有不同于其主机的自己的IP地址。Macvlan或SR-IOV允许物理网卡模拟多个NIC与不同的MAC地址和IP地址，Macvlan通过使容器IP在主机网络上可路由，将主机网络扩展到容器中。然而，这种方法从根本上讲使数据中心网络路由复杂化。假设一个IP地址为IP1.2.3.[1-10]的分布式应用程序。[1-10]不共同位于同一主机，或者启动时在同一主机，但是一些容器被迁移。然后，主机的IP地址将不会是连续的。例如，一个容器可能在主机5.6.7.8上，而另一个容器可能在主机9.10.11.12上。Macvlan要求云提供商更改其核心网络路由，以重定向到IP1.2.3[1-10]的流量到5.6.7.8和9.10.11.12，可能需要为在数据中心中运行的数百万个容器中的每个容器提供一个单独的路由表条目。另一个限制是，容器必须选择与任何其他容器（或主机）的IP地址不重叠的IP地址。由于这些复杂的问题，今天，大多数云提供商都阻止了macvlan模式。</p>
 <p>为了避免干扰主机网络上的路由，流行的选择是使用overlay模式。这是虚拟机的模拟，但对于一组容器——每个应用程序都有自己的网络名称空间，对其他容器或主机网络所做的选择没有影响或可见性。每个容器创建一个虚拟网络接口（由应用程序选择的IP地址）。虚拟网络接口通过操作系统内核内的虚拟交换机连接到外部（例如：在操作系统内核中的OpenvSwich)。当在主机网络上路由时，覆盖数据包用主机网络报头封装。这使得容器覆盖网络具有自己的IP地址空间和与主机网络脱节的网络配置；每个网络都可以完全独立地管理。今天有许多容器覆盖网络解决方案——如Weave、Falnnel和Docker Overlay[8]——所有这些都共享类似的内部架构）</p>
 <p><img src="/2021/09/08/container-network-1/image-20210911172050383.png" alt="image-20210911172050383"></p>
 <p>图2介绍了使用包转换实现网络虚拟化的容器覆盖网络的高级系统图，它显示了一个操作系统内核和一个由名称空间和cgroups构建的容器。命名空间隔离可以阻止容器化的应用程序访问主机网络接口。cgroups允许细粒度地控制容器内的应用程序可以消耗的资源总量(例如，CPU、内存和网络)</p>
@@ -336,8 +335,8 @@
 <h3 id="3-概览"><a href="#3-概览" class="headerlink" title="3 概览"></a>3 概览</h3><p>Slim提供了一个低开销的容器覆盖网络，其中覆盖网络中的数据包恰好遍历网络堆栈一次。与其他容器覆盖网络实现一样，Slim创建了一个配置与主机网络完全解耦的虚拟网络。容器没有主机网络接口的可见性，它们只使用操作系统内核创建的虚拟网络接口进行通信。</p>
 <p>我们要求（1）Slim易于部署，支持未修改的应用程序二进制文件；（2）灵活，支持各种网络策略，如在每个连接和容器的级别上支持访问控制、速率限制和服务质量(QoS)；而（3）安全，容器无法学习有关物理主机的信息，直接在主机网络上创建连接，或增加其流量转发优先级。</p>
 <p><img src="/2021/09/08/container-network-1/image-20210911225923727.png" alt="image-20210911225923727"></p>
-<p>图4显示了Slim的架构。它有三个主要组成部分：（1）一个用户空间层，<em>SlimSocket</em>，即与应用程序二进制文件的命名链接，（2）一个用户空间路由器，<em>SlimRouter</em>，运行在host namespace中；（3）是一个小型的可选内核模块，<em>SlimKernModule</em>，它通过高级的Slim特性来增强操作系统内核（例如，动态更改访问控制规则，执行安全性）</p>
-<p>Slim通过操作连接级的元数据来虚拟化网络。<em>SlimSocket</em>将POSIX套接字接口对外暴露给应用程序二进制文件，以拦截与容器相关的系统调用。当SlimSocket检测到应用程序试图设置连接时，它会向<em>SlimRouter</em>发送请求。SlimRouter设置网络连接后，它将该连接的访问权限作为一个文件描述符的传递给容器内的进程。容器内的应用程序然后使用host namespace文件描述符直接向主机网络发送/接收数据包。因为SlimSocket具有与POSIX套接字完全相同的接口，并且Slim动态地将SlimSocket链接到应用程序中，所以不需要修改应用程序的二进制文件。</p>
+<p>图4显示了Slim的架构。它有三个主要组成部分：（1）一个用户空间层，<em>SlimSocket</em>，即与应用程序二进制文件动态链接的模块，（2）一个用户空间路由器，<em>SlimRouter</em>，运行在host namespace中；（3）是一个小型的可选内核模块，<em>SlimKernModule</em>，它通过高级的Slim特性来增强操作系统内核（例如，动态更改访问控制规则，执行安全性）</p>
+<p>Slim通过操作连接级的元数据来虚拟化网络。<em>SlimSocket</em>将POSIX套接字接口对外暴露给应用程序二进制文件，以拦截与容器相关的系统调用。当SlimSocket检测到应用程序试图设置连接时，它会向<em>SlimRouter</em>发送请求。SlimRouter设置网络连接后，它将该连接的访问权限作为一个文件描述符传递给容器内的进程。容器内的应用程序然后使用host namespace文件描述符直接向主机网络发送/接收数据包。因为SlimSocket具有与POSIX套接字完全相同的接口，并且Slim动态地将SlimSocket链接到应用程序中，所以不需要修改应用程序的二进制文件。</p>
 <p>在Slim中，数据包直接进入主机网络，绕过虚拟网络接口和虚拟交换机；因此，它需要一个单独的机制来支持各种灵活的控制平面策略（例如，访问控制）和数据平面策略（例如，速率限制、QoS）。控制平面策略隔离容器化应用程序的不同组件。数据平面策略限制容器的网络资源使用，并允许网络流量的优先级。在当前的许多覆盖网络实现中，这两种类型的策略实际上都是在数据平面内强制执行的。例如，一个典型的网络防火墙检查每个数据包，以确定它是否被访问控制列表阻止。</p>
 <p><em>SlimRouter</em>存储控制平面策略，并在连接设置时强制执行它们。这种方法避免了检查连接中的每个数据包的需要。在创建连接之前，SlimRouter会检查访问控制列表是否允许该连接。当策略更改时，SlimRouter将扫描所有现有连接，并通过<em>SlimKernModule</em>模块删除任何违反更新的访问控制策略的连接的文件描述符。Slim利用现有的内核功能来执行数据平面策略。</p>
 <p>直接发送主机名称空间文件描述符到恶意的容器引起了安全问题，例如，如果恶意容器绕过SlimSocket并直接在主机名称空间文件描述符上调用<em>getpeername</em>，那么它将能够学习主机的IP地址。容器还可以用主机网络IP地址调用connect，以直接在主机网络上创建连接，从而绕过覆盖网络。最后，一个容器可以调用<em>setsockopt</em>以增加其流量优先级。</p>
@@ -360,21 +359,21 @@
 <p>访问控制策略可以动态更改，而且必须中止违反了更新后的访问控制策略的连接。<em>SlimRouter</em>保持每个连接的状态，包括源和目标IP地址、端口以及相应的主机名称空间文件描述符。当访问控制策略更改时，SlimRouter迭代所有当前连接，以找到更新策略中禁止的连接。SlimRouter通过从容器中删除相应的文件描述符来中止这些连接。从正在运行的进程中删除文件描述符在Linux等操作系统中不是现有的特性。我们在<em>SlimKernModule</em>模块中构建了这个功能。（详情请参见4.3）</p>
 <p><strong>Data-plane policies</strong>    Slim支持两种类型的数据平面策略：速率限制和服务质量(QoS)。速率限制限制了容器可以使用的资源量。QoS确保了某些应用程序的性能优于其他应用程序。</p>
 <p>Slim重用操作系统内核的现有特性来支持数据平面策略。现代操作系统内核支持单个连接或一组连接的速率限制和QoS。Slim只需设置正确的标识符，让操作系统内核识别生成流量的容器。</p>
-<p>在Slim中，在每个连接和每个容器级别都执行速率限制。每个连接速率限制的设置方式与今天使用Linux的具体控制程序<em>tc</em>的覆盖网络类似。对于每个容器的速率限制，Slim首先将<em>net_cls cgroups</em>配置为包括<em>SlimRouter</em>进程。net_cls cgroups标记来自容器或相应<em>SlimRouter</em>的流量具有唯一标识符。然后，<em>SlimRouter</em>在主机网络接口上使用tc设置使用此标识符的流量的速率限制。这样，<em>SlimRouter</em>的网络使用也会受到速率限制的限制。正确解释网络使用情况是为什么每个容器都需要一个单独的<em>SlimRouter实例</em>的基本原因。</p>
+<p>在Slim中，在每个连接和每个容器级别都执行速率限制。每个连接速率限制的设置方式与今天使用Linux的具体控制程序<em>tc</em>的覆盖网络类似。对于每个容器的速率限制，Slim首先将<em>net_cls cgroups</em>配置为包含<em>SlimRouter</em>进程。net_cls cgroups标记来自容器或相应<em>SlimRouter</em>的流量具有唯一标识符。然后，<em>SlimRouter</em>在主机网络接口上使用tc设置使用此标识符的流量的速率限制。这样，<em>SlimRouter</em>的网络使用也会受到速率限制的限制。正确解释网络使用情况是为什么每个容器都需要一个单独的<em>SlimRouter实例</em>的基本原因。</p>
 <p>服务质量(QoS)也使用tc。SlimRouter使用套接字选项来设置服务类型(ToS)字段。（也就是<em>setsockopt</em>）这样，物理网络上的交换机/路由器将被通知容器流量的优先级。</p>
 <p><strong>Compatibility with existing IT tools</strong>一般来说，需要修改IT工具以与SlimRouter交互，以便Slim发挥作用。IT工具通常使用一些用户内核接口(例如，iptables)来注入防火墙和速率限制规则。当使用Slim时，他们应该将这些规则注入到<em>SlimRouter</em>中。因为Slim从本质上是一种基于连接的虚拟化方法，所以我们的方法的一个局限性是它不能支持基于数据包的网络策略（例如，如果数据包的散列与标签匹配，则删除一个overlay数据包）。如果需要基于数据包的策略，则应该使用标准的Linux overlay来代替。</p>
 <p>如果基于连接的静态访问控制是唯一需要的网络策略，那么就不需要修改现有的IT工具。如果IT工具阻止了标准容器覆盖网络上的连接，那么它也会在Slim上阻止该连接的服务发现的元数据，从而阻止在Slim上创建主机连接。</p>
 <p><strong>4.3 Addressing Security Concerns</strong></p>
 <p>Slim包括一个可选的内核模块，<em>SlimKernModule</em>模块，以确保Slim维护与今天的容器覆盖网络相同的安全模型。这个问题涉及到潜在的恶意容器。Slim将主机名称空间文件描述符暴露给容器，因此需要在操作系统内核内部建立一个额外的机制来跟踪和管理访问。<em>SlimKernModule</em>实现了一个基于文件描述符的轻量级和通用的功能系统。SlimKernModule以类似于污染跟踪工具的方式跟踪标记的文件描述符，并过滤这些文件描述符上不安全的系统调用。我们设想这个SlimKernModule也可以被其他系统用于跟踪和控制文件描述符。例如，如果文件服务器触发警报，它可能希望撤销从可疑进程的访问。Slim不能使用像seccomp这样的现有内核特性，因为seccomp不能跟踪已标记的文件描述符。</p>
-<p><em>SlimKernModule</em>监视主机名称空间文件描述符在容器内传播的方式。它允许<em>SlimRouter</em>或其他特权进程标记一个文件描述符。然后，它插入可能复制或删除带标记的文件描述符的系统调用，如dup、fork和close，以跟踪它们的传播。如果容器将文件描述符传递给容器内的其他进程，则也会标记为复制。</p>
+<p><em>SlimKernModule</em>监视主机名称空间文件描述符在容器内传播的方式。它允许<em>SlimRouter</em>或其他特权进程标记文件描述符。然后，对部分文件描述符的系统调用，如dup、fork和close，它插入复制或删除标记，以跟踪它们的传播。如果容器将文件描述符传递给容器内的其他进程，则也会标记为复制。</p>
 <p>带标记的文件描述符在容器内的能力有限。<em>SlimKernModule<em>不允许使用这些文件描述符调用某些不安全的系统调用。例如，在Slim的情况下，带标记的文件描述符不能用于以下系统调用：</em>connect</em>, <em>bind</em>, <em>getsockname</em>,<em>getpeername</em>, <em>setsockopt</em>,等。这防止容器学习其主机IP地址或增加其流量优先级。它还可以防止容器直接创建主机网络连接。对于非恶意容器，<em>SlimSocket</em>和<em>SlimRouter</em>模拟这些被禁止的系统调用的功能。</p>
 <p><em>SlimKernModule</em>根据要求撤销标记的文件描述符。要做到这一点，它需要一个进程标识符(pid)和一个文件描述符索引。<em>SlimRouter</em>使用此功能来实现动态访问控制。当现有连接的访问控制列表发生变化时，<em>SlimRouter</em>将通过<em>SlimKernModule</em>删除文件描述符。<em>SlimKernModule</em>撤消文件描述符的所有副本。</p>
 <p><strong>Secure versus Non-secure mode</strong>(安全模式与非安全模式) 是否在安全模式下使用Slim(使用SlimKernModule)取决于用例。当容器和物理基础设施处于同一实体的控制下时，例如对于云提供商自己的使用，非安全模式就足够了。不安全模式更容易部署，因为它不需要修改内核。当容器对其他实体的物理基础设施或容器有潜在的不可信时，就需要使用安全模式。安全模式的连接设置时间略长（∼为25%），使得整个连接设置时间比传统的容器覆盖网络长106%（见第6.1章）。</p>
-<h3 id="5-Implementation"><a href="#5-Implementation" class="headerlink" title="5 Implementation"></a><strong>5 Implementation</strong></h3><p>我们的Slim的实现是基于Linux和Docker的。我们的原型包括在4中描述的所有特性。<em>SlimSocket</em> SlimRouter* <em>SlimKernModule</em> 分别由1184行C、1196行C++（不包括标准库）、和1438行C实现。</p>
+<h3 id="5-Implementation"><a href="#5-Implementation" class="headerlink" title="5 Implementation"></a><strong>5 Implementation</strong></h3><p>我们的Slim的实现是基于Linux和Docker的。我们的原型包括在4中描述的所有特性。<em>SlimSocket</em> SlimRouter <em>SlimKernModule</em> 分别由1184行C、1196行C++（不包括标准库）、和1438行C实现。</p>
 <p>我们的原型依赖于一个标准的覆盖网络，Weave，用于服务发现和需要数据平面处理的数据包(例如，ICMP、UDP)。</p>
-<p><em>SlimSocket</em>使用 LD PRELOAD来动态链接到应用程序二进制文件。<em>SlimSocket</em>和<em>SlimRouter</em>之间的通信是通过一个Unix域套接字。在非安全模式下，文件描述符通过<em>sendmsg</em>在<em>SlimRouter</em>和<em>SlimSocket</em>之间传递。对于安全模式，使用SlimKernModule的跨进程文件描述符复制方法传递文件描述符。</p>
+<p><em>SlimSocket</em>使用 LD_PRELOAD来动态链接到应用程序二进制文件。<em>SlimSocket</em>和<em>SlimRouter</em>之间的通信是通过一个Unix域套接字。在非安全模式下，文件描述符通过<em>sendmsg</em>在<em>SlimRouter</em>和<em>SlimSocket</em>之间传递。对于安全模式，使用SlimKernModule的跨进程文件描述符复制方法传递文件描述符。</p>
 <p><em>SlimRouter<em>允许网络运营商根据JSON文件中的源/目标IP地址前缀和端口将访问控制表示为条目列表。SlimRouter有一个命令行接口，使网络操作员可以通过重新加载JSON文件在访问控制列表中发布更改。Slim拒绝在列表中匹配的任何连接。</em>SlimRouter<em>使用</em>htb</em> qdisc来实现速率限制、用 <em>prio</em> qdisc tc 来实现Qos。</p>
-<p><em>SlimRouter</em>和<em>SlimKernModule</em>通过<em>SlimKernModule</em>创建的procfs中的虚拟文件进行通信。SlimKernModule将对此文件的写入视为请求。访问虚拟文件需要主机根权限。</p>
+<p><em>SlimRouter</em>和<em>SlimKernModule</em>通过<em>SlimKernModule</em>创建的procfs中的虚拟文件进行通信。SlimKernModule将对此文件的写入视为请求。访问虚拟文件需要主机root权限。</p>
 <p>SlimKernModule通过替换系统调用表中的函数指针来对系统调用进行交互。SlimKernModule将标记的文件描述符存储在哈希表和不安全的系统调用列表中。SlimKernModule拒绝对标记文件描述符的不安全的系统调用。</p>
 <p>SlimKernModule还插入系统调用，如dup、dup2和close，以确保文件描述符标记被适当地传播。对于进程fork(例如，fork、vfork、Linux内核中的克隆)，SlimKernModule使用<em>sched_process fork</em> 作为回调函数。Slim不会改变进程frok的行为。一个fork的进程仍然有<em>SlimSocket</em>的动态连接。</p>
 <h3 id="6-Evaluation（评估）"><a href="#6-Evaluation（评估）" class="headerlink" title="6 Evaluation（评估）"></a>6 Evaluation（评估）</h3><p>我们首先在安全和非安全模式下对Slim的性能和CPU利用率进行微基准测试，然后使用四个流行的容器应用程序：内存密钥值存储工具，Memcached；web服务器，Nginx；一个数据库，PostgreSQL；和一个流处理框架，ApacheKafka。最后，我们展示了容器迁移的性能结果。我们的测试床设置与我们的测量研究相同（2.2）。在所有的实验中，我们Weave的默认启动的快速数据平面和默认启用的RFS来参与Slim比较。我们使用Docker来创建容器。</p>
@@ -384,7 +383,7 @@
 <p>图6：TCP连接的CPU使用和故障分析。在图6a中，Slim和主机线重叠。在图6b中，usr条在底部，可以忽略不计。误差条表示标准差</p>
 <p>对于长连接，Slim降低了CPU的使用。我们在改变TCP吞吐量从0到25Gbps的情况下，我们在Slim安全模式、Weave开启RFS下使用mpstat为Slim测量CPU使用。RFS不能达到25Gbps，所以我们省略了该数据点。</p>
 <p>图6a显示了按消耗的虚拟核数量计算的总CPU使用。与RFS相比，Slim的CPU开销下降了22-41%；Slim的CPU成本与直接使用主机网络相同。为了确定这种减少的来源，当TCP吞吐量为22.5Gbps时，我们使用mpstat分解不同的组件。</p>
-<p>图6b显示了结果。正如预期的那样，CPU成本的最大降低来自于服务软件中断。这些数据包下降了49%：使用Slim，数据包不再需要数据平面转换，并且只需要遍历主机操作系统内核的网络堆栈一次图6b显示了结果。正如预期的那样，CPU成本的最大降低来自于服务软件中断。这些数据包下降了49%：使用Slim，数据包不再需要数据平面转换，并且只需要遍历主机操作系统内核的网络堆栈一次。</p>
+<p>图6b显示了结果。正如预期的那样，CPU成本的最大降低来自于服务软件中断。这些数据包下降了49%：使用Slim，数据包不再需要数据平面转换，并且只需要遍历主机操作系统内核的网络堆栈一次图6b显示了结果。正如预期的那样，CPU成本的最大降低来自于服务软件中断。这些数据包下降了49%，使用Slim，数据包不再需要数据平面转换，并且只需要遍历主机操作系统内核的网络堆栈一次。</p>
 <p><img src="/2021/09/08/container-network-1/image-20210912132623212.png" alt="image-20210912132623212"></p>
 <p><strong>图7</strong>：两个Slim容器的组合吞吐量的条状图，并对其中一个容器进行了速率限制和访问控制策略的更新。</p>
 <p><strong>Network policies</strong>（网络策略）Slim支持访问控制、速率限制和QoS策略，包括当应用于现有连接。我们检查了在使用速率限制和访问控制时的一组示例场景。我们运行两个并行的容器，每个容器都有一个TCP连接。这些连接的另一端是另一台机器上的一个容器。我们使用iperf报告平均每秒吞吐量。图7显示了结果。</p>
@@ -407,7 +406,7 @@
 <p><img src="/2021/09/08/container-network-1/image-20210912153824855.png" alt="image-20210912153824855"></p>
 <p><strong>图12</strong>：Nginx服务器的延迟。误差条表示标准差。</p>
 <p>虽然Slim提高了CPU使用，但Nginx延迟自然方差会了延迟的噪声。基准测试工具wrk2报告Nginx延迟的平均值和标准差。图12显示了结果。标准差远远大于平均延迟的差值。</p>
-<h5 id="6-2-3-PostgreSQL"><a href="#6-2-3-PostgreSQL" class="headerlink" title="6.2.3 PostgreSQL"></a><strong>6.2.3 PostgreSQL</strong></h5><p>我们在一个容器中部署了一个关系数据库PostgreSQL[45]（9.5版），然后使用其默认的基准测试工具pgbench[43]对其在另一个容器中的性能进行基准测试。该工具pgbench实现了标准的TPC-B基准测试。</p>
+<h5 id="6-2-3-PostgreSQL"><a href="#6-2-3-PostgreSQL" class="headerlink" title="6.2.3 PostgreSQL"></a><strong>6.2.3 PostgreSQL</strong></h5><p>我们在一个容器中部署了一个关系数据库PostgreSQL（9.5版），然后使用其默认的基准测试工具pgbench对其在另一个容器中的性能进行基准测试。该工具pgbench实现了标准的TPC-B基准测试。</p>
 <p>它创建了一个包含100万个银行账户的数据库，并使用4个线程执行交易，总共100个连接。</p>
 <p><img src="/2021/09/08/container-network-1/image-20210912154159822.png" alt="image-20210912154159822"></p>
 <p><strong>图13</strong>：PostgreSQL和Kafka的CPU使用。误差条表示标准差。</p>
@@ -420,13 +419,13 @@
 <p>Slim减少了kafka中的消息延迟。基准工具kafka-producer-perf-test，报告了kafka的延迟。图14b显示了结果。与RFS相比，Kafka的延迟减少了0.28ms（28%）。使用Slim和主机模式之间仍存在0.09ms的延迟间隔。</p>
 <h4 id="6-3-Container-Migration（容器迁移）"><a href="#6-3-Container-Migration（容器迁移）" class="headerlink" title="6.3 Container Migration（容器迁移）"></a><strong>6.3 Container Migration</strong>（容器迁移）</h4><p>Slim支持容器迁移。在我们的测试床上，我们将一个Memcached的容器从一个物理服务器迁移到40Gbps网络上的另一个物理服务器。我们测试了20次迁移。容器的IP地址在整个迁移过程中保持不变。同样地，我们也不更改主机网络的路由表。从文件系统中提取的容器镜像为58M字节。</p>
 <p><img src="/2021/09/08/container-network-1/image-20210912154957014.png" alt="image-20210912154957014"></p>
-<p>表4：迁移<em>Memcached</em>容器的时间。±后面的数字表示标准差。</p>
+<p><strong>表4</strong>：迁移<em>Memcached</em>容器的时间。±后面的数字表示标准差。</p>
 <p>使用Slim可以略微减缓容器的迁移。表4是在Weave和Slim上的平均容器迁移时间的分类。总的来说，Slim可以将容器迁移从3.34s减慢到3.76s。Slim不会改变大部分的迁移过程。额外的开销主要用于恢复文件系统。使用Slim，容器具有包含SlimSocket的附加磁盘卷和一个虚拟文件，以支持SlimSoicket和<em>SlimRouter</em>之间在UNIX域套接字上的通信。我们怀疑额外的磁盘卷会减慢文件系统的恢复过程。此外，使用Slim启动容器还增加了少量的额外开销。</p>
 <h3 id="7-Discussion-讨论"><a href="#7-Discussion-讨论" class="headerlink" title="7 Discussion(讨论)"></a><strong>7 Discussion</strong>(讨论)</h3><p><strong>Connection Setup Time (连接建立时间)</strong>Slim的一个缺点是连接设置时间明显长得多（6.1）。这可能对具有许多短连接的应用程序不利。Slim允许容器中的独立应用程序通过分离<em>SlimSocket</em>来选择退出。在未来，我们希望在每个连接的级别可以有选择的选择退出。我们可以让（1)允许开发人员指定选择退出的连接，也可以让(2）根据预测的流大小自动选择退出。</p>
 <p><strong>Container Live Migration（容器热迁移）</strong>虽然Slim确实支持静态容器迁移，但它目前不支持容器实时迁移。在迁移过程中，所有TCP连接都断开，也不迁移内存状态。但是，在实时迁移中，必须完全恢复实时应用程序状态，包括在操作系统内核中等待事件的应用程序线程等状态。Docker目前正在试验使用criu进行实时检查指向和恢复，但它关注的是单个主机的更简单的情况。如果可以构建一个实际的实时容器迁移系统，Slim将使其更加困难，因为：（1)容器的状态现在包括主机名称空间文件描述符，(2)数据平面策略对主机连接标识符(例如，速率限制），在迁移时需要正确翻译。</p>
-<p><strong>UDP.</strong>本文的重点是通过将操作从数据平面转移到连接设置，来提高面向连接等TCP的协议的容器通信性能。这对UDP等无连接协议带来了挑战。Slim可能可以通过使用类似的机制支持TCP，通过拦截<em>socket</em>, <em>bind</em>, <em>connect</em>, <em>sendto</em>,recvfrom*来支持UDP。然而，我们选择在原型中不这样做有两个原因。首先，我们没有一个良好的机制来支持UDP的灵活的网络策略。在UDP中，文件描述符并不描述单个网络对，而是描述一个开放的端口，虚拟网络中的每个节点都可以向其发送数据包。其次，数据中心中UDP最常见的用例是避免连接设置的开销；由于Slim使连接设置更昂贵，它将破坏其中一些好处。相反，为了使用可能混合使用TCP和UDP数据包的未修改的应用程序，我们的原型只是将UDP流量导向Weave。</p>
-<p><strong>Packet-based Network Policy（基于包的网络策略）</strong>Slim的一个限制性是，它支持基于连接的网络策略，而不是基于数据包的网络策略。例如，可以设置虚拟网络以防止访问后端数据库，但来自某些容器的除外；Slim支持这种访问控制。如果覆盖数据包的哈希与签名相匹配，则基于数据包的过滤器允许系统删除数据包。在Slim上，从未构建过虚拟覆盖数据包，因此检查签名将非常昂贵。如果需要基于数据包的网络策略，则应使用标准的覆盖网络。</p>
-<p><strong>LD PRELOAD</strong>我们的原型使用PRELOAD来将SlimSocket动态链接到未修改的应用程序二进制文件中。有些系统假设是静态链接的应用程序二进制文件（例如，用Go编写的应用程序）。它们可以通过修补应用程序二进制文件以使用SlimSocket而不是POSIX套接字，也能使用Slim。我们不实现这个功能支持我们的原型。</p>
+<p><strong>UDP.</strong>本文的重点是通过将操作从数据平面转移到连接设置，来提高面向连接等TCP的协议的容器通信性能。这对UDP等无连接协议带来了挑战。Slim可能可以通过使用类似的机制支持TCP，通过拦截<em>socket</em>, <em>bind</em>, <em>connect</em>, <em>sendto</em>,recvfrom来支持UDP。然而，我们选择在原型中不这样做有两个原因。首先，我们没有一个良好的机制来支持UDP的灵活的网络策略。在UDP中，文件描述符并不描述单个网络对，而是描述一个开放的端口，虚拟网络中的每个节点都可以向其发送数据包。其次，数据中心中UDP最常见的用例是避免连接设置的开销；由于Slim使连接设置更昂贵，它将破坏其中一些好处。相反，为了使用可能混合使用TCP和UDP数据包的未修改的应用程序，我们的原型只是将UDP流量导向Weave。</p>
+<p><strong>Packet-based Network Policy（基于包的网络策略）</strong>Slim的一个限制性是，它支持基于连接的网络策略，而不是基于数据包的网络策略。例如，可以设置虚拟网络以防止某些容器访问后端数据库；Slim支持这种访问控制。基于数据包的策略做法是如果覆盖数据包的哈希与签名相匹配，则允许系统删除数据包。。在Slim上，从未构建过虚拟覆盖数据包，因此检查签名将非常昂贵。如果需要基于数据包的网络策略，则应使用标准的覆盖网络。</p>
+<p><strong>LD_PRELOAD</strong>我们的原型使用LD_PRELOAD来将SlimSocket动态链接到未修改的应用程序二进制文件中。有些系统假设是静态链接的应用程序二进制文件（例如，用Go编写的应用程序）。它们可以通过修补应用程序二进制文件以使用SlimSocket而不是POSIX套接字，也能使用Slim。我们不实现这个功能支持我们的原型。</p>
 <p><strong>Error Code</strong>我们目前的原型实现在一个重要的方式上是不透明的。当访问控制列表发生更改，要求Slim撤销文件描述符时，应用程序在使用该文件描述符时相对于Weave会收到不同的错误代码。在Slim中，对被撤销的文件描述符的发送返回一个错误的文件描述符错误代码，而在Weave中，数据包将被静默地丢弃。我们相信有可能解决这个问题，但我们的基准测试应用程序不需要它。</p>
 <p><strong>SmartNICs</strong></p>
 <p>最近的一个研究趋势是探索将常见情况下的网络数据平面操作转向硬件。例如，Catapult会将虚拟机仿真所需的数据包封装移动到硬件上。然而，Catapult在物理链路上运行，因此，为了卸载覆盖网络处理，需要修改Linux以接受在其物理网络接口上的虚拟网络数据包。SR-IOV是一种商品硬件，但它面临着与malvlan模式相同的问题。（见第2.1节。）FlexNIC提出了一种灵活的模型，可以包含应用程序、客户操作系统和虚拟机数据包管理，但迄今为止它只是实验性的硬件。虽然新的硬件支持可能会越来越可用，但我们已经表明，这种硬件支持对于容器的高效虚拟覆盖网络并不是必要的；容器操作系统具有在连接设置时执行虚拟化所需的所有信息。</p>
@@ -435,7 +434,7 @@
 <p><strong>Redirecting system calls(重定向系统调用)</strong>重定向系统调用对于许多用途都是一种有用的技术，如污染跟踪、构建用户级文件系统[16]和执行其他高级操作系统内核特性（比如，sandboxing record and replay  intrusion detection。在网络上下文中，mTCP会重定向套接字调用，以构建用户级的网络堆栈。网络内核重定向套接字调用，以将网络堆栈与虚拟机映像解耦。</p>
 <p><strong>Separation of control- and data-plane（控制平面和数据平面的分离）</strong>Slim的性能增益来自于将网络虚拟化逻辑从数据移动到控制平面。控制平面和数据平面的分离是提高在灵活网络中构建快速数据平面操作系统和路由的系统性能的著名技术。</p>
 <h3 id="9-Conclusion（结论）"><a href="#9-Conclusion（结论）" class="headerlink" title="9 Conclusion（结论）"></a><strong>9 Conclusion（结论）</strong></h3><p>容器已经成为托管分布式应用程序的实际方法。提供可移植性的关键组件，容器覆盖网络，在吞吐量、延迟和CPU使用方面造成了巨大的开销，因为它向数据平面添加了一层。我们提出了Slim，一种低开销的容器覆盖网络，它通过操作连接级元数据来实现网络虚拟化。Slim透明地支持未经修改的、潜在恶意的应用程序。Slim提高了内存中密钥值存储的吞吐量71%，并减少了42%的延迟。Slim将内存中密钥值存储的CPU使用减少了56%，web服务器减少了22%-24%，数据库服务器减少了22%，流处理框架减少了10%。</p>
-<p>Slim的源代码可以在<a href="https://github.com/danyangz/slim上公开获得。" target="_blank" rel="noopener">https://github.com/danyangz/slim上公开获得。</a></p>
+<p>Slim的源代码在<a href="https://github.com/danyangz/slim。" target="_blank" rel="noopener">https://github.com/danyangz/slim。</a></p>
 
     </div>
 
@@ -521,14 +520,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-count">162</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">

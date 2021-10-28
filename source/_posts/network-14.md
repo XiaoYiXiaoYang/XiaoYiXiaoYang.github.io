@@ -2,7 +2,7 @@
 title: 网络化测控技术（数据采集）
 date: 2020-01-08 11:34:40
 tags: [网络化测控]
-categories: [学习笔记]
+categories: [Network]
 ---
 
 <center>
@@ -185,8 +185,6 @@ void CDODLG::OnT0()
 	CDialog::OnTimer(nIDEvent);
 
 ```
-
-
 
 
 

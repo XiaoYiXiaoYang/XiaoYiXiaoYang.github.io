@@ -55,7 +55,10 @@
 <meta property="og:description" content="1.发展经历     2.知识图谱     3.组件说明">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2021&#x2F;07&#x2F;18&#x2F;kubernetes-1&#x2F;image-20210718175013674.png">
-<meta property="og:updated_time" content="2021-08-15T14:49:29.803Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2021&#x2F;07&#x2F;18&#x2F;kubernetes-1&#x2F;image-20211017161745859.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2021&#x2F;07&#x2F;18&#x2F;kubernetes-1&#x2F;image-20211025221300053.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2021&#x2F;07&#x2F;18&#x2F;kubernetes-1&#x2F;image-20211025225156002.png">
+<meta property="og:updated_time" content="2021-10-25T15:05:51.927Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2021&#x2F;07&#x2F;18&#x2F;kubernetes-1&#x2F;image-20210718175013674.png">
 
@@ -218,7 +221,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-15 22:49:29" itemprop="dateModified" datetime="2021-08-15T22:49:29+08:00">2021-08-15</time>
+                <time title="修改时间：2021-10-25 23:05:51" itemprop="dateModified" datetime="2021-10-25T23:05:51+08:00">2021-10-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -262,17 +265,56 @@
    2.知识图谱 <br>
    3.组件说明 <br>
 </center>
-
-
-
-
-
-
 <a id="more"></a>
 
-<h2 id="发展经历"><a href="#发展经历" class="headerlink" title="发展经历"></a>发展经历</h2><p>kubernetes简 称k8s，即k和s之间刚好8个字母。</p>
-<p>发展：</p>
+
+
+<p>kubernetes简称k8s，即k和s之间刚好8个字母。</p>
+<h2 id="发展经历"><a href="#发展经历" class="headerlink" title="发展经历"></a>发展经历</h2><p>云计算服务分类：Iaas Paas Saas</p>
+<p>资源管理器发展：</p>
+<p><strong>apache mesos</strong>：2009年由加利福尼亚大学发起，在twitter公司生产环境使用过，不过，twitter公司2019年宣布不使用mesos，切换到kubernetes。</p>
+<p><strong>docker swarm</strong>：docker 绑定的集群管理工具，缺点：可能不支持其他的容器化组件。</p>
 <p><img src="/2021/07/18/kubernetes-1/image-20210718175013674.png" alt="image-20210718175013674"></p>
+<center> 图1 mesos 和 docker swarm logo </center>
+
+
+<p><strong>kubernetes</strong>：google发出的开源集群资源管理器，由谷歌内部的容器化资源管理框架borg发展而来。特点是轻量级、开源、弹性伸缩、负载均衡IPVS。</p>
+<p><img src="/2021/07/18/kubernetes-1/image-20211017161745859.png" alt="image-20211017161745859"></p>
+<center>图2 kubernetes logo</center>
+
+<h2 id="知识图谱"><a href="#知识图谱" class="headerlink" title="知识图谱"></a>知识图谱</h2><ul>
+<li><strong>介绍说明</strong></li>
+<li><strong>基础概念</strong></li>
+<li><strong>kubernetes安装</strong></li>
+<li><strong>资源清单</strong></li>
+<li><strong>Pod控制器</strong></li>
+<li><strong>服务发现</strong></li>
+<li><strong>存储</strong></li>
+<li><strong>调度器</strong></li>
+<li><strong>集群安全机制</strong></li>
+<li><strong>HELM</strong></li>
+<li><strong>运维</strong></li>
+</ul>
+<p>![Kubernetes 结构 ](kubernetes-1/Kubernetes 结构 .png)</p>
+<h3 id="组件说明"><a href="#组件说明" class="headerlink" title="组件说明"></a>组件说明</h3><p>kubernetes前身是borg系统，borg系统的架构如下图。</p>
+<p><img src="/2021/07/18/kubernetes-1/image-20211025221300053.png" alt="image-20211025221300053"></p>
+<center>图3 borg组件说明</center>
+
+<p>主要组件：</p>
+<p>borgmaster：处理客户端RPC请求，比如创建Job，查询Job等，维护系统组件和服务的状态，比如服务器、Task等，<br>负责与borglet通信。</p>
+<p>borglet：部署在所有节点上的agent，负责接收borgmaster进程的指令。</p>
+<p>scheduler：调度器，将数据写入paxos数据库，borglet会监控paxos的数据变化，进行拉取消息进行消费。</p>
+<p>对应于kubernetes结构如下。</p>
+<p><img src="/2021/07/18/kubernetes-1/image-20211025225156002.png" alt="image-20211025225156002"></p>
+<center> 图4 kubernetes结构 </center>
+
+<p>​    主要组件：</p>
+<p>apiserver：和用户交互的组件，对外暴露restful api。</p>
+<p>etcd：集群的键值存储。</p>
+<p>controllers：控制器维护副本数目等</p>
+<p>scheduler：调度器会监控新建的pods并将其分配给节点</p>
+<p>kubelet：节点上的agent，维持容器的生命周期</p>
+<p>kube-proxy：负责为service提供cluster内部的服务发现和负载均衡</p>
 
     </div>
 
@@ -345,7 +387,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#发展经历"><span class="nav-number">1.</span> <span class="nav-text">发展经历</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#发展经历"><span class="nav-number">1.</span> <span class="nav-text">发展经历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#知识图谱"><span class="nav-number">2.</span> <span class="nav-text">知识图谱</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#组件说明"><span class="nav-number">2.1.</span> <span class="nav-text">组件说明</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -361,14 +403,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-count">162</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">

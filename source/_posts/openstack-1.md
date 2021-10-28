@@ -2,7 +2,7 @@
 title: Openstack--基本介绍
 date: 2020-12-16 22:35:05
 tags: [OpenStack]
-categories: [学习笔记]
+categories: [Network]
 ---
 
 <center>
@@ -77,37 +77,36 @@ IaaS的特点：资源可作为服务提供、费用因消费而异、服务高�
 
 ## OpenStack介绍
 
-
-
 openstack主要实现了计算、网络、存储资源池的虚拟化，
 
+### **核心项目**
+
+- 计算服务Nova
 
 
+- 网络服务Neutron
 
 
-**核心项目**
+- 块存储服务Cinder
 
-计算服务Nova
 
-网络服务Neutron
+- 对象存储服务Switft
 
-块存储服务Cinder
 
-对象存储服务Switft
+- 虚拟机镜像的发现Glance
 
-虚拟机镜像的发现Glance
 
-用户信息管理，为其他组件提供认证Keystone
+- 用户信息管理，为其他组件提供认证Keystone
 
-用以管理、控制Openstack服务的Web控制面板Horizon
+
+- 用以管理、控制Openstack服务的Web控制面板Horizon
+
 
 
 
 **各组件之间的关系**
 
 组件关系图：
-
-
 
 
 
@@ -182,74 +181,4 @@ OpenStack vs CloudStack 对比图：
 
 
 Docker vs OpenStack 对比图：
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

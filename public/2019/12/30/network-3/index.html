@@ -54,7 +54,7 @@
 <meta property="og:site_name" content="萧逸小杨的个人博客">
 <meta property="og:description" content="ARP--地址解析协议，由IP地址解析为MAC物理地址">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-07-18T08:19:38.150Z">
+<meta property="og:updated_time" content="2021-10-28T14:59:33.153Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/30/network-3/">
@@ -216,7 +216,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-18 16:19:38" itemprop="dateModified" datetime="2021-07-18T16:19:38+08:00">2021-07-18</time>
+                <time title="修改时间：2021-10-28 22:59:33" itemprop="dateModified" datetime="2021-10-28T22:59:33+08:00">2021-10-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -224,8 +224,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">学习笔记</span>
+                  <a href="/categories/Network/" itemprop="url" rel="index">
+                    <span itemprop="name">Network</span>
                   </a>
                 </span>
             </span>
@@ -261,29 +261,27 @@
 
 <a id="more"></a>
 
-<p><strong>IP地址与硬件地址</strong></p>
-<p>物理地址是数据链路层与物理层使用的地址，IP地址是网络层和以上各层使用的地址</p>
-<p>在发送数据时，数据从高层下到低层，然后才到通信链路上传输，使用IP地址的P数据包一旦交给了数据链路层，就被封装成了MAC帧，MAC帧在传送时使用的源地址和目的地址都是硬件地址</p>
-<p>连接通信链路的设备在收到MAC帧之，根据MAC帧首部的硬件地址决定收下或者丢弃，只有在剥去MAC帧的首部和尾部后把MAC层的数据上交给网络层后，网络层才能在IP数据包中找到源IP地址和目的IP地址</p>
-<p>想象【协议栈】</p>
+<h4 id="IP地址与硬件地址"><a href="#IP地址与硬件地址" class="headerlink" title="IP地址与硬件地址"></a>IP地址与硬件地址</h4><p>物理地址是数据链路层与物理层使用的地址，IP地址是网络层和以上各层使用的地址。</p>
+<p>在发送数据时，数据从协议栈高层下到低层，然后才到通信链路上传输，使用IP地址的数据包一旦交给了数据链路层，就被封装成了MAC帧，MAC帧在传送时使用的源地址和目的地址都是硬件地址。</p>
+<p>连接通信链路的设备在收到MAC帧之后，根据MAC帧首部的硬件地址决定收下或者丢弃，只有在剥去MAC帧的首部和尾部后把MAC层的数据上交给网络层后，网络层才能在IP数据包中找到源IP地址和目的IP地址。</p>
 <p>因此连接到两个局域网的路由器也就有两个硬件地址</p>
-<h4 id="地址解析协议ARP"><a href="#地址解析协议ARP" class="headerlink" title="地址解析协议ARP"></a>地址解析协议ARP</h4><p>IP地址—–》物理地址</p>
-<p>每一台主机都设有一个<strong>ARP高速缓存</strong>，里面有本局域网的各追加和路由器的IP地址和物理地址的映射表。这个表动态更新</p>
-<p><strong>例1</strong>；<br>本局域网：主机A—-》主机B</p>
-<p>主机A首先在ARP告诉缓存中找有无主机B的IP地址，若有，则直接将其物理地址封装到MAC帧首部，若无，<strong>则运行本机ARP进程，在本局域网向广播发送一个ARP请求分组</strong></p>
-<p>在本局域网的所有主机运行的ARP进程都收到这个ARP请求，</p>
+<h3 id="地址解析协议ARP"><a href="#地址解析协议ARP" class="headerlink" title="地址解析协议ARP"></a>地址解析协议ARP</h3><p>IP地址—–&gt;物理地址</p>
+<p>每一台主机都设有一个<strong>ARP高速缓存</strong>，里面有本局域网的各主机和路由器的IP地址和物理地址的映射表。这个表动态更新。</p>
+<p><strong>例1</strong>；<br>本局域网：主机A—-&gt;主机B</p>
+<p>主机A首先在ARP高速缓存中找有无主机B的IP地址，若有，则直接将其物理地址封装到MAC帧首部，若无，<strong>则运行本机ARP进程，在本局域网向广播发送一个ARP请求分组</strong></p>
+<p>在本局域网的所有主机运行的ARP进程都会收到这个ARP请求，</p>
 <p>主机B的IP地址与ARP请求分组要查询的IP地址一致，就收下这个ARP请求分组，<strong>并向主机A发送响应分组</strong>，其余主机的IP地址和请求IP地址不对应，不予理睬。</p>
-<p>主机A收到ARP响应分组，将主机B的ip地址和物理地址写入ARP高速缓存</p>
+<p>主机A收到ARP响应分组，将主机B的ip地址和物理地址写入ARP高速缓存。</p>
 <p>*<em>注意：ARP是解决同一个局域网上的主机或路由器的IP地址和硬件地址的映射问题<br>*</em></p>
-<p><strong>1</strong>：</p>
-<p>本局域网：主机A—-》本局域网：主机B<br>主机A发送ARP请求分组，找到主机B的物理地址</p>
+<p><strong>1</strong></p>
+<p>本局域网：主机A—-&gt;本局域网：主机B<br>主机A发送ARP请求分组，找到主机B的物理地址。</p>
 <p><strong>2</strong></p>
-<p>本局域网：主机A—-》另一个局域网：主机B<br>主机A发送ARP请求分组，找到本局域网和其他局域网互连的路由器R1的物理地址，剩下的工作交给路由器R1，<br>(R1 做的事情就是 3 、4)</p>
+<p>本局域网：主机A—-&gt;另一个局域网：主机B<br>主机A发送ARP请求分组，找到本局域网和其他局域网互连的路由器R1的物理地址，剩下的工作交给路由器R1，<br>(R1 做的事情就是 3 、4)。</p>
 <p><strong>3</strong></p>
-<p>本局域网：路由器R1——》本局域网：主机B<br>路由器R1发送ARP请求分组，找到主机B的物理地址</p>
+<p>本局域网：路由器R1——&gt;本局域网：主机B<br>路由器R1发送ARP请求分组，找到主机B的物理地址。</p>
 <p><strong>4</strong></p>
-<p>本局域网：路由器R1—-》另一个局域网：主机B<br>路由器R1发送ARP请求分组，找到连接在另一个局域网上的路由器R2的物理地址，剩下的工作交给R2</p>
-<p><strong>ARP对保存在高速缓存中的每一个映射地址项目都设置生存时间，凡超过生存时间的项目就从高速缓存中删除</strong></p>
+<p>本局域网：路由器R1—-&gt;另一个局域网：主机B<br>路由器R1发送ARP请求分组，找到连接在另一个局域网上的路由器R2的物理地址，剩下的工作交给R2</p>
+<p><strong>ARP对保存在高速缓存中的每一个映射地址项都设置生存时间，凡超过生存时间的项就从高速缓存中删除</strong></p>
 <p>2019-10-25 16:28:31 星期五</p>
 
     </div>
@@ -357,7 +355,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#地址解析协议ARP"><span class="nav-number">1.</span> <span class="nav-text">地址解析协议ARP</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#IP地址与硬件地址"><span class="nav-number">1.</span> <span class="nav-text">IP地址与硬件地址</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#地址解析协议ARP"><span class="nav-number"></span> <span class="nav-text">地址解析协议ARP</span></a></div>
       </div>
       <!--/noindex-->
 
@@ -373,14 +371,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-count">162</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">

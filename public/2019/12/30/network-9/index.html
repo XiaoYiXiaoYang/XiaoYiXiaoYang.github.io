@@ -54,7 +54,7 @@
 <meta property="og:site_name" content="萧逸小杨的个人博客">
 <meta property="og:description" content="DNS是域名解析协议，应用层的协议，从域名解析出IP地址">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-07-18T08:17:51.415Z">
+<meta property="og:updated_time" content="2021-10-28T15:01:42.657Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/30/network-9/">
@@ -216,7 +216,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-18 16:17:51" itemprop="dateModified" datetime="2021-07-18T16:17:51+08:00">2021-07-18</time>
+                <time title="修改时间：2021-10-28 23:01:42" itemprop="dateModified" datetime="2021-10-28T23:01:42+08:00">2021-10-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -224,8 +224,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">学习笔记</span>
+                  <a href="/categories/Network/" itemprop="url" rel="index">
+                    <span itemprop="name">Network</span>
                   </a>
                 </span>
             </span>
@@ -261,12 +261,10 @@
 
 <a id="more"></a>
 
-<h3 id="域名系统DNS"><a href="#域名系统DNS" class="headerlink" title="域名系统DNS"></a>域名系统DNS</h3><p>完成域名到IP地址转换的程序叫域名服务器程序</p>
-<p>运行域名服务器程序的机器为域名服务器</p>
+<h3 id="域名系统DNS"><a href="#域名系统DNS" class="headerlink" title="域名系统DNS"></a>域名系统DNS</h3><p>完成域名到IP地址转换的程序叫域名服务器程序，运行域名服务器程序的机器为域名服务器</p>
 <p><strong>查询过程</strong></p>
-<p>当应用进程需要解析域名时候，就调用域名解析程序，并成为DNS的一个客户，<strong>把待解析的域名放在一个DNS请求报文中，以UDP用户数据报方式传输给本地域名服务器</strong></p>
-<p>本地域名服务器在查找域名后，把对应的IP地址放在回答报文传回</p>
-<p>如果本地域名服务器没找到，则本地域名服务器暂时称为DNS中的另一个客户，向其他域名服务器发出查询请求，直到找到为止</p>
+<p>当应用进程需要解析域名时候，就调用域名解析程序，并成为DNS的一个客户，<strong>把待解析的域名放在一个DNS请求报文中，以UDP用户数据报方式传输给本地域名服务器</strong>，本地域名服务器在查找域名后，把对应的IP地址放在回答报文传回。</p>
+<p>如果本地域名服务器没找到，则本地域名服务器暂时称为DNS中的另一个客户，向其他域名服务器发出查询请求，直到找到为止。</p>
 <h4 id="域名"><a href="#域名" class="headerlink" title="域名"></a>域名</h4><p><strong>域</strong>是名字空间中一个可被管理的划分</p>
 <h4 id="域名服务器"><a href="#域名服务器" class="headerlink" title="域名服务器"></a>域名服务器</h4><p>域名服务器以<strong>区</strong>划分</p>
 <p>区小于或等于域</p>
@@ -280,9 +278,7 @@
 <p>主机询问本地域名服务器，如果本地域名服务器不知道，则本地域名服务器成为一个客户，向其他根域名服务器发送查询请求</p>
 <p>2.<strong>本地域名服务器向其他根域名服务器一般是迭代查询</strong></p>
 <p>本地域名服务器询问根域名服务器，如果根域名服务器不知道，则继续让本地域名服务器询问更高级的域名服务器 (根域名服务器通常把自己知道的顶级域名服务器的IP地址告诉本地域名服务器，让本地域名服务器再向顶级域名服务器查询)</p>
-<p><strong>在域名服务器中使用高速缓存</strong></p>
-<p>缓存更新</p>
-<p>生存时间</p>
+<p><strong>在域名服务器中使用高速缓存</strong>有缓存更新和生存时间</p>
 <p>2019-11-03 20:58:19 星期日</p>
 
     </div>
@@ -372,14 +368,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">163</span>
+          <span class="site-state-item-count">162</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
