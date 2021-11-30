@@ -88,3 +88,13 @@ wsl --shutdown -n <自定义的系统名>
 # 当需要对Windows里面的文件进行写操作时，需要使用管理员权限运行WSL，并且使用chmod 777 {文件}修改文件的权限
 cd /mnt/{Windows盘符}
 ```
+
+
+
+**常见问题**
+
+1.wsl 启动时，报错“参考的对象类型不支持尝试的操作”
+
+解决办法: 管理员身份运行 `netsh winsock reset`
+
+参考：[wsl2安装kali 不成功 - Microsoft Community](https://answers.microsoft.com/zh-hans/insider/forum/all/wsl2安装kali/b6dd4c[wsl2安装kali 不成功 - Microsoft Community](https://answers.microsoft.com/zh-hans/insider/forum/all/wsl2安装kali/b6dd4c62-1130-4a7c-9462-1e9e5f38dab2?auth=1)62-1130-4a7c-9462-1e9e5f38dab2?auth=1)
