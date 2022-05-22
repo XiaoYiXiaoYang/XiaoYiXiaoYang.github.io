@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://yoursite.com/2020/01/14/hexo-new/</loc>
+    
+    <lastmod>2022-05-22T05:22:44.146Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/friends/index.html</loc>
+    
+    <lastmod>2022-05-22T04:49:41.789Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/about/index.html</loc>
+    
+    <lastmod>2022-05-22T04:36:01.945Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/404.html</loc>
+    
+    <lastmod>2022-05-22T03:25:52.101Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/categories/index.html</loc>
+    
+    <lastmod>2022-05-22T02:13:17.374Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/tags/index.html</loc>
+    
+    <lastmod>2022-05-22T02:13:17.374Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/archives/index.html</loc>
+    
+    <lastmod>2022-05-22T02:13:17.363Z</lastmod>
+    
+  </url>
+  
+</urlset>
