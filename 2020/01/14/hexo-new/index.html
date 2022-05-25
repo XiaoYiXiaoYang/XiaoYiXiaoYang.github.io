@@ -299,7 +299,7 @@ Hexo是本次新挖掘出来的搭建网站的快速工具，容易上手，且�
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/files/hexo.png')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -454,14 +454,14 @@ Hexo是本次新挖掘出来的搭建网站的快速工具，容易上手，且�
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    665
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    4 分
                 </div>
                 
                 
@@ -497,8 +497,86 @@ Hexo是本次新挖掘出来的搭建网站的快速工具，容易上手，且�
 <p><code>&lt;center&gt;&lt;center/&gt;</code> 该标签可以把摘要居中</p>
 <p><code>&lt;br/&gt;</code>该标签可以插入一个换行</p>
 <p>可以不用<code>![]</code>来插入图片，可以使用<code>&lt;img src=&#39;&#39; width=&#39;20&#39; height=&#39;20&gt;</code>来插入图片</p>
-<h2 id="2022-05-22"><a href="#2022-05-22" class="headerlink" title="2022.05.22"></a>2022.05.22</h2><p>参考别人的主题进行了一次改版，参考网站：<code>https://godweiyang.com/</code></p>
-<p>为什么要改版？<br>因为之前的风格看的有些厌倦，不能让我很好的坚持写博客，不如换一个风格。</p>
+<h2 id="2022-05-22"><a href="#2022-05-22" class="headerlink" title="2022.05.22"></a>2022.05.22</h2><p>参考别人的主题进行了一次改版，参考网站：<code>https://godweiyang.com/</code><br>Matery主题美化参考：<code>https://blog.csdn.net/kuashijidexibao/article/details/112971657</code><br>为什么要改版？<br>因为之前的风格看的有些厌倦，不能让我很好的坚持写博客，不如换一个风格。</p>
+<table>
+<thead>
+<tr>
+<th>配置选项</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>title</td>
+<td>markdown文件标题</td>
+<td>文章标题，强烈建议填写此选项</td>
+</tr>
+<tr>
+<td>date</td>
+<td>文件创建时的日期时间</td>
+<td></td>
+</tr>
+<tr>
+<td>author</td>
+<td>根 _config.yml 中的 author</td>
+<td></td>
+</tr>
+<tr>
+<td>img</td>
+<td>featureImages 中的某个值</td>
+<td>文章特征图，推荐使用图床</td>
+</tr>
+<tr>
+<td>top</td>
+<td>true</td>
+<td>推荐文章(文章是否置顶)，如果top为true，则会作为首页推荐文章</td>
+</tr>
+<tr>
+<td>cover</td>
+<td>false</td>
+<td>表示该文章是否需要加入到首页轮播封面</td>
+</tr>
+<tr>
+<td>coverImg</td>
+<td>无</td>
+<td>表示该文章在首页轮播封面需要显示的图片路径，如果没有，则默认使用文章的特色图片</td>
+</tr>
+<tr>
+<td>password</td>
+<td>无</td>
+<td>文章阅读密码，如果要对文章设置阅读验证密码的话，就可以设置</td>
+</tr>
+<tr>
+<td>toc</td>
+<td>true</td>
+<td>是否开启 TOC，可以针对某篇文章单独关闭 TOC 的功能。前提是在主题的 config.yml 中激活了 toc 选项</td>
+</tr>
+<tr>
+<td>mathjax</td>
+<td>false</td>
+<td>是否开启数学公式支持 ，本文章是否开启 mathjax，且需要在主题的 _config.yml 文件中也需要开启才行</td>
+</tr>
+<tr>
+<td>summary</td>
+<td>无</td>
+<td>文章摘要，自定义的文章摘要内容，如果这个属性有值，文章卡片摘要就显示这段文字，否则程序会自动截取文章的部分内容作为摘要</td>
+</tr>
+<tr>
+<td>categories</td>
+<td>无</td>
+<td>文章分类，本主题的分类表示宏观上大的分类，只建议一篇文章一个分类</td>
+</tr>
+<tr>
+<td>tags</td>
+<td>无</td>
+<td>文章标签，一篇文章可以多个标签</td>
+</tr>
+<tr>
+<td>reprintPolicy</td>
+<td>cc_by</td>
+<td>文章转载规则， 可以是 cc_by, cc_by_nd, cc_by_sa, cc_by_nc, cc_by_nc_nd, cc_by_nc_sa, cc0, noreprint 或 pay 中的一个</td>
+</tr>
+</tbody></table>
 
             </div>
             <hr />
@@ -867,8 +945,7 @@ Hexo是本次新挖掘出来的搭建网站的快速工具，容易上手，且�
                 <a href="/2020/01/14/hexo-new/">
                     <div class="card-image">
                         
-                        
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Hello, Hexo">
+                        <img src="/medias/files/hexo.png" class="responsive-img" alt="Hello, Hexo">
                         
                         <span class="card-title">Hello, Hexo</span>
                     </div>
@@ -917,8 +994,7 @@ Hexo是本次新挖掘出来的搭建网站的快速工具，容易上手，且�
                 <a href="/2020/01/14/hexo-new/">
                     <div class="card-image">
                         
-                        
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Hello, Hexo">
+                        <img src="/medias/files/hexo.png" class="responsive-img" alt="Hello, Hexo">
                         
                         <span class="card-title">Hello, Hexo</span>
                     </div>
@@ -1124,7 +1200,7 @@ Hexo是本次新挖掘出来的搭建网站的快速工具，容易上手，且�
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">665</span>
+            <span class="white-color">1.1k</span>
             
 
             <br>
