@@ -1,12 +1,15 @@
 ---
 title: {{ title }}
 date: {{ date }}
+img: 
+summary: 
+tags:
+- 博客
+categories:
+- 随笔
 top: false
 cover: false
-password:
 toc: true
 mathjax: true
-summary:
-tags:
-categories:
+password: 
 ---
