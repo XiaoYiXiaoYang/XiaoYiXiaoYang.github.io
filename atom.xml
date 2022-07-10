@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2022-06-25T14:26:40.996Z</updated>
+  <updated>2022-07-10T15:19:00.488Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,11 +17,43 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>ovs port vlan属性设置</title>
+    <link href="http://yoursite.com/2022/07/05/ovs-port-vlan/"/>
+    <id>http://yoursite.com/2022/07/05/ovs-port-vlan/</id>
+    <published>2022-07-05T14:39:49.000Z</published>
+    <updated>2022-07-10T15:19:00.488Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;vlan-模式&quot;&gt;&lt;a href=&quot;#vlan-模式&quot; class=&quot;headerlink&quot; title=&quot;vlan 模式&quot;&gt;&lt;/a&gt;vlan
+        
+      
+    
+    </summary>
+    
+      <category term="NetWork" scheme="http://yoursite.com/categories/NetWork/"/>
+    
+    
+      <category term="OVS" scheme="http://yoursite.com/tags/OVS/"/>
+    
+      <category term="VLAN" scheme="http://yoursite.com/tags/VLAN/"/>
+    
+      <category term="ACCESS" scheme="http://yoursite.com/tags/ACCESS/"/>
+    
+      <category term="TRUNK" scheme="http://yoursite.com/tags/TRUNK/"/>
+    
+  </entry>
+  
+  <entry>
     <title>win-11 安装linux子系统并使用</title>
     <link href="http://yoursite.com/2022/06/25/win11-wsl/"/>
     <id>http://yoursite.com/2022/06/25/win11-wsl/</id>
     <published>2022-06-25T13:09:00.000Z</published>
-    <updated>2022-06-25T14:26:40.996Z</updated>
+    <updated>2022-07-04T14:25:05.788Z</updated>
     
     <summary type="html">
     
@@ -35,10 +67,10 @@
     
     </summary>
     
-      <category term="随笔" scheme="http://yoursite.com/categories/%E9%9A%8F%E7%AC%94/"/>
+      <category term="工具" scheme="http://yoursite.com/categories/%E5%B7%A5%E5%85%B7/"/>
     
     
-      <category term="博客" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2/"/>
+      <category term="WSL" scheme="http://yoursite.com/tags/WSL/"/>
     
   </entry>
   
@@ -47,7 +79,7 @@
     <link href="http://yoursite.com/2022/06/05/hello-go/"/>
     <id>http://yoursite.com/2022/06/05/hello-go/</id>
     <published>2022-06-05T10:22:24.000Z</published>
-    <updated>2022-06-19T13:23:17.317Z</updated>
+    <updated>2022-07-05T14:23:09.893Z</updated>
     
     <summary type="html">
     
@@ -61,10 +93,10 @@
     
     </summary>
     
-      <category term="随笔" scheme="http://yoursite.com/categories/%E9%9A%8F%E7%AC%94/"/>
+      <category term="学习笔记" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
-      <category term="博客" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2/"/>
+      <category term="Go" scheme="http://yoursite.com/tags/Go/"/>
     
   </entry>
   
@@ -73,7 +105,7 @@
     <link href="http://yoursite.com/2020/01/14/hexo-new/"/>
     <id>http://yoursite.com/2020/01/14/hexo-new/</id>
     <published>2020-01-14T07:27:31.000Z</published>
-    <updated>2022-05-25T14:23:42.748Z</updated>
+    <updated>2022-07-04T14:25:15.525Z</updated>
     
     <summary type="html">
     
@@ -93,7 +125,7 @@
       <category term="随笔" scheme="http://yoursite.com/categories/%E9%9A%8F%E7%AC%94/"/>
     
     
-      <category term="博客" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2/"/>
+      <category term="Hexo" scheme="http://yoursite.com/tags/Hexo/"/>
     
   </entry>
   

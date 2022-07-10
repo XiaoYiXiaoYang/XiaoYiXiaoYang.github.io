@@ -4,6 +4,37 @@
   
     
     <entry>
+      <title>ovs port vlan属性设置</title>
+      <link href="/2022/07/05/ovs-port-vlan/"/>
+      <url>/2022/07/05/ovs-port-vlan/</url>
+      
+        <content type="html"><![CDATA[<h2 id="vlan-模式"><a href="#vlan-模式" class="headerlink" title="vlan 模式"></a>vlan 模式</h2><p>access、trunk、native-tagged、native-untagged</p><h3 id="收发包行为"><a href="#收发包行为" class="headerlink" title="收发包行为"></a>收发包行为</h3><p>vlanid为0和没有vlan tag一样的处理。<br>native-tagged端口和native-untagged端口的native vlan即为port的tag值</p>  <blockquote class="pullquote mindmap mindmap-md"><ul><li>OVS vlan属性收发包<ul><li>access<ul><li>收<ul><li>没有vlan tag，接收，并打上端口vlan(tag=0不生效)</li><li>有vlan tag且vlanid非0，丢弃</li></ul></li><li>发<ul><li>发出去的报文不带vlan</li></ul></li></ul></li><li>trunk<ul><li>收<ul><li>trunk为空收：<ul><li>报文带vlan，允许进入</li><li>报文不带vlan，允许进入</li></ul></li><li>trunk不为空收<ul><li>报文带vlan tag，vlan id是否在允许之列，收</li><li>报文不带vlan tag，丢弃</li></ul></li></ul></li><li>发<ul><li>带着原始vlan发出</li></ul></li></ul></li><li>native-tagged<ul><li>收<ul><li>报文带vlan tag，vlan id是否在允许之列，收</li><li>报文不带vlan tag，接收，并打上端口的native vlan</li></ul></li><li>发<ul><li>带着原始vlan发出</li></ul></li></ul></li><li>native-untagged<ul><li>收<ul><li>报文带vlan tag，vlan id是否在允许之列，收</li><li>报文不带vlan tag，接收，并打上端口的native vlan</li></ul></li><li>发<ul><li>vid == native vlan，不带vlan，发出</li><li>vid != native vlan，带原始vlan发出</li></ul></li></ul></li></ul></li></ul></blockquote><h2 id="实验过程"><a href="#实验过程" class="headerlink" title="实验过程"></a>实验过程</h2><h3 id="创建两个vm"><a href="#创建两个vm" class="headerlink" title="创建两个vm"></a>创建两个vm</h3><pre><code>ip netns add vm1ip link add vm1-vif type veth peer name vm1ip link set vm1 netns vm1ip netns exec vm1 ip link set vm1 address 00:00:00:00:00:03ip netns exec vm1 ip addr add 10.10.10.2/24 dev vm1ip netns exec vm1 ip link set vm1 upip link set vm1-vif upip netns add vm2ip link add vm2-vif type veth peer name vm2ip link set vm2 netns vm2ip netns exec vm2 ip link set vm2 address 00:00:00:00:00:04ip netns exec vm2 ip addr add 10.10.10.3/24 dev vm2ip netns exec vm2 ip link set vm2 upip link set vm2-vif up</code></pre><h3 id="连接vm网卡和网桥"><a href="#连接vm网卡和网桥" class="headerlink" title="连接vm网卡和网桥"></a>连接vm网卡和网桥</h3><pre><code>ovs-vsctl add-br -br-intovs-vsctl add-port br-int vm1-vifovs-vsctl add-port br-int vm2-vif</code></pre><p>效果如图<br><img src="/2022/07/05/ovs-port-vlan/img-20220705225523.png" alt></p><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><h4 id="抓包工具"><a href="#抓包工具" class="headerlink" title="抓包工具"></a>抓包工具</h4><p>tcpdump和ovs-tcpdump工具可以抓到一路上OVS对vlan的处理。</p><p>如果使用ovs-tcpdump，ovs-tcpdump在守护程序中创建交换机镜像端口，并执行以侦听这些端口。当实例退出时，它会清理它创建的镜像端口。</p><p>如果用系统tcpdump抓包，抓的是经过vm网卡veth pair的流量。</p><p>抓包点如下</p><pre><code>vm1-eth0-(tcpdump)vm1-vif(ovs-tcpdump)-OVS Bridge-vm2-vif-vm2-eth0</code></pre><h3 id="access模式"><a href="#access模式" class="headerlink" title="access模式"></a>access模式</h3><h4 id="tag-0"><a href="#tag-0" class="headerlink" title="tag=0"></a>tag=0</h4><p>tag=0时不生效，抓到的包并没有打上vlanid为0的tag(处理收包时也类似，vlan_id为0则表示当作没有vlan处理)</p><pre><code>ovs-vsctl set Port vm1-vif tag=0ovs-vsctl set Port vm2-vif tag=0</code></pre><ul><li><p>vm1 ping vm2可以通<br><img src="/2022/07/05/ovs-port-vlan/img-20220707221449.png" alt><br><img src="/2022/07/05/ovs-port-vlan/img-20220707221512.png" alt></p></li><li><p>vm发出不带vlan的包<br><img src="/2022/07/05/ovs-port-vlan/img-20220707222722.png" alt></p></li><li><p>vm1-vif port access tag=0处理后还是不带vlan<br><img src="/2022/07/05/ovs-port-vlan/img-20220707222806.png" alt></p></li></ul><h4 id="tag-0-1"><a href="#tag-0-1" class="headerlink" title="tag!=0"></a>tag!=0</h4><pre><code>ovs-vsctl set Port vm1-vif tag=10ovs-vsctl set Port vm2-vif tag=10</code></pre><ul><li><p>vm1 ping vm2可以通<br><img src="/2022/07/05/ovs-port-vlan/img-20220707222905.png" alt><br><img src="/2022/07/05/ovs-port-vlan/img-20220707222915.png" alt></p></li><li><p>vm1发出不带vlan的包</p></li><li><p>vm1-vif port access tag=10处理后，带上vlan 10<br><img src="/2022/07/05/ovs-port-vlan/img-20220707223104.png" alt></p></li><li><p>OVS转到vm2-vif port<br><img src="/2022/07/05/ovs-port-vlan/img-20220707223345.png" alt></p></li><li><p>vm2-vif 去掉vlan后转发到vm2<br><img src="/2022/07/05/ovs-port-vlan/img-20220707223428.png" alt></p></li></ul><p><strong>对带vlan的收包测试</strong></p><ul><li><p><strong>vm1带vlan 0</strong><br>设置linux 子接口</p><pre><code>ip netns exec vm1 vconfig add vm1 0ip netns exec vm1 ifconfig vm1 0.0.0.0ip netns exec vm1 ifconfig vm1.0 10.10.10.2</code></pre></li><li><p>vm1 ping vm2 未ping通<br><img src="/2022/07/05/ovs-port-vlan/img-20220710224137.png" alt></p></li><li><p>vm1 发出vlan 0的数据包<br><img src="/2022/07/05/ovs-port-vlan/img-20220710224012.png" alt></p></li><li><p>vm1-vif port access 处理后，带上vlan10<br><img src="/2022/07/05/ovs-port-vlan/img-20220710224207.png" alt></p></li><li><p>OVS转到vm2-vif,vm2-vif去掉vlan转到vm2，vm2进行回包，经过vm2-vif打上vlan10，经过vm1-vif去掉vlan。linux子接口在收到不是vlan0的包进行了丢弃。</p></li><li><p><strong>vm1带vlan 10</strong></p></li></ul><p>设置linux 子接口</p><pre><code>ip netns exec vm1 vconfig add vm1 10ip netns exec vm1 ifconfig vm1 0.0.0.0ip netns exec vm1 ifconfig vm1.10 10.10.10.2</code></pre><ul><li><p>vm1 ping vm2 未ping通<br><img src="/2022/07/05/ovs-port-vlan/img-20220710223350.png" alt></p></li><li><p>vm1发出带vlan 10的包<br><img src="/2022/07/05/ovs-port-vlan/img-20220710223431.png" alt></p></li><li><p>vm1-vif port access 处理后，丢弃<br><img src="/2022/07/05/ovs-port-vlan/img-20220710223519.png" alt></p></li></ul><h4 id="trunk模式"><a href="#trunk模式" class="headerlink" title="trunk模式"></a>trunk模式</h4><h5 id="trunks为空"><a href="#trunks为空" class="headerlink" title="trunks为空"></a>trunks为空</h5><p>在不配置vlan时，ovs port默认是trunk all的，可以抓包看到对应的数据包没有带vlan，也都被允许通过了。</p><p><strong>收到不带vlan的包</strong></p><ul><li><p>vm1 ping vm2可以通<br><img src="/2022/07/05/ovs-port-vlan/img-20220705230205.png" alt></p></li><li><p>vm1-vif处理后继续不带vlan<br><img src="/2022/07/05/ovs-port-vlan/img-20220710225446.png" alt></p></li><li><p>转发vm2-vif处理后以不带vlan转发vm2<br><img src="/2022/07/05/ovs-port-vlan/img-20220710225459.png" alt></p></li></ul><p><strong>vm1带vlan 0的包</strong></p><ul><li><p>vm1 ping vm2 不通<br><img src="/2022/07/05/ovs-port-vlan/img-20220710225639.png" alt></p></li><li><p>vm1 发出带vlan 0的包<br><img src="/2022/07/05/ovs-port-vlan/img-20220710225805.png" alt></p></li><li><p>vm1-vif处理后不带vlan，且允许通过。最终正常到达vm2，vm2的回复包也正常到达vm1，vm1的子接口未能正确收包<br><img src="/2022/07/05/ovs-port-vlan/img-20220710225731.png" alt></p></li></ul><p><strong>vm1带vlan 10的包</strong></p><ul><li><p>vm1 ping vm2 不通<br><img src="/2022/07/05/ovs-port-vlan/img-20220710230312.png" alt></p></li><li><p>vm1发出带vlan 10的包<br><img src="/2022/07/05/ovs-port-vlan/img-20220710230349.png" alt></p></li><li><p>vm1-vif 处理后带着原vlan转发，vm2-vif处理后带着原始vlan转发，vm2收到后丢弃<br><img src="/2022/07/05/ovs-port-vlan/img-20220710230615.png" alt></p></li></ul><h5 id="trunks不为空"><a href="#trunks不为空" class="headerlink" title="trunks不为空"></a>trunks不为空</h5><p>在配置vlan后，ovs port只能收在trunk范围的包</p><pre><code>ovs-vsctl set Port vm1-vif trunks=[10]ovs-vsctl set Port vm2-vif trunks=[10]</code></pre><p><strong>收到不带vlan的包</strong></p><ul><li>vm1 ping vm2 不通</li><li>vm1 发出不带vlan的包，vm1-vif处理后不在允许范围内，丢弃<br><img src="/2022/07/05/ovs-port-vlan/img-20220710231215.png" alt></li></ul><p><strong>vm1带vlan 0的包</strong></p><ul><li>vm1 ping vm2 不通</li><li>vm1 发出带vlan 0的包，vm1-vif处理后不在允许范围内丢弃<br><img src="/2022/07/05/ovs-port-vlan/img-20220710231542.png" alt></li></ul><p><strong>vm1带vlan 10的包</strong></p><ul><li>vm1 ping vm2 不通</li><li>vm1 发出带vlan10的包，vm1-vif处理后允许通过，vm2-vif允许通过，vm2收到带vlan10的包后丢弃<br><img src="/2022/07/05/ovs-port-vlan/img-20220710231015.png" alt></li></ul><p>如果带vlan 11，不在trunk范围内也会被丢弃<br><img src="/2022/07/05/ovs-port-vlan/img-20220710231738.png" alt></p><p>参考：</p><p>思维导插件<code>npm install hexo-simple-mindmap</code><br>ovs-tcpdump <code>https://docs.openvswitch.org/en/latest/ref/ovs-tcpdump.8/</code></p><script type="text&#x2F;javascript" src="https://unpkg.com/kity@2.0.4/dist/kity.min.js"></script><script type="text&#x2F;javascript" src="https://unpkg.com/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text&#x2F;javascript" src="https://unpkg.com/hexo-simple-mindmap@0.8.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text&#x2F;css" href="https://unpkg.com/hexo-simple-mindmap@0.8.0/dist/mindmap.min.css">]]></content>
+      
+      
+      <categories>
+          
+          <category> NetWork </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> OVS </tag>
+            
+            <tag> VLAN </tag>
+            
+            <tag> ACCESS </tag>
+            
+            <tag> TRUNK </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>win-11 安装linux子系统并使用</title>
       <link href="/2022/06/25/win11-wsl/"/>
       <url>/2022/06/25/win11-wsl/</url>
@@ -13,14 +44,14 @@
       
       <categories>
           
-          <category> 随笔 </category>
+          <category> 工具 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 博客 </tag>
+            <tag> WSL </tag>
             
         </tags>
       
@@ -38,14 +69,14 @@
       
       <categories>
           
-          <category> 随笔 </category>
+          <category> 学习笔记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 博客 </tag>
+            <tag> Go </tag>
             
         </tags>
       
@@ -70,7 +101,7 @@
       
         <tags>
             
-            <tag> 博客 </tag>
+            <tag> Hexo </tag>
             
         </tags>
       

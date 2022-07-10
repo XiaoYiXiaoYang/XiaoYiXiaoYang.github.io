@@ -2,23 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/2022/06/25/win11-wsl/</loc>
+    <loc>http://yoursite.com/2022/07/05/ovs-port-vlan/</loc>
     
-    <lastmod>2022-06-25T14:26:40.996Z</lastmod>
+    <lastmod>2022-07-10T15:19:00.488Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2022/06/05/hello-go/</loc>
     
-    <lastmod>2022-06-19T13:23:17.317Z</lastmod>
+    <lastmod>2022-07-05T14:23:09.893Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2020/01/14/hexo-new/</loc>
     
-    <lastmod>2022-05-25T14:23:42.748Z</lastmod>
+    <lastmod>2022-07-04T14:25:15.525Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2022/06/25/win11-wsl/</loc>
+    
+    <lastmod>2022-07-04T14:25:05.788Z</lastmod>
     
   </url>
   
