@@ -8,6 +8,7 @@
   "dependencies": {
     "eslint": "^6.0.1",
     "hexo": "^3.9.0",
+    "hexo-asset-image": "git+https://github.com/CodeFalling/hexo-asset-image.git",
     "hexo-baidu-url-submit": "0.0.6",
     "hexo-deployer-git": "^1.0.0",
     "hexo-generator-archive": "^0.1.5",
@@ -25,6 +26,7 @@
     "hexo-renderer-marked": "^1.0.1",
     "hexo-renderer-stylus": "^0.3.3",
     "hexo-server": "^0.3.3",
+    "hexo-simple-mindmap": "^0.8.0",
     "hexo-wordcount": "^6.0.1",
     "live2d-widget-model-shizuku": "^1.0.5"
   }

@@ -1,9 +1,9 @@
 ---
 title: go语言基础
 tags:
-  - 博客
+  - Go
 categories:
-  - 随笔
+  - 学习笔记
 top: false
 cover: false
 toc: true

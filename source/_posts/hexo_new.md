@@ -9,7 +9,7 @@ date: 2020-01-14 15:27:31
 password:
 summary: Hexo是一个快速, 简洁且高效的博客框架. 让上百个页面在几秒内瞬间完成渲染. Hexo支持Github Flavored Markdown的所有功能, 甚至可以整合Octopress的大多数插件. 并自己也拥有强大的插件系统.
 tags:
-- 博客
+- Hexo
 categories:
 - 随笔
 ---
