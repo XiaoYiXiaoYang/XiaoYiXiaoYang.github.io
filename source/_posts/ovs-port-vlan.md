@@ -1,5 +1,5 @@
 ---
-title: ovs port vlan属性设置
+title: ovs port vlan处理研究
 tags:
   - OVS
   - VLAN
@@ -570,6 +570,6 @@ ovs-vsctl set Port vm2-vif tag=11
 
 
 
-参考：
+**参考：**
 思维导插件`npm install hexo-simple-mindmap`
 ovs-tcpdump `https://docs.openvswitch.org/en/latest/ref/ovs-tcpdump.8/`

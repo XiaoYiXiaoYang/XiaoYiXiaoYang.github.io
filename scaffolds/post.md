@@ -1,8 +1,8 @@
 ---
 title: {{ title }}
 date: {{ date }}
-img: 
-summary: 
+img: 自己填
+summary: 自己填
 tags:
 - 博客
 categories:
