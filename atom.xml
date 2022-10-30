@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2022-07-13T14:51:54.722Z</updated>
+  <updated>2022-10-30T12:35:45.414Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,11 +17,68 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>ovs port vlan属性设置</title>
+    <title>kafka生产者消费者</title>
+    <link href="http://yoursite.com/2022/10/16/kafka-producer-consumer/"/>
+    <id>http://yoursite.com/2022/10/16/kafka-producer-consumer/</id>
+    <published>2022-10-16T06:08:24.000Z</published>
+    <updated>2022-10-30T12:35:45.414Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;kafka角色：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;消息系统：Kafka和传统的消息系统都具备系统解耦性、冗余存储、流量削峰、缓冲、异步通信、扩展性、可恢复性等功能。Kafka还提供大多数消息系统难以实现的消息顺序性保障和回溯消费功能&lt;/li&gt;
+&lt;li&gt;存储系统：Kafka把消息持
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="http://yoursite.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="博客" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>浅析ovn LS流表设计</title>
+    <link href="http://yoursite.com/2022/09/27/ovn-ls-pipeline/"/>
+    <id>http://yoursite.com/2022/09/27/ovn-ls-pipeline/</id>
+    <published>2022-09-27T14:41:49.000Z</published>
+    <updated>2022-10-16T05:11:08.141Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;OVN通过引入逻辑交换机(Logical Switch)、逻辑交换机端口(Logical Switch
+        
+      
+    
+    </summary>
+    
+      <category term="Network" scheme="http://yoursite.com/categories/Network/"/>
+    
+    
+      <category term="OVN" scheme="http://yoursite.com/tags/OVN/"/>
+    
+      <category term="LS" scheme="http://yoursite.com/tags/LS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ovs port vlan处理研究</title>
     <link href="http://yoursite.com/2022/07/05/ovs-port-vlan/"/>
     <id>http://yoursite.com/2022/07/05/ovs-port-vlan/</id>
     <published>2022-07-05T14:39:49.000Z</published>
-    <updated>2022-07-13T14:51:54.722Z</updated>
+    <updated>2022-09-27T14:34:06.756Z</updated>
     
     <summary type="html">
     

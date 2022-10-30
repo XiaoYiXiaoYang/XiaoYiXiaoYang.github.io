@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2022/10/16/kafka-producer-consumer/</loc>
+    
+    <lastmod>2022-10-30T12:35:45.414Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2022/09/27/ovn-ls-pipeline/</loc>
+    
+    <lastmod>2022-10-16T05:11:08.141Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2022/07/05/ovs-port-vlan/</loc>
     
-    <lastmod>2022-07-13T14:51:54.722Z</lastmod>
+    <lastmod>2022-09-27T14:34:06.756Z</lastmod>
     
   </url>
   
