@@ -1,9 +1,10 @@
 ---
-title: kafka生产者消费者
+title: kafka - 生产者消费者
 img: /medias/files/kafka.png
 summary: 一个有名的多分区多副本且基于ZooKeeper协调的分布式消息系统，高吞吐、可持久化、可水平扩展、支持流数据处理等多种特性被使用。
 tags:
   - 博客
+  - Kafka
 categories:
   - 随笔
 top: false
@@ -480,7 +481,7 @@ public void close()
 
 消费模式：推模式和拉模式
 推模式：服务端主动将消息推送给消费者
-拉模式：消费者主动向服务端发起请求来拉去消息
+拉模式：消费者主动向服务端发起请求来拉取消息
 
 poll方法定义:
 
@@ -488,7 +489,7 @@ poll方法定义:
 public ConsumerRecords<K, V> poll(final Duration timeout) 
 ```
 
-timeout参数用来控制poll方法的阻塞时间，再消费者的缓冲区里没有可用数据时会发生阻塞。
+timeout参数用来控制poll方法的阻塞时间，在消费者的缓冲区里没有可用数据时会发生阻塞。
 
 ConsumerRecord定义
 
@@ -522,12 +523,12 @@ public class ConsumerRecord<K, V> {
 
 ### 位移提交
 
-对于kafka中的分区而言，它的每条消息都有唯一的offset，用来表示消息再分区中对应的位置。
+对于kafka中的分区而言，它的每条消息都有唯一的offset，用来表示消息在分区中对应的位置。
 笔者对于消息在分区中的位置，这个offset称为‘偏移量’
 对于消费者消费到的位移，这个offset称为‘消费位移’
 
 
-在每次调用poll方法时，它返回的是还没有被消费国的消息集，要做到这一点就要记录上一次消费时的消费位移。
+在每次调用poll方法时，它返回的是还没有被消费过的消息集，要做到这一点就要记录上一次消费时的消费位移。
 消费位移要持久化保存，这个消费位移存储在kafka内部主题 `_consumer_offsets`中。消费者在消费完消息后需要执行消费位移的提交。
 
 当前消费到的位移x，即lastConsumedOffset；已经提交过的消费位移，即commited offset
