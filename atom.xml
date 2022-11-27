@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2022-10-30T12:35:45.414Z</updated>
+  <updated>2022-11-27T14:10:16.093Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,11 +17,73 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>kafka生产者消费者</title>
+    <title>动态规划算法详解</title>
+    <link href="http://yoursite.com/2022/11/27/algorithm-dp/"/>
+    <id>http://yoursite.com/2022/11/27/algorithm-dp/</id>
+    <published>2022-11-27T07:32:05.000Z</published>
+    <updated>2022-11-27T14:10:16.093Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;动态规划的核心问题是穷举，因为要求最值，肯定要把所有可行的答案都穷举出来，然后再其中找最值。&lt;/p&gt;
+&lt;p&gt;首先，动态规划的问题存在&lt;strong&gt;重叠子问题&lt;/strong&gt;，如果暴力穷举，效率会极其低下，所以需要“备忘录”或“DP
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="http://yoursite.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+      <category term="算法" scheme="http://yoursite.com/categories/%E9%9A%8F%E7%AC%94/%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="博客" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2/"/>
+    
+      <category term="算法" scheme="http://yoursite.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="动态规划" scheme="http://yoursite.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>kafka - 主题与分区</title>
+    <link href="http://yoursite.com/2022/10/30/kafka-topic-and-partition/"/>
+    <id>http://yoursite.com/2022/10/30/kafka-topic-and-partition/</id>
+    <published>2022-10-30T13:00:34.000Z</published>
+    <updated>2022-11-27T07:25:03.759Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;分区的划分不仅为 Kafka 提供了可伸缩性、水平扩展的功能，还通过多副本机制来为 Kafka 提供数据冗余以提高数据可靠性。&lt;/p&gt;
+&lt;h1 id=&quot;主题的管理&quot;&gt;&lt;a href=&quot;#主题的管理&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="http://yoursite.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="博客" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2/"/>
+    
+      <category term="Kafka" scheme="http://yoursite.com/tags/Kafka/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>kafka - 生产者消费者</title>
     <link href="http://yoursite.com/2022/10/16/kafka-producer-consumer/"/>
     <id>http://yoursite.com/2022/10/16/kafka-producer-consumer/</id>
     <published>2022-10-16T06:08:24.000Z</published>
-    <updated>2022-10-30T12:35:45.414Z</updated>
+    <updated>2022-10-30T13:03:18.388Z</updated>
     
     <summary type="html">
     
@@ -42,6 +104,8 @@
     
     
       <category term="博客" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2/"/>
+    
+      <category term="Kafka" scheme="http://yoursite.com/tags/Kafka/"/>
     
   </entry>
   
