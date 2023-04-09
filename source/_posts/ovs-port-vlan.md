@@ -93,7 +93,7 @@ ovs-vsctl add-port br-int vm2-vif
 ```
 
 效果如图
-![](ovs-port-vlan/img-20220705225523.png)
+![](../images/ovs-port-vlan/img-20220705225523.png)
 
 ### 测试
 
@@ -125,28 +125,28 @@ ovs-vsctl set Port vm2-vif vlan_mode=access
 ovs-vsctl set Port vm1-vif tag=0
 ovs-vsctl set Port vm2-vif tag=0
 ```
-![](ovs-port-vlan/img-20220707221449.png)
+![](../images/ovs-port-vlan/img-20220707221449.png)
 
 **收包 不带vlan**
 - vm1发出不带vlan的包，vm1-vif port access tag=0处理后还是不带vlan
-![](ovs-port-vlan/img-20220707222722.png)
-![](ovs-port-vlan/img-20220707222806.png)
+![](../images/ovs-port-vlan/img-20220707222722.png)
+![](../images/ovs-port-vlan/img-20220707222806.png)
 
 
 **收包 带vlan 0**
 - vm1发出带vlan0的包, vm1-vif处理后不带vlan
-![](ovs-port-vlan/img-20220711222809.png)
+![](../images/ovs-port-vlan/img-20220711222809.png)
 
 
 **收包 带vlan 11**
 - vm1 发出带vlan 11的包，vm1-vif port access tag=0处理后丢弃
-![](ovs-port-vlan/img-20220711222511.png)
-![](ovs-port-vlan/img-20220711222607.png)
+![](../images/ovs-port-vlan/img-20220711222511.png)
+![](../images/ovs-port-vlan/img-20220711222607.png)
 
 
 **发包 不带vlan**
 - vm2-vif通过不带vlan的包，以不带vlan转发
-![](ovs-port-vlan/img-20220711223215.png)
+![](../images/ovs-port-vlan/img-20220711223215.png)
 
 **发包 带vlan 0**
 带vlan 0的数据包无法进入
@@ -155,7 +155,7 @@ ovs-vsctl set Port vm2-vif tag=0
 **发包 带vlan 11**
 - 设置vm1-vif access模式tag为11，，vm2-vif access模式保持tag=0
 - 带vlan 11的数据包不会被转发到vm2-vif口
-![](ovs-port-vlan/img-20220713200925.png)
+![](../images/ovs-port-vlan/img-20220713200925.png)
 
 
 #### tag!=0
@@ -166,11 +166,11 @@ ovs-vsctl set Port vm2-vif vlan_mode=access
 ovs-vsctl set Port vm1-vif tag=10
 ovs-vsctl set Port vm2-vif tag=10
 ```
-![](ovs-port-vlan/img-20220707222905.png)
+![](../images/ovs-port-vlan/img-20220707222905.png)
 
 **收包 不带vlan**
 - vm1发出不带vlan的包，vm1-vif port access tag=10处理后，带上vlan 10
-![](ovs-port-vlan/img-20220707223104.png)
+![](../images/ovs-port-vlan/img-20220707223104.png)
 
 
 **收包 带vlan 0**
@@ -181,8 +181,8 @@ ip netns exec vm1 ifconfig vm1 0.0.0.0
 ip netns exec vm1 ifconfig vm1.0 10.10.10.2
 ```
 - vm1 发出vlan 0的数据包，vm1-vif port access 处理后，带上vlan 10
-![](ovs-port-vlan/img-20220710224012.png)
-![](ovs-port-vlan/img-20220710224207.png)
+![](../images/ovs-port-vlan/img-20220710224012.png)
+![](../images/ovs-port-vlan/img-20220710224207.png)
 
 
 **收包带vlan 10**
@@ -193,8 +193,8 @@ ip netns exec vm1 ifconfig vm1 0.0.0.0
 ip netns exec vm1 ifconfig vm1.10 10.10.10.2
 ```
 - vm1发出带vlan 10的包，vm1-vif port access 处理后，被丢弃
-![](ovs-port-vlan/img-20220710223431.png)
-![](ovs-port-vlan/img-20220710223519.png)
+![](../images/ovs-port-vlan/img-20220710223431.png)
+![](../images/ovs-port-vlan/img-20220710223519.png)
 
 
 **收包 带vlan11**
@@ -204,12 +204,12 @@ ip netns exec vm1 ifconfig vm1 0.0.0.0
 ip netns exec vm1 ifconfig vm1.11 10.10.10.2
 ```
 - vm1发出带vlan 11的数据包，vm1-vif port处理后，被丢弃
-![](ovs-port-vlan/img-20220713201315.png)
+![](../images/ovs-port-vlan/img-20220713201315.png)
 
 
 **发包 不带vlan**
 - vm1-vif设置trunk模式且trunks为空，vm2-vif设置access模式tag=10，vm1-vif接收不带vlan的包后没有被转发到vm2-vif
-![](ovs-port-vlan/img-20220713201940.png)
+![](../images/ovs-port-vlan/img-20220713201940.png)
 
 
 **发包 带vlan 0**
@@ -219,13 +219,13 @@ ip netns exec vm1 ifconfig vm1.11 10.10.10.2
 **发包 带vlan 10**
 - vm1-vif设置access模式tag=10，vm2-vif设置access模式tag=10
 - vm1-vif port将vlan 10的数据包转发到vm2-vif，vm2-vif处理后以不带vlan转发
-![](ovs-port-vlan/img-20220713203016.png)
+![](../images/ovs-port-vlan/img-20220713203016.png)
 
 
 **发包 带vlan 11**
 - vm1-vif设置access模式tag=11， vm2-vif设置access模式tag=10
 - vm1-vif port收到vlan 11的数据包后没有转发到vm2-vif
-![](ovs-port-vlan/img-20220713203212.png)
+![](../images/ovs-port-vlan/img-20220713203212.png)
 
 
 ### trunk模式
@@ -245,29 +245,29 @@ ovs-vsctl set Port vm2-vif vlan_mode=trunk
 ovs-vsctl set Port vm1-vif trunks=[]
 ovs-vsctl set Port vm2-vif trunks=[]
 ```
-![](ovs-port-vlan/img-20220713213515.png)
+![](../images/ovs-port-vlan/img-20220713213515.png)
 
 **收到不带vlan的包**
 - vm1发出不带vlan的数据包，vm1-vif处理后继续不带vlan
-![](ovs-port-vlan/img-20220713203933.png)
+![](../images/ovs-port-vlan/img-20220713203933.png)
 
 
 **收到带vlan 0的包**
 - vm1 发出带vlan 0的包，vm1-vif处理后不带vlan，且允许通过。
-![](ovs-port-vlan/img-20220710225805.png)
-![](ovs-port-vlan/img-20220710225731.png)
+![](../images/ovs-port-vlan/img-20220710225805.png)
+![](../images/ovs-port-vlan/img-20220710225731.png)
 
 
 **收到带vlan 10的包**
 - vm1发出带vlan 10的包，vm1-vif 处理后带着原vlan转发，
-![](ovs-port-vlan/img-20220710230349.png)
-![](ovs-port-vlan/img-20220713204049.png)
+![](../images/ovs-port-vlan/img-20220710230349.png)
+![](../images/ovs-port-vlan/img-20220713204049.png)
 
 
 **发包 不带vlan**
 - vm1-vif转发不带vlan的包到vm2-vif
 - vm2-vif继续以不带vlan转发vm2
-![](ovs-port-vlan/img-20220713204432.png)
+![](../images/ovs-port-vlan/img-20220713204432.png)
 
 
 **发包 带vlan 0**
@@ -277,7 +277,7 @@ ovs-vsctl set Port vm2-vif trunks=[]
 **发包 带vlan 10**
 - 设置vm1-vif 为access模式tag=10
 - vm1-vif收到vlan 10的数据包转发到vm2-vif， vm2-vif以原vlan转发到vm2
-![](ovs-port-vlan/img-20220713204647.png)
+![](../images/ovs-port-vlan/img-20220713204647.png)
 
 
 ##### trunks不为空
@@ -288,32 +288,32 @@ ovs-vsctl set Port vm1-vif vlan_mode=trunk
 ovs-vsctl set Port vm1-vif trunks=[10]
 ovs-vsctl set Port vm2-vif trunks=[10]
 ```
-![](ovs-port-vlan/img-20220713213553.png)
+![](../images/ovs-port-vlan/img-20220713213553.png)
 
 **收到不带vlan的包**
 - vm1 发出不带vlan的包，vm1-vif处理后，被丢弃
-![](ovs-port-vlan/img-20220710231215.png)
+![](../images/ovs-port-vlan/img-20220710231215.png)
 
 
 **收到带vlan 0的包**
 - vm1 发出带vlan 0的包，vm1-vif处理后不在允许范围内被丢弃
-![](ovs-port-vlan/img-20220710231542.png)
+![](../images/ovs-port-vlan/img-20220710231542.png)
 
 
 **收到带vlan 10的包**
 - vm1 发出带vlan10的包，vm1-vif处理后允许通过，vm2-vif允许通过，vm2收到带vlan10的包后丢弃
-![](ovs-port-vlan/img-20220710231015.png)
+![](../images/ovs-port-vlan/img-20220710231015.png)
 
 
 **收到带vlan 11的包**
 - vm1 发出带vlan 0的包，vm1-vif处理后不在允许范围内被丢弃
-![](ovs-port-vlan/img-20220710231738.png)
+![](../images/ovs-port-vlan/img-20220710231738.png)
 
 
 **发包 不带vlan**
 - 设置vm1-vif trunk模式，trunks=[]
 - vm1-vif处理不带vlan的数据包不会转发到vm2-vif
-![](ovs-port-vlan/img-20220713205845.png)
+![](../images/ovs-port-vlan/img-20220713205845.png)
 
 
 **发包 带vlan 0**
@@ -323,13 +323,13 @@ ovs-vsctl set Port vm2-vif trunks=[10]
 **发包 带vlan 10**
 - 设置vm1-vif access模式，tag=10
 - vm1-vif处理vlan 10的数据包转发到vm2-vif，vm2-vif以vlan 10转发
-![](ovs-port-vlan/img-20220713210045.png)
+![](../images/ovs-port-vlan/img-20220713210045.png)
 
 
 **发包 带vlan 11**
 - 设置vm1-vif access模式，tag=10
 - vm1-vif处理vlan 11的数据包不会转发到vm2-vif
-![](ovs-port-vlan/img-20220713210138.png)
+![](../images/ovs-port-vlan/img-20220713210138.png)
 
 ### native-tagged模式
 native-vlan设置即tag列
@@ -347,31 +347,31 @@ ovs-vsctl set Port vm1-vif tag=10
 ovs-vsctl set Port vm2-vif trunks=[10]
 ovs-vsctl set Port vm2-vif tag=10
 ```
-![](ovs-port-vlan/img-20220713213626.png)
+![](../images/ovs-port-vlan/img-20220713213626.png)
 
 **收包 不带vlan**
 - vm1发出不带vlan的数据包，vm1-vif处理后带上native vlan 10
-![](ovs-port-vlan/img-20220713211909.png)
+![](../images/ovs-port-vlan/img-20220713211909.png)
 
 
 **收包 带vlan 0**
 - vm1发出带vlan 0的数据包，vm1-vif处理后带上native vlan 10
-![](ovs-port-vlan/img-20220713212047.png)
+![](../images/ovs-port-vlan/img-20220713212047.png)
 
 
 **收包 带vlan 10**
 - vm1发出带vlan 10的数据包，vm1-vif允许带着原始vlan进入
-![](ovs-port-vlan/img-20220713212213.png)
+![](../images/ovs-port-vlan/img-20220713212213.png)
 
 **收包 带vlan 11**
 - vm1 发出带vlan 11的数据包，不在允许之列，vm1-vif丢弃
-![](ovs-port-vlan/img-20220713212418.png)
+![](../images/ovs-port-vlan/img-20220713212418.png)
 
 
 **发包 不带vlan**
 - vm1-vif设置trunk模式，trunks=[]
 - vm1-vif收到不带vlan的数据包后没有向vm2-vif转发
-![](ovs-port-vlan/img-20220713212741.png)
+![](../images/ovs-port-vlan/img-20220713212741.png)
 
 
 **发包 带vlan 0**
@@ -381,13 +381,13 @@ ovs-vsctl set Port vm2-vif tag=10
 **发包 带vlan 10**
 - 设置vm1-vif access模式，tag=10
 - vm1-vif收到vlan 10的数据包转发到vm2-vif，vm2-vif处理后以原始vlan转发
-![](ovs-port-vlan/img-20220713212843.png)
+![](../images/ovs-port-vlan/img-20220713212843.png)
 
 
 **发包 带vlan 11**
 - 设置vm1-vif access模式，tag=11
 - vm1-vif收到vlan 11的数据包没有转发到vm2-vif
-![](ovs-port-vlan/img-20220713213027.png)
+![](../images/ovs-port-vlan/img-20220713213027.png)
 
 
 #### native vlan和trunks不重合
@@ -399,37 +399,37 @@ ovs-vsctl set Port vm1-vif tag=11
 ovs-vsctl set Port vm2-vif trunks=[10]
 ovs-vsctl set Port vm2-vif tag=11
 ```
-![](ovs-port-vlan/img-20220713213656.png)
+![](../images/ovs-port-vlan/img-20220713213656.png)
 
 **收包 不带vlan**
 - vm1发出不带vlan的数据包，vm1-vif处理后带vlan 11
-![](ovs-port-vlan/img-20220713213800.png)
+![](../images/ovs-port-vlan/img-20220713213800.png)
 
 
 **收包 带vlan 0**
 - vm1发出带vlan 0的数据包，vm1-vif处理后带vlan 11
-![](ovs-port-vlan/img-20220713213923.png)
+![](../images/ovs-port-vlan/img-20220713213923.png)
 
 
 **收包 带vlan 10**
 - vm1 发出带vlan 10的数据包，vm1-vif处理后带着原始vlan进入
-![](ovs-port-vlan/img-20220713214019.png)
+![](../images/ovs-port-vlan/img-20220713214019.png)
 
 
 **收包 带vlan 11**
 - vm1 发出带vlan 11的数据包，vm1-vif处理后带着原始vlan进入
-![](ovs-port-vlan/img-20220713214125.png)
+![](../images/ovs-port-vlan/img-20220713214125.png)
 
 
 **发包 带vlan 12**
 - vm1 发出带vlan 12的数据包，vm1-vif处理不在允许之列丢弃
-![](ovs-port-vlan/img-20220713214218.png)
+![](../images/ovs-port-vlan/img-20220713214218.png)
 
 
 **发包 不带vlan**
 - vm1设置trunk模式，trunks=[]
 - vm1收到不带vlan的数据包，没有向vm2-vif转发
-![](ovs-port-vlan/img-20220713214451.png)
+![](../images/ovs-port-vlan/img-20220713214451.png)
 
 
 **发包 带vlan 0**
@@ -438,17 +438,17 @@ ovs-vsctl set Port vm2-vif tag=11
 **发包 带vlan 10**
 - vm1设置access模式，tag=10
 - vm1-vif 收到带vlan 10的数据包，转发到vm2-vif，vm2-vif以原始vlan转发
-![](ovs-port-vlan/img-20220713214701.png)
+![](../images/ovs-port-vlan/img-20220713214701.png)
 
 **发包 带vlan 11**
 - vm1设置access模式，tag=11
 - vm1-vif收到带vlan 11的数据包，转发到vm2-vif，vm2-vif以原始vlan转发
-![](ovs-port-vlan/img-20220713214834.png)
+![](../images/ovs-port-vlan/img-20220713214834.png)
 
 **发包 带vlan 12**
 - vm1设置access模式，tag=12
 - vm1-vif收到带vlan 12的数据包，没有转发到vm2-vif
-![](ovs-port-vlan/img-20220713214945.png)
+![](../images/ovs-port-vlan/img-20220713214945.png)
 
 ### native-untagged模式
 native vlan即tag列
@@ -464,32 +464,32 @@ ovs-vsctl set Port vm1-vif tag=10
 ovs-vsctl set Port vm2-vif trunks=[10]
 ovs-vsctl set Port vm2-vif tag=10
 ```
-![](ovs-port-vlan/img-20220713215316.png)
+![](../images/ovs-port-vlan/img-20220713215316.png)
 
 **收包 不带vlan**
 - vm1发出不带vlan的数据包，vm1-vif处理后带vlan 10
-![](ovs-port-vlan/img-20220713215402.png)
+![](../images/ovs-port-vlan/img-20220713215402.png)
 
 
 **收包 带vlan 0**
 - vm1发出带vlan 0的数据包，vm1-vif处理后带vlan 10
-![](ovs-port-vlan/img-20220713215454.png)
+![](../images/ovs-port-vlan/img-20220713215454.png)
 
 
 **收包 带vlan 10**
 - vm1 发出带vlan 10的数据包，vm1-vif处理后带原始vlan 进入
-![](ovs-port-vlan/img-20220713215625.png)
+![](../images/ovs-port-vlan/img-20220713215625.png)
 
 
 **收包 带vlan 11**
 - vm1 发出带vlan 11的数据包，vm1-vif处理后不在允许之列，丢弃
-![](ovs-port-vlan/img-20220713215748.png)
+![](../images/ovs-port-vlan/img-20220713215748.png)
 
 
 **发包 不带vlan**
 - 设置vm1-vif trunk模式，trunks=[]
 - vm1-vif收到不带vlan的数据包后不会转发到vm2-vif
-![](ovs-port-vlan/img-20220713220011.png)
+![](../images/ovs-port-vlan/img-20220713220011.png)
 
 
 **发包 带vlan 0**
@@ -498,12 +498,12 @@ ovs-vsctl set Port vm2-vif tag=10
 **发包 带vlan 10**
 - 设置vm1-vif access模式，tag=10
 - vm1-vif收到带vlan 10的数据包转发到vm2-vif,vm2-vif处理后去掉vlan转发到vm2
-![](ovs-port-vlan/img-20220713220151.png)
+![](../images/ovs-port-vlan/img-20220713220151.png)
 
 **发包 带vlan 11**
 - 设置vm1-vif access模式，tag=11
 - vm1-vif收到带vlan 11的数据包不会转发到vm2-vif
-![](ovs-port-vlan/img-20220713220356.png)
+![](../images/ovs-port-vlan/img-20220713220356.png)
 
 #### native vlan和trunks不重合
 ```
@@ -514,38 +514,38 @@ ovs-vsctl set Port vm1-vif tag=11
 ovs-vsctl set Port vm2-vif trunks=[10]
 ovs-vsctl set Port vm2-vif tag=11
 ```
-![](ovs-port-vlan/img-20220713220442.png)
+![](../images/ovs-port-vlan/img-20220713220442.png)
 
 
 **收包 不带vlan**
 - vm1发出不带vlan的数据包，vm1-vif处理后打上vlan 11
-![](ovs-port-vlan/img-20220713220628.png)
+![](../images/ovs-port-vlan/img-20220713220628.png)
 
 
 **收包 带vlan 0**
 - vm1发出带vlan 0的数据包，vm1-vif处理后打上vlan 11
-![](ovs-port-vlan/img-20220713220741.png)
+![](../images/ovs-port-vlan/img-20220713220741.png)
 
 
 **收包 带vlan 10**
 - vm1发出带vlan 10的数据包，vm1-vif处理后带着原始vlan 进入
-![](ovs-port-vlan/img-20220713220829.png)
+![](../images/ovs-port-vlan/img-20220713220829.png)
 
 
 **收包 带vlan 11**
 - vm1发出带vlan 11的数据包，vm1-vif处理后带着原始vlan 进入
-![](ovs-port-vlan/img-20220713220933.png)
+![](../images/ovs-port-vlan/img-20220713220933.png)
 
 
 **发包 带vlan 12**
 - vm1发出带vlan 11的数据包，vm1-vif处理后不在允许范围内丢弃
-![](ovs-port-vlan/img-20220713221021.png)
+![](../images/ovs-port-vlan/img-20220713221021.png)
 
 
 **发包 不带vlan**
 - vm1-vif设置trunk模式 trunks=0
 - vm1-vif收到不带vlan的数据包，不会向vm2-vif转发
-![](ovs-port-vlan/img-20220713221252.png)
+![](../images/ovs-port-vlan/img-20220713221252.png)
 
 
 **发包 带vlan 0**
@@ -554,19 +554,19 @@ ovs-vsctl set Port vm2-vif tag=11
 **发包 带vlan 10**
 - vm1-vif设置access模式 tag=10
 - vm1-vif收到带vlan 10的数据包转发到vm2-vif，vm2-vif处理后带着原始vlan转发到vm2
-![](ovs-port-vlan/img-20220713221436.png)
+![](../images/ovs-port-vlan/img-20220713221436.png)
 
 
 **发包 带vlan 11**
 - vm1-vif设置access模式 tag=11
 - vm1-vif收到带vlan 11的数据包转发到vm2-vif，vm2-vif处理后去掉vlan转发到vm2
-![](ovs-port-vlan/img-20220713221610.png)
+![](../images/ovs-port-vlan/img-20220713221610.png)
 
 
 **发包 带vlan 12**
 - vm1-vif设置access模式 tag=12
 - vm1-vif收到带vlan 12的数据包不会转发到vm2-vif
-![](ovs-port-vlan/img-20220713221726.png)
+![](../images/ovs-port-vlan/img-20220713221726.png)
 
 
 

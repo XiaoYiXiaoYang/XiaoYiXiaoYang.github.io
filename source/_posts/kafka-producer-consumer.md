@@ -43,7 +43,7 @@ kafka角色：
 当同步完成后，消费者才可以消费这条消息(为了防止leader副本宕机造成消息丢失)
 kafka的复制机制既不是完全的同步复制，也不是单纯的落后复制。同步复制要求所有能工作的follower副本都复制完，这条消息才会被确认为已成功提交，这种方式极大的影响了性能。而在异步复制方式下，follower副本异步的从leader副本中复制数据，数据只要被leader副本写入就认为已经成功提交。(在这种情况下，如果follower副本都还没有复制完而落后与leader副本，突然leader副本宕机，则会造成数据丢失)。
 
-![](kafka-producer-consumer/img-20221016191323.png)
+![](../images/kafka-producer-consumer/img-20221016191323.png)
 
 
 ## 生产与消费
@@ -722,7 +722,7 @@ if (refcount.decrementAndGet () == 0) {
 
 多线程的目的就是为了提高整体的消费能力。多线程的实现方式有多种，第一种也是最常见的方式 线程封闭，即为每个线程实例化一个 KafkaConsumer 对象。
 
-![](kafka-producer-consumer/img-20221030190716.png)
+![](../images/kafka-producer-consumer/img-20221030190716.png)
 
 一个消费线程可消费一个或多个分区中的消息，所有的消费线程都隶属于同一个消费组。这种实现方式的并发度受限于分区的实际个数，当消费线程的个数大于分区数时 就有部分消费线程一直处于空闲的状态。
 
@@ -766,7 +766,7 @@ public static class KafkaConsumerThread extends Thread{
 
 这里的处理速度取决于处理消息模块，。一般 言， poll（）拉取消息的速度是相当快的 ，而整体消费的瓶颈是在处理消息这一块， 通过－定的方式来改进这一部分，那么就能带动整体消费性能提升。
 
-![](kafka-producer-consumer/img-20221030193459.png)
+![](../images/kafka-producer-consumer/img-20221030193459.png)
 
 ```java
 	@Override 
@@ -806,7 +806,7 @@ RecordHandler 类是用来处理消息的，而 KafraConsumerThread 类对应的
 引入一个共享
 变量 offsets 来参与提交
 
-![](kafka-producer-consumer/img-20221030200350.png)
+![](../images/kafka-producer-consumer/img-20221030200350.png)
 
 每一个处理消息的 RecordHandler 类在处理完消息之后都将对应的消费位移保存到共享变量offsets 中， KafraConsumerThread 在每一次 poll （）方法之后都读取 offsets 中的内容并对其进行位移提交。
 
@@ -841,7 +841,7 @@ if (!offsets. isEmpty () ) {
 
 通过消费者拉取分批次的消息，然后提交给多线程进行处理，而这里的滑动窗口式的实现方式是将拉取到的消息暂存起来， 多个消费线程可以拉取暂存的消息，这个用于暂存消息的缓存大小即为滑动窗口的大小， 总体上而言没有太多的变化 不同的是对于消费位移的把控。
 
-![](kafka-producer-consumer/img-20221030201350.png)
+![](../images/kafka-producer-consumer/img-20221030201350.png)
 
 startOffset标注的是当前滑动 口的起始位置 endOffset 注的是末尾位置。每当 startOffset 指向的方格中的消息被消 费完成，就可以提交这部分的位移，与此同时，窗 口向 前滑动一格， 除原来startOffset 所指方格中对应的消息 并且拉取新的消息进入窗口。
 
@@ -881,9 +881,9 @@ startOffset标注的是当前滑动 口的起始位置 endOffset 注的是末尾
 `isolation.level`：配置消费者的事务隔离级别。有效值为“read uncommitted ，，和
 “ read committed ＂
 
-![](kafka-producer-consumer/img-20221030202942.png)
+![](../images/kafka-producer-consumer/img-20221030202942.png)
 
-![](kafka-producer-consumer/img-20221030202957.png)
+![](../images/kafka-producer-consumer/img-20221030202957.png)
 
 
 

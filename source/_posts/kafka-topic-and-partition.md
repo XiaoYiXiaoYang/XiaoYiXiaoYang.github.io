@@ -32,18 +32,18 @@ bin/kafka-top cs .sh - zookeeper localhost: 2181/kafka
 ```
 
 在执行完脚本之后， Kafka 会在 log.dir log.dirs 参数所配置的目录下创建相应的主题分区，默认情况下这个目录为／tmp/kafka-logs／
-![](kafka-topic-and-partition/img-20221030211533.png)
+![](../images/kafka-topic-and-partition/img-20221030211533.png)
 
 
 topic-create-0 topic-create-1对应了主题的两个分区，其余两个分区被创建到了别的节点
-![](kafka-topic-and-partition/img-20221030211753.png)
+![](../images/kafka-topic-and-partition/img-20221030211753.png)
 
 主题、分区、副本和 Log （日志）的关系如下
-![](kafka-topic-and-partition/img-20221030211824.png)
+![](../images/kafka-topic-and-partition/img-20221030211824.png)
 
 我们不仅可以通过日志文件的根目录来查看集群中各个 broker 的分区副本的分配情况，还可以通过 ZooKeeper 客户端来获取。
 当创建一个主题时会在 zooKeeper 的／ brokers/topics/ 目录下创建一个同名的实节点，该节点记录了该主题的分区副本分配方案。
-![](kafka-topic-and-partition/img-20221030212257.png)
+![](../images/kafka-topic-and-partition/img-20221030212257.png)
 
 示例数据中的 "2"：[1, 2] 表示分区2 分配了2个副本，分别在 brokerld 1和 brokerId 2节点中。
 
@@ -131,13 +131,13 @@ kafka configs.sh 脚本不仅可以支持操作主题相关的配置，还支持
 与主题相关的所有配置参数在 broker 层面都有对应参数， 
 比如主题端参数 cleanup.policy 对应 broker 层面的 log.cleanup policy
 
-![](kafka-topic-and-partition/img-20221106222237.png)
+![](../images/kafka-topic-and-partition/img-20221106222237.png)
 
-![](kafka-topic-and-partition/img-20221106222301.png)
+![](../images/kafka-topic-and-partition/img-20221106222301.png)
 
-![](kafka-topic-and-partition/img-20221106222336.png)
+![](../images/kafka-topic-and-partition/img-20221106222336.png)
 
-![](kafka-topic-and-partition/img-20221106222348.png)
+![](../images/kafka-topic-and-partition/img-20221106222348.png)
 
 ## 删除主题
 
@@ -146,9 +146,9 @@ kafka-topics.sh 脚本中的 delete 令就可以用来删除主题
 
 使用 kafka_topics.sh 脚本删除主题的行为本质上只是在 ZooKeeper 中的 /admin/delete_topics 路径下 建一个与待删除主题同名的节点，以 标记该主题为待删除的状态。与创建主题相同的是，真正删除主题的动作也是由 Kafka 的控制器负责完成的。
 
-![](kafka-topic-and-partition/img-20221106222536.png)
+![](../images/kafka-topic-and-partition/img-20221106222536.png)
 
-![](kafka-topic-and-partition/img-20221106222544.png)
+![](../images/kafka-topic-and-partition/img-20221106222544.png)
 
 # 初识 KafkaAdminClient
 
@@ -170,7 +170,7 @@ Kafka broker 端有－个这样的参数 create.topic.policy.class.name，默认
 它提供了一个入口用来验证主题创建的合法性。使用方式很简单，只需要自定义实现org.apache.kafka.server.policy.CreateTopicPolicy 接口
 
 例：
-![](kafka-topic-and-partition/img-20221106223639.png)
+![](../images/kafka-topic-and-partition/img-20221106223639.png)
 
 # 分区的管理
 
@@ -189,7 +189,7 @@ kafka-perferred-replica election.sh 脚本提供了对分区 leader 副本进行
 
 当集群中新增 roker 节点时，只有新创建的主题分区才有可能被分配到这个节点上，而之前的主题分区并不会自动分配到新加入的节点中，因为在它们被创建时还没有这个新节点，这样新节点的负载和原先节点的负载之间严重不均衡。
 
-Kafka提供了 kafka-reass n-partitio s.sh 脚本来执行分区重分配的工作，它可以在集群扩容、broker节点失效的场景下对分区进行迁移。
+Kafka提供了 kafka-reassin-partitions.sh 脚本来执行分区重分配的工作，它可以在集群扩容、broker节点失效的场景下对分区进行迁移。
 
 
 
@@ -223,10 +223,10 @@ Kafka 本身提供的用于生产者性能测试 kafka-producer-perf-test.sh 和
 写入的吞吐量还会受到消息大小、消息压缩方式、消息发送方式（同步 异步）、消息确认类型
 acks、副本因子等参数影 响， 消息消费 吞吐量还会受到应用逻辑、处理速度的影响
 
-![](kafka-topic-and-partition/img-20221106230140.png)
+![](../images/kafka-topic-and-partition/img-20221106230140.png)
 分区数为1时吞吐量最低，随着分区数的增长，相应的吞吐量跟着上涨。一旦分区数超过了某个阔值之后，整体的吞吐量是不升反降的。
 
-![](kafka-topic-and-partition/img-20221106230222.png)
+![](../images/kafka-topic-and-partition/img-20221106230222.png)
 随着分区数的增加，相应的吞吐量也会有所增长。一旦分区数超过了某个阈值之后，整体的吞吐量也是不升反降的
 
 ## 分区数的上限
