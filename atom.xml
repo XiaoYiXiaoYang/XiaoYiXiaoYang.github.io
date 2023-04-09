@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2022-11-27T14:10:16.093Z</updated>
+  <updated>2023-04-09T06:08:10.587Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,11 +17,46 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>链表相关</title>
+    <link href="http://yoursite.com/2023/04/09/algorithm-linked-list/"/>
+    <id>http://yoursite.com/2023/04/09/algorithm-linked-list/</id>
+    <published>2023-04-09T03:39:47.000Z</published>
+    <updated>2023-04-09T06:08:10.587Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;经典题目&quot;&gt;&lt;a href=&quot;#经典题目&quot; class=&quot;headerlink&quot; title=&quot;经典题目&quot;&gt;&lt;/a&gt;经典题目&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="http://yoursite.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+      <category term="算法" scheme="http://yoursite.com/categories/%E9%9A%8F%E7%AC%94/%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="博客" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2/"/>
+    
+      <category term="算法" scheme="http://yoursite.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="链表" scheme="http://yoursite.com/tags/%E9%93%BE%E8%A1%A8/"/>
+    
+  </entry>
+  
+  <entry>
     <title>动态规划算法详解</title>
     <link href="http://yoursite.com/2022/11/27/algorithm-dp/"/>
     <id>http://yoursite.com/2022/11/27/algorithm-dp/</id>
     <published>2022-11-27T07:32:05.000Z</published>
-    <updated>2022-11-27T14:10:16.093Z</updated>
+    <updated>2023-04-09T05:28:25.840Z</updated>
     
     <summary type="html">
     
@@ -54,7 +89,7 @@
     <link href="http://yoursite.com/2022/10/30/kafka-topic-and-partition/"/>
     <id>http://yoursite.com/2022/10/30/kafka-topic-and-partition/</id>
     <published>2022-10-30T13:00:34.000Z</published>
-    <updated>2022-11-27T07:25:03.759Z</updated>
+    <updated>2023-04-09T06:13:26.213Z</updated>
     
     <summary type="html">
     
@@ -74,7 +109,7 @@
     
       <category term="博客" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2/"/>
     
-      <category term="Kafka" scheme="http://yoursite.com/tags/Kafka/"/>
+      <category term="Kafka" scheme="http://yoursite.com/tags/kafka/"/>
     
   </entry>
   
@@ -83,7 +118,7 @@
     <link href="http://yoursite.com/2022/10/16/kafka-producer-consumer/"/>
     <id>http://yoursite.com/2022/10/16/kafka-producer-consumer/</id>
     <published>2022-10-16T06:08:24.000Z</published>
-    <updated>2022-10-30T13:03:18.388Z</updated>
+    <updated>2023-04-09T06:13:26.221Z</updated>
     
     <summary type="html">
     
@@ -105,7 +140,7 @@
     
       <category term="博客" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2/"/>
     
-      <category term="Kafka" scheme="http://yoursite.com/tags/Kafka/"/>
+      <category term="Kafka" scheme="http://yoursite.com/tags/kafka/"/>
     
   </entry>
   
@@ -128,12 +163,12 @@
     
     </summary>
     
-      <category term="Network" scheme="http://yoursite.com/categories/Network/"/>
+      <category term="Network" scheme="http://yoursite.com/categories/network/"/>
     
     
-      <category term="OVN" scheme="http://yoursite.com/tags/OVN/"/>
+      <category term="OVN" scheme="http://yoursite.com/tags/ovn/"/>
     
-      <category term="LS" scheme="http://yoursite.com/tags/LS/"/>
+      <category term="LS" scheme="http://yoursite.com/tags/ls/"/>
     
   </entry>
   
@@ -142,7 +177,7 @@
     <link href="http://yoursite.com/2022/07/05/ovs-port-vlan/"/>
     <id>http://yoursite.com/2022/07/05/ovs-port-vlan/</id>
     <published>2022-07-05T14:39:49.000Z</published>
-    <updated>2022-09-27T14:34:06.756Z</updated>
+    <updated>2023-04-09T06:13:26.221Z</updated>
     
     <summary type="html">
     
@@ -156,16 +191,16 @@
     
     </summary>
     
-      <category term="NetWork" scheme="http://yoursite.com/categories/NetWork/"/>
+      <category term="NetWork" scheme="http://yoursite.com/categories/network/"/>
     
     
-      <category term="OVS" scheme="http://yoursite.com/tags/OVS/"/>
+      <category term="OVS" scheme="http://yoursite.com/tags/ovs/"/>
     
-      <category term="VLAN" scheme="http://yoursite.com/tags/VLAN/"/>
+      <category term="VLAN" scheme="http://yoursite.com/tags/vlan/"/>
     
-      <category term="ACCESS" scheme="http://yoursite.com/tags/ACCESS/"/>
+      <category term="ACCESS" scheme="http://yoursite.com/tags/access/"/>
     
-      <category term="TRUNK" scheme="http://yoursite.com/tags/TRUNK/"/>
+      <category term="TRUNK" scheme="http://yoursite.com/tags/trunk/"/>
     
   </entry>
   
@@ -174,7 +209,7 @@
     <link href="http://yoursite.com/2022/06/25/win11-wsl/"/>
     <id>http://yoursite.com/2022/06/25/win11-wsl/</id>
     <published>2022-06-25T13:09:00.000Z</published>
-    <updated>2022-07-04T14:25:05.788Z</updated>
+    <updated>2023-04-09T06:13:26.221Z</updated>
     
     <summary type="html">
     
@@ -191,7 +226,7 @@
       <category term="工具" scheme="http://yoursite.com/categories/%E5%B7%A5%E5%85%B7/"/>
     
     
-      <category term="WSL" scheme="http://yoursite.com/tags/WSL/"/>
+      <category term="WSL" scheme="http://yoursite.com/tags/wsl/"/>
     
   </entry>
   
@@ -217,7 +252,7 @@
       <category term="学习笔记" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
-      <category term="Go" scheme="http://yoursite.com/tags/Go/"/>
+      <category term="Go" scheme="http://yoursite.com/tags/go/"/>
     
   </entry>
   
@@ -246,7 +281,7 @@
       <category term="随笔" scheme="http://yoursite.com/categories/%E9%9A%8F%E7%AC%94/"/>
     
     
-      <category term="Hexo" scheme="http://yoursite.com/tags/Hexo/"/>
+      <category term="Hexo" scheme="http://yoursite.com/tags/hexo/"/>
     
   </entry>
   

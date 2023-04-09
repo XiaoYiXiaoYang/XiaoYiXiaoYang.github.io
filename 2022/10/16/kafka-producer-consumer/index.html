@@ -357,7 +357,7 @@
                             <span class="chip bg-color">博客</span>
                         </a>
                         
-                        <a href="/tags/Kafka/" target="_blank">
+                        <a href="/tags/kafka/" target="_blank">
                             <span class="chip bg-color">Kafka</span>
                         </a>
                         
@@ -439,7 +439,7 @@
 <li>LEO: 标识当前日志文件中下一条待写入消息的offset (Log End Offset)</li>
 </ul>
 <p>新产生的消息会先写入leader副本，然后follower副本会发送拉取请求来拉取落后的消息来进行消息同步。<br>当同步完成后，消费者才可以消费这条消息(为了防止leader副本宕机造成消息丢失)<br>kafka的复制机制既不是完全的同步复制，也不是单纯的落后复制。同步复制要求所有能工作的follower副本都复制完，这条消息才会被确认为已成功提交，这种方式极大的影响了性能。而在异步复制方式下，follower副本异步的从leader副本中复制数据，数据只要被leader副本写入就认为已经成功提交。(在这种情况下，如果follower副本都还没有复制完而落后与leader副本，突然leader副本宕机，则会造成数据丢失)。</p>
-<p><img src="/2022/10/16/kafka-producer-consumer/img-20221016191323.png" alt></p>
+<p><img src="../images/kafka-producer-consumer/img-20221016191323.png" alt></p>
 <h2 id="生产与消费"><a href="#生产与消费" class="headerlink" title="生产与消费"></a>生产与消费</h2><pre><code>./bin/kafka-topics.sh --zookeeper localhost:2181/kafka --create --topic topic-demo --replication-factor 3 --partitions 4
 
 
@@ -517,7 +517,7 @@
 <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onAcknowledgement</span><span class="token punctuation">(</span>RecordMetadata metadata<span class="token punctuation">,</span> Exception exception<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>可以指定一个拦截链，KafkaProducer按照interceptor.classes参数配置的拦截器的顺序来一一执行（各个拦截器按逗号隔开）</p>
-<h2 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h2><h3 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h3><p><img src="/2022/10/16/kafka-producer-consumer/producer-structure.jpg" alt="生产者客户端整体架构"></p>
+<h2 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h2><h3 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h3><p><img src="kafka-producer-consumer/producer-structure.jpg" alt="生产者客户端整体架构"></p>
 <p>生产者客户端有两个线程，主线程和Sender线程。主线程生产消息经过拦截器、序列化器、分区器缓存到消息累加器中，Sender线程从RecordAccumulator中获取消息并发往Kafka中</p>
 <p><code>buffer.memory</code>： 指定RecordAccumulator缓存的大小</p>
 <p><code>max.block.ms</code>：指定生产者发送太快，缓冲区满了，阻塞的最大时间</p>
@@ -757,7 +757,7 @@ refcount<span class="token punctuation">.</span><span class="token function">inc
     currentThread<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>NO CURRENT THREAD<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>多线程的目的就是为了提高整体的消费能力。多线程的实现方式有多种，第一种也是最常见的方式 线程封闭，即为每个线程实例化一个 KafkaConsumer 对象。</p>
-<p><img src="/2022/10/16/kafka-producer-consumer/img-20221030190716.png" alt></p>
+<p><img src="../images/kafka-producer-consumer/img-20221030190716.png" alt></p>
 <p>一个消费线程可消费一个或多个分区中的消息，所有的消费线程都隶属于同一个消费组。这种实现方式的并发度受限于分区的实际个数，当消费线程的个数大于分区数时 就有部分消费线程一直处于空闲的状态。</p>
 <p>多个消费线程同时消费同一个分区 ，这个通过 assign（）、 seek （）等方法实现，这样可以打破原有的消费线程的个数不能超过分区数的限制，进一步提高了消费的能力 。不过这种实现方式对于位移提交和顺序控制的处理就会变得非常复杂，</p>
 <pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
@@ -793,7 +793,7 @@ refcount<span class="token punctuation">.</span><span class="token function">inc
     <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>上面这种多线程的实现方式和开启多个消费进程的方式没有本质上的区别， 优点是每个线程可以按顺序消费各个分区中的消息。缺点也很明显，每个消费线程都要维护一个独立的TCP 连接 如果分区数和 consumerThreadNum 的值都很大，那么会造成不 的系统开销。</p>
 <p>这里的处理速度取决于处理消息模块，。一般 言， poll（）拉取消息的速度是相当快的 ，而整体消费的瓶颈是在处理消息这一块， 通过－定的方式来改进这一部分，那么就能带动整体消费性能提升。</p>
-<p><img src="/2022/10/16/kafka-producer-consumer/img-20221030193459.png" alt></p>
+<p><img src="../images/kafka-producer-consumer/img-20221030193459.png" alt></p>
 <pre class="line-numbers language-java"><code class="language-java">    <span class="token annotation punctuation">@Override</span> 
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">try</span> <span class="token punctuation">{</span> 
@@ -826,7 +826,7 @@ refcount<span class="token punctuation">.</span><span class="token function">inc
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>RecordHandler 类是用来处理消息的，而 KafraConsumerThread 类对应的是一个消费线程，里面通过线程池的方式来调用 RecordHandler 处理一批批的消息。</p>
 <p>引入一个共享<br>变量 offsets 来参与提交</p>
-<p><img src="/2022/10/16/kafka-producer-consumer/img-20221030200350.png" alt></p>
+<p><img src="../images/kafka-producer-consumer/img-20221030200350.png" alt></p>
 <p>每一个处理消息的 RecordHandler 类在处理完消息之后都将对应的消费位移保存到共享变量offsets 中， KafraConsumerThread 在每一次 poll （）方法之后都读取 offsets 中的内容并对其进行位移提交。</p>
 <pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">for</span> <span class="token punctuation">(</span>TopicPartition tp <span class="token operator">:</span> records <span class="token punctuation">.</span><span class="token function">partitions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
     List<span class="token operator">&lt;</span>ConsumerRecord<span class="token operator">&lt;</span>String <span class="token punctuation">,</span> String<span class="token operator">></span> tpRecords <span class="token operator">=</span> records <span class="token punctuation">.</span> <span class="token function">records</span><span class="token punctuation">(</span>tp<span class="token punctuation">)</span><span class="token punctuation">;</span> 
@@ -851,7 +851,7 @@ refcount<span class="token punctuation">.</span><span class="token function">inc
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>假设一个处理线程 RecordHand erl 正在处理 offset 99消息，而另一个处理线程 RecordHand er2 己经处理完了 offset 100 99 的消息并进行了位移提交，此时如果 RecordHandler 发生异常，则之后的消费只能从 200 开始而无法再次消费 99的消息，从而造成了消息丢失的现象。这里虽然针对位移覆盖做了一定的处理，但还没有解决异常情况下的位移覆盖问题。</p>
 <p>通过消费者拉取分批次的消息，然后提交给多线程进行处理，而这里的滑动窗口式的实现方式是将拉取到的消息暂存起来， 多个消费线程可以拉取暂存的消息，这个用于暂存消息的缓存大小即为滑动窗口的大小， 总体上而言没有太多的变化 不同的是对于消费位移的把控。</p>
-<p><img src="/2022/10/16/kafka-producer-consumer/img-20221030201350.png" alt></p>
+<p><img src="../images/kafka-producer-consumer/img-20221030201350.png" alt></p>
 <p>startOffset标注的是当前滑动 口的起始位置 endOffset 注的是末尾位置。每当 startOffset 指向的方格中的消息被消 费完成，就可以提交这部分的位移，与此同时，窗 口向 前滑动一格， 除原来startOffset 所指方格中对应的消息 并且拉取新的消息进入窗口。</p>
 <p>滑动窗口的大小固定，所对应的用来暂 消息的缓存大小也就固定了，这部分内存开销可控。方格大小和滑动窗口的大小同决定了消费线程的并发数。</p>
 <p>如果 个方格内的消 息无法被标记为消费完成，那么就会造成 startOffset 悬停。为了使窗口能够继续向前滑动 那么就需要设定 个闹值，当 startOffset 悬停一定的时间后就对这部分消息进行本地重试消费，如果重试失败就转入重试队列，如果还不奏效就转入死信队列。</p>
@@ -869,8 +869,8 @@ refcount<span class="token punctuation">.</span><span class="token function">inc
 <p><code>reconnect.backoff.ms</code>：配置尝试重新连接指定主机之前的等待时间，默认值为50ms</p>
 <p><code>retry.backo ms</code>：配置尝试重新发送失败的请求到指定的主题分区之前的等待（退避〉时间，</p>
 <p><code>isolation.level</code>：配置消费者的事务隔离级别。有效值为“read uncommitted ，，和<br>“ read committed ＂</p>
-<p><img src="/2022/10/16/kafka-producer-consumer/img-20221030202942.png" alt></p>
-<p><img src="/2022/10/16/kafka-producer-consumer/img-20221030202957.png" alt></p>
+<p><img src="../images/kafka-producer-consumer/img-20221030202942.png" alt></p>
+<p><img src="../images/kafka-producer-consumer/img-20221030202957.png" alt></p>
 <script type="text&#x2F;javascript" src="https://unpkg.com/kity@2.0.4/dist/kity.min.js"></script><script type="text&#x2F;javascript" src="https://unpkg.com/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text&#x2F;javascript" src="https://unpkg.com/hexo-simple-mindmap@0.8.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text&#x2F;css" href="https://unpkg.com/hexo-simple-mindmap@0.8.0/dist/mindmap.min.css">
             </div>
             <hr />
@@ -1272,7 +1272,7 @@ refcount<span class="token punctuation">.</span><span class="token function">inc
                         <span class="chip bg-color">博客</span>
                     </a>
                     
-                    <a href="/tags/Kafka/" target="_blank">
+                    <a href="/tags/kafka/" target="_blank">
                         <span class="chip bg-color">Kafka</span>
                     </a>
                     
@@ -1309,7 +1309,7 @@ refcount<span class="token punctuation">.</span><span class="token function">inc
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Network/" class="post-category" target="_blank">
+                            <a href="/categories/network/" class="post-category" target="_blank">
                                     Network
                                 </a>
                             
@@ -1320,11 +1320,11 @@ refcount<span class="token punctuation">.</span><span class="token function">inc
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/OVN/" target="_blank">
+                    <a href="/tags/ovn/" target="_blank">
                         <span class="chip bg-color">OVN</span>
                     </a>
                     
-                    <a href="/tags/LS/" target="_blank">
+                    <a href="/tags/ls/" target="_blank">
                         <span class="chip bg-color">LS</span>
                     </a>
                     
@@ -1499,7 +1499,7 @@ refcount<span class="token punctuation">.</span><span class="token function">inc
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">18.6k</span>
+            <span class="white-color">20.5k</span>
             
 
             <br>
