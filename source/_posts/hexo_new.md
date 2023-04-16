@@ -27,7 +27,7 @@ categories:
 ## 2021.06.30
 
 hexo 文章插图技巧
-1.站点的_config.yml 的post_asset_folder: false改为true
+1.站点的_config.yml的 post_asset_folder: false改为true
 2.在新建文章的时候`hexo new hello`就会在文章下生成同名文件夹，在文件夹中放图片，在文章中引用即可。
 
 ```
@@ -81,3 +81,30 @@ Matery主题美化参考：`https://blog.csdn.net/kuashijidexibao/article/detail
 | categories    | 无                       | 文章分类，本主题的分类表示宏观上大的分类，只建议一篇文章一个分类                                                                     |
 | tags          | 无                       | 文章标签，一篇文章可以多个标签                                                                                      |
 | reprintPolicy | cc_by                   | 文章转载规则， 可以是 cc_by, cc_by_nd, cc_by_sa, cc_by_nc, cc_by_nc_nd, cc_by_nc_sa, cc0, noreprint 或 pay 中的一个 |
+
+## 2023.04.16
+
+文章插图问题：当我想在_post目录下创建images文件夹，存放图片
+
+```
+_posts/images/$filename/$imagename
+```
+
+然后在md中通过相对路径引用文件
+
+```
+![](../images/$filename/$imagename
+```
+
+
+
+但是由于hexo-image插件不能正确的将文件路径转换，导致转换后的路径和要引用的文件的路径不一致，也就导致了文章中图片不显示。
+
+```
+hexo-asset-image 已经过期
+替代品：
+hexo-asset-img
+hexo-asset-link
+```
+
+注意：上述插件都要求将config.yaml中的post_asset_folder选项置为true

@@ -369,7 +369,7 @@ ch := make(chan int)
 
 - 有缓冲的channel  `make(chan int, 100)`, 可以异步，当缓冲区满时再写入才会阻塞，缓冲区空时读取才会阻塞
 
--  通道可以close，可以通过ok测试 `v, ok := <- ch`，只有发送者可以关闭通道，在关闭的通道里发送会panic，对于for range通道运算，需要主动close来告知接收者通道没有值了
+- 通道可以close，可以通过ok测试 `v, ok := <- ch`，只有发送者可以关闭通道，在关闭的通道里发送会panic，对于for range通道运算，需要主动close来告知接收者通道没有值了
 
 **select**
 

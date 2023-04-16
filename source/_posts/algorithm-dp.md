@@ -24,6 +24,7 @@ password:
 最后，虽然动态规划的核心思想就是穷举求最值，但是问题可以千变万化，穷举所有可行解并不是一件容易的事情，只有列出正确的**状态转移方程**，才能正确的穷举。
 
 核心套路：状态、选择、dp数组的定义
+
 ```
 # 初始化base case
 dp[0][0][...] = base case
@@ -52,13 +53,15 @@ F(N) = F(N - 1) + F(N - 2), 其中 N > 1.
 输出：5
 
 ### 解答
+
 #### 递归：定义dp[i]为f(i)
+
 ```go
 func fib(n int) int {
     dp := make([]int, n+1)
     dp[0] = 0
     dp[1] = 1
-    
+
     return hepler(dp, n)
 }
 
@@ -76,6 +79,7 @@ func hepler(dp []int, n int)int {
 ```
 
 #### dp table：定义dp[i]为f(i)
+
 ```go
 func fib(n int) int {
     if n == 0 {
@@ -84,12 +88,12 @@ func fib(n int) int {
     if n == 1{
         return 1
     }
-    
+
     dp := make([]int, n+1)
     // 初始化base case
     dp[0] = 0
     dp[1] = 1
-    
+
     // 状态转移
     for i := 2; i <= n; i++{
         dp[i] = dp[i-1] + dp[i-2]
@@ -100,6 +104,7 @@ func fib(n int) int {
 ```
 
 ## 凑零钱
+
 给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。
 计算并返回可以凑成总金额所需的 最少的硬币个数 。如果没有任何一种硬币组合能组成总金额，返回 -1 。
 你可以认为每种硬币的数量是无限的。
@@ -118,7 +123,9 @@ func fib(n int) int {
 输出：0
 
 ### 解答
+
 #### 递归，dp[i] = value  凑i需要最少value个硬币
+
 ```go
 func coinChange(coins []int, amount int) int {
     // 初始化dp数组  dp[i] = value  凑i需要最少value个硬币
@@ -149,7 +156,7 @@ func hepler(dp, coins []int, amount int) int{
         if subproblem < 0 {
             continue
         }
-    
+
         if subproblem < res {
             res = 1 + subproblem
         }
@@ -159,12 +166,13 @@ func hepler(dp, coins []int, amount int) int{
     } else {
         dp[amount] = -1
     }
-    
+
     return dp[amount]
 }
 ```
 
 #### dp table，dp[i] = value  凑i需要最少value个硬币
+
 ```go
 func coinChange(coins []int, amount int) int {
     if amount == 0 {
@@ -206,6 +214,7 @@ func min(a, b int) int {
 ```
 
 ## 最长递增子序列
+
 给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
 子序列 是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的子序列。
 
@@ -225,6 +234,7 @@ func min(a, b int) int {
 ### 解答
 
 #### dp table，dp[i]为表示以nums[i]为结尾的数组的最长递增子序列的长度
+
 ```go
 func lengthOfLIS(nums []int) int {
     // dp[i] 表示以nums[i]为结尾的数组的最长递增子序列的长度
@@ -275,6 +285,7 @@ func max(a, b int) int{
 ### 解答
 
 #### dp table, dp[i]为以nums[i]结尾的最大子数组和
+
 ```go
 func maxSubArray(nums []int) int {
     if len(nums) <= 0 {
@@ -284,7 +295,7 @@ func maxSubArray(nums []int) int {
     dp := make([]int, len(nums))
     dp[0] = nums[0]
     ret := dp[0]
-    
+
     // 状态转移
     for i := 1; i < len(nums); i ++ {
         dp[i] = max(nums[i], dp[i-1] + nums[i])
@@ -327,6 +338,7 @@ func max(a, b int) int {
 ### 解答
 
 #### dp table，dp[i][j]为str1[0:i]和str2[0:j]最长公共子序列的长度
+
 ```go
 func longestCommonSubsequence(text1 string, text2 string) int {
     if len(text1) == 0 || len(text2) == 0 {
@@ -367,8 +379,4 @@ func max(a, b int) int{
 
 ## 编辑距离
 
-
-
-
 ## 以插入最小次数构造回文串
-

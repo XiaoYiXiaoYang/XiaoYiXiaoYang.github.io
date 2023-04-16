@@ -134,67 +134,6 @@ func mergeTwoLists(l1, l2 *ListNode)*ListNode {
 }
 ```
 
-```go
-/**
- * Definition for singly-linked list.
- * type ListNode struct {
- *     Val int
- *     Next *ListNode
- * }
- */
-func mergeKLists(lists []*ListNode) *ListNode {
-    // 和合并两个有序数组类似，本次使用方法1
-    // 方法1 类似归并排序，两两合并，最后合并成一个
-    // 方法2 顺序合并，n-1此合并
-    var merge func(lists []*ListNode, left, right int) *ListNode
-    merge = func(lists []*ListNode, left, right int) *ListNode{
-        // 终止条件
-        if left == right {
-            return lists[left]
-        }
-        if left > right {
-            return nil
-        }
-
-        mid := (left + right) / 2
-        l1 := merge(lists, left, mid)
-        l2 := merge(lists, mid+1, right)
-
-        return mergeTwoLists(l1, l2)
-    }
-
-    return merge(lists, 0, len(lists)-1)
-}
-
-func mergeTwoLists(l1, l2 *ListNode)*ListNode {
-    head := &ListNode{}
-    p := head
-    for ;l1 != nil && l2 != nil; {
-        if l1.Val < l2.Val {
-            p.Next = l1
-            l1 = l1.Next
-        } else {
-            p.Next = l2
-            l2 = l2.Next
-        }
-
-        // p向前进
-        p = p.Next
-    }
-
-    // 当l1还没结束
-    if l1 != nil {
-        p.Next = l1
-    }
-    // 当l2还没结束
-    if l2 != nil {
-        p.Next = l2
-    }
-
-    return head.Next
-}
-```
-
 ### 分割链表
 
 ```go

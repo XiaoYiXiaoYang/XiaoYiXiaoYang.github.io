@@ -16,13 +16,12 @@ password:
 ---
 
 kafka角色：
+
 - 消息系统：Kafka和传统的消息系统都具备系统解耦性、冗余存储、流量削峰、缓冲、异步通信、扩展性、可恢复性等功能。Kafka还提供大多数消息系统难以实现的消息顺序性保障和回溯消费功能
 - 存储系统：Kafka把消息持久化到磁盘，相比于其他基于内存存储的系统而言，有效地降低了数据丢失的风险。也正是得益于Kafka的消息持久化功能和多副本机制，我们可以吧Kafka作为长期对的数据存储系统来使用。
 - 流式处理平台：Kafka不仅为每个流行的流式处理框架提供了可靠的数据来源，还提供了一个完整的流式处理类库
 
 # 初识Kafka
-
-
 
 ## 基本概念
 
@@ -43,11 +42,9 @@ kafka角色：
 当同步完成后，消费者才可以消费这条消息(为了防止leader副本宕机造成消息丢失)
 kafka的复制机制既不是完全的同步复制，也不是单纯的落后复制。同步复制要求所有能工作的follower副本都复制完，这条消息才会被确认为已成功提交，这种方式极大的影响了性能。而在异步复制方式下，follower副本异步的从leader副本中复制数据，数据只要被leader副本写入就认为已经成功提交。(在这种情况下，如果follower副本都还没有复制完而落后与leader副本，突然leader副本宕机，则会造成数据丢失)。
 
-![](../images/kafka-producer-consumer/img-20221016191323.png)
-
+![](kafka-producer-consumer/img-20221016191323.png)
 
 ## 生产与消费
-
 
 ```
 ./bin/kafka-topics.sh --zookeeper localhost:2181/kafka --create --topic topic-demo --replication-factor 3 --partitions 4
@@ -70,7 +67,9 @@ kafka的复制机制既不是完全的同步复制，也不是单纯的落后复
 # 生产者
 
 ## 生产者客户端开发
+
 步骤：
+
 1. 配置生产者客户端参数及创建相应的生产者实例
 2. 构建待发送的消息
 3. 发送消息
@@ -78,35 +77,33 @@ kafka的复制机制既不是完全的同步复制，也不是单纯的落后复
 
 ```java
 public static Properties initConfig() {
-	Properties props = new Properties();
-	props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
+    Properties props = new Properties();
+    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
 }
 
 public static void main(String[] args) {
-	Properties props = initConfig();
-	KafkaProducer<String, String> producer = new KafkaProducer<>(props);
-	ProducerRecord<String, String> record = new ProducerRecord<>(topic, "Hello, Kafka");
-	
-	try {
-		producer.send(record);
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
+    Properties props = initConfig();
+    KafkaProducer<String, String> producer = new KafkaProducer<>(props);
+    ProducerRecord<String, String> record = new ProducerRecord<>(topic, "Hello, Kafka");
+
+    try {
+        producer.send(record);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
 }
 ```
-
-
 
 消息对象ProducerRecord 并不是单纯意义上的消息，包含了多个属性
 
 ```java
 public class ProducerRecord<K, V> {
-	private final String topic;
-	private final Integer paitition;
-	private final Headers headers;
-	private final K key;
-	private final V value;
-	private final Long timestamp;
+    private final String topic;
+    private final Integer paitition;
+    private final Headers headers;
+    private final K key;
+    private final V value;
+    private final Long timestamp;
 }
 ```
 
@@ -118,8 +115,6 @@ public class ProducerRecord<K, V> {
 
 - 构建ProducerRecord 对象，topic属性和value属性是必填，其他选填
 
-
-
 ### 发送消息
 
 发送消息的三种模式
@@ -129,25 +124,17 @@ public class ProducerRecord<K, V> {
 
 异步：send方法，指定Callback回调函数
 
-
-
 可重试异常和不可重试异常
 
 对于可重试异常，如果配置了retries参数，那么只要在规定的重试次数内自行恢复，就不会抛出异常
 
 对于不可重试的异常，则直接抛出异常，不进行重试
 
-
-
 对于同一个分区而言，如果消息record1先与record2发送，那么KafkaProducer就可以保证对应的callback1先与callback2调用
-
-
 
 ### 序列化器
 
 生产者需要使用序列化器将对象转换成字节数组，才能通过网络发送给Kafka，在对端消费者使用反序列化器把Kafka转换成相应的对象
-
-
 
 序列化器实现了org.apache.kafka.common.serialization.Serializer接口
 
@@ -159,40 +146,27 @@ public byte[]serialize(String topic, T data)
 public void close()
 ```
 
-
-
 可以使用Avro、JSON、Thrift、Protobuf、Protostuff等通用工具来实现
 
-
-
 ### 分区器
-
-
 
 ```java
 public int partition(String topic, Object key,byte[] keyBytes, Object Value, byte[] valueBytes,Cluster cluster);
 public void close();
 ```
 
-
-
 - 如果ProducerRecord中指定了partition字段，则不需要分区器，partition字段就是要发往的分区号
 
 - 如果没有指定分区器，就需要分区器根据key字段来计算partition值。Kafka的默认分区器实现了 xx.Partitioner接口，接口中有partition方法和close方法
   默认分区器会判断key不为null，则对key进行哈希，最终根据得到的哈希值来计算分区号，拥有相同key的消息会被写入同一个分区。如果key为null，那么消息会以轮询的方式发往主题内的某一个可用分区
 
-  
   自定义分区器也只需实现上述接口即可
-
-
 
 ### 生产者拦截器
 
 消息发送前做一些过滤，修改等等
 
 需要自定义实现ProducerInterceptor接口
-
-
 
 KafkaProducer会在消息被应答之前或消息发送失败时调用拦截器的onAcknowledgement方法，优于用户设定的Callback之前执行。
 
@@ -202,24 +176,15 @@ public void onAcknowledgement(RecordMetadata metadata, Exception exception);
 public void close();
 ```
 
-
-
 可以指定一个拦截链，KafkaProducer按照interceptor.classes参数配置的拦截器的顺序来一一执行（各个拦截器按逗号隔开）
-
 
 ## 原理分析
 
 ### 整体架构
 
-
-
 ![生产者客户端整体架构](kafka-producer-consumer/producer-structure.jpg)
 
-
-
 生产者客户端有两个线程，主线程和Sender线程。主线程生产消息经过拦截器、序列化器、分区器缓存到消息累加器中，Sender线程从RecordAccumulator中获取消息并发往Kafka中
-
-
 
 `buffer.memory`： 指定RecordAccumulator缓存的大小
 
@@ -227,30 +192,21 @@ public void close();
 
 RecordAccumulator缓存的大小由buffer.memory配置；如果生产者发送消息的速度超过发送到服务器的速度，则会导致生产者空间不足，这时候producer的send方法调用要么被阻塞，要么抛出异常，这个取决于参数max.block.ms的设置。
 
-
 RecordAccumulator为每个分区维护一个双端队列，队列内容为ProducerBatch，ProducerBatch为一个至多个ProducerRecord；可以使得生产者创建的消息组成一个批次，更为紧凑。
-
-
 
 消息在网络上传输是以字节传输的，发送之前要创建内存区域。kafka生产者中，通过java.io.ByteBuffer实现消息内存创建和释放。RecordAccumulator内部还有一个BufferPool，实现ByteBuffer的复用。BufferPool只针对特定大小的ByteBuffer进行管理，这个大小由`batch.size`指定。
 
 `batch.size` 指定ByteBuffer的大小
 
-
-
 ProducerBatch的大小和batch.size相关。当一条ProducerRecord消息到了RecordAccumulator，会先寻找与分区对应的双端队列(如果没有则新建)，再从尾部获取一个ProducerBatch，查看该ProducerBatch中是否还可以写入这个ProducerRecord，可以写入则写入，不可以写入则新建ProducerBatch。
 
 新建ProducerBatch时，判断这条ProducerRecord消息大小是否超过batch.size没超过，则就以batch.size的大小新建ProducerBatch，这段内存还可以由ByterBuffer复用；如果超过了则以评估的大小新建ProducerBatch，这段内存不会被复用。
-
-
 
 Sender从RecordAccumulator获取缓存的消息后，进一步将原本的`<分区，Deque<ProducerBatch>>` 转换为 `<Node, List<ProducerBatch>>`Node表示kafka集群的结点。生产者向具体的broker结点发消息。
 
 Sender还会进一步封装为`<Node, Request>`才发往各个Node，请求在从Sender发往kafka之前会保存到InFlightRequests中，保存形式为`Map<NodeId, Deque<Request>>`主要作用是缓存了已经发出去，但是还没有收到响应的请求。
 
 这里限制了每个连接最多缓存的请求数，由`max.in.flight.requests.per.connecttion`指定，默认为5
-
-
 
 ### 元数据的更新
 
@@ -261,7 +217,6 @@ leastLoadedNode，即所有Node中负载最小的。
 
 leastLoadedNode还可以用于**元数据请求**、**消费者组播协议的交互**
 
-
 如果发送一个很简单的消息
 
 ```
@@ -271,12 +226,9 @@ ProducerRecord<string, string> record = new ProducerRecord<>(topic, "hello");
 这里只有主题和消息
 KafkaProducer需要将消息追加到指定主题的某个分区的对应leader副本之前。需要知道分区数目，计算出目标分区，需要知道目标分区的leader副本所在broker结点的地址、端口信息。这些需要的信息都属于**元数据信息**。
 
-
 bootstrap.servers参数只需要配置部分broker结点的地址，客户端可以发现其他broker结点的地址，这一过程属于元数据更新。
 
 客户端没有元数据信息时，会先选出leastLoadedNode，然后向这个Node发送MetadataRequest请求来获取具体的元数据信息。这个更新操作由Sender线程发起，在创建完MetadataRequest后同样会存入inFlightRequests。元数据虽然由Sender线程负责更新，但是主线程也需要读取这些信息，这里数据同步通过synchronized 和 final关键字保障。
-
-
 
 ### 重要的生产者参数
 
@@ -306,11 +258,7 @@ retries 和 retry.backoff.ms
 
 `request.timeout.ms` 配置Producer等待请求响应的最长时间，默认30000ms
 
-
-
 # 消费者
-
-
 
 ## 消费者与消费者组
 
@@ -319,7 +267,6 @@ retries 和 retry.backoff.ms
 每个消费组消费全部分区的消息。
 
 消费者与消费组这种模型又可以让整体的消费能力具备横向伸缩性，我们可以增加消费者的个数来提高整体的消费能力。对于分区数固定的情况，一直增加消费者，到消费者个数超过分区数，就会有消费者分配不到分区。
-
 
 消息投递模式：
 点对点模式：基于队列，消息生产者发送消息到队列，消费者从消息队列中接收消息。
@@ -331,11 +278,7 @@ kafka同时支持两种消息投递模式。
 - 如果所有的消费者隶属于一个消费者组，那么所有的消息都会被均衡的投递给每一个消费者，即每条消息只会被一个消费者处理，这相当于点对点。
 - 如果所有的消费者隶属于不同的消费组，那么所有的消息都会被广播给所有的消费者，即每条消息都会被所有的消费者处理，相当于发布订阅模式应用。
 
-
-
 消费组是一个逻辑概念，每个消费者在消费前需要指定所属消费组的名称，由`group.id`指定。消费者是实际的应用实例，可以是一个线程，也可以是一个进程，同一个消费组的消费者既可以部署在同一机器上，也可以部署在不同机器上。
-
-
 
 ## 客户端开发
 
@@ -347,34 +290,32 @@ kafka同时支持两种消息投递模式。
 
 ```java
 public class KafkaConsumerAnalysis {
-	public static final String brokerList = "";
-	...
-	
-	public static Properties initConfig() {
-		Properties props = new Properties();
-		props.put("bootstrap.servers", brokerList);
-	}
-	
-	public static void main() {
-		Properties props = initConfig();
-		KafkaConsumer<String, String> consumer = new KafkaConsmer<>(props);
-		consumer.subscribe(Arrays.asList(topic));
-		
-		try {
-			while(isRunning.get()) {
-				ConsumerRecrds<String, String> records = consumer.poll(Duration.ofMillis(1000));
-				
-			} catch (Exception e) {
-				log.error("");
-			} finally {
-				consumer.close();
-			}
-		}
-	}
+    public static final String brokerList = "";
+    ...
+
+    public static Properties initConfig() {
+        Properties props = new Properties();
+        props.put("bootstrap.servers", brokerList);
+    }
+
+    public static void main() {
+        Properties props = initConfig();
+        KafkaConsumer<String, String> consumer = new KafkaConsmer<>(props);
+        consumer.subscribe(Arrays.asList(topic));
+
+        try {
+            while(isRunning.get()) {
+                ConsumerRecrds<String, String> records = consumer.poll(Duration.ofMillis(1000));
+
+            } catch (Exception e) {
+                log.error("");
+            } finally {
+                consumer.close();
+            }
+        }
+    }
 }
 ```
-
-
 
 ### 必要的参数配置
 
@@ -392,8 +333,6 @@ public class KafkaConsumerAnalysis {
 
 如ConsumerConfig.GROUP_ID_CONFIG
 
-
-
 ### 订阅主题与分区
 
 一个消费者可以订阅一个或多个主题，subscribe的几个重载方法
@@ -404,8 +343,6 @@ public void subscribe(Collection<String> topics);
 public void subscribe(Pattern pattern, ConsumerRebalanceListener listener);
 public void subscribe(Pattern pattern);
 ```
-
-
 
 1.集合方式，`subscribe(Collection<String> topics)`订阅了什么就消费什么主题的消息。
 
@@ -418,20 +355,18 @@ public void subscribe(Pattern pattern);
 ```java
 public void assign(Collection<TopicPartition> partitions);
 ```
-例：`public List<PartitionInfo> partitionsFor(String topic)`
 
+例：`public List<PartitionInfo> partitionsFor(String topic)`
 
 TopicPartition类表示分区
 
 ```java
 public final class TopicPartition implements Serializable {
-	private final int partition; //分区
-	private final String topic; //主题
-	...
+    private final int partition; //分区
+    private final String topic; //主题
+    ...
 }
 ```
-
-
 
 如果事先不知道主题中有多少分区，则使用partitionsFor()方法查询指定主题的元数据信息
 
@@ -439,16 +374,14 @@ public final class TopicPartition implements Serializable {
 public List<PartitionInfo> partitionsFor(String topic)
 
 public class PartitionInfo {
-	private final String topic;
-	private final int paitition;
-	private final Node leader;
-	private final Node[] replicas;  //AR
-	private final Node[] inSyncReplicas; //ISR
-	private final Node offlineReplicas;  //OSR
+    private final String topic;
+    private final int paitition;
+    private final Node leader;
+    private final Node[] replicas;  //AR
+    private final Node[] inSyncReplicas; //ISR
+    private final Node offlineReplicas;  //OSR
 }
 ```
-
-
 
 取消订阅
 
@@ -457,8 +390,6 @@ consumer.unsubscribe()
 ```
 
 如果没有订阅任何主题或分区，那么继续执行消费程序会报异常IllegalStateException
-
-
 
 订阅状态:
 集合订阅  `AUTO_TOPICS`
@@ -520,13 +451,11 @@ public class ConsumerRecord<K, V> {
 它还提供了按照主题维度来进行消费的方法
 `public Iterable<ConsumerRecord<K, V>> records(String topic)`
 
-
 ### 位移提交
 
 对于kafka中的分区而言，它的每条消息都有唯一的offset，用来表示消息在分区中对应的位置。
 笔者对于消息在分区中的位置，这个offset称为‘偏移量’
 对于消费者消费到的位移，这个offset称为‘消费位移’
-
 
 在每次调用poll方法时，它返回的是还没有被消费过的消息集，要做到这一点就要记录上一次消费时的消费位移。
 消费位移要持久化保存，这个消费位移存储在kafka内部主题 `_consumer_offsets`中。消费者在消费完消息后需要执行消费位移的提交。
@@ -582,15 +511,18 @@ pause和resume来分别实现暂停某些分区在拉取操作时返回数据给
 public void pause(Collection<TopicPartition> partitions)
 public void resume(Collection<TopicPartition> partitions)
 ```
+
 还可以检查被暂停的分区集合
 `public Set<TopicPartition> paused()`
 
 kafka consumer提供了close方法来实现关闭
+
 ```java
 public void close()
 public void close(Duration timeout)
 public void close(long timeout, TimeUnit timeUnit)
 ```
+
 第一种方法没有timeout参数，并不意味着会无限制的等待，它内部设定了最长等待时间30s
 
 ### 指定位移消费
@@ -604,9 +536,11 @@ public void close(long timeout, TimeUnit timeUnit)
 `none` ： 不从末尾也不从开始处开始消费，报NoOffsetForPartitionException异常
 
 seek方法提供了从特定位移处开始拉去消息的功能
+
 ```java
 public void seek(TopicPartition partition, long offset)
 ```
+
 seek方法只能重置消费者分配到的分区的消费位置，而分区的分配是在poll方法的调用过程中实现的，也就是说，在执行seek方法之前需要先执行一次poll方法。
 
 ```java
@@ -621,11 +555,11 @@ ConsumerRecords<String , String> records = consumer.poll(DurationofMllis(1000));
 //consume the record .
 }
 ```
+
 如果我们将代码清单 中第①行 poll （）方法的参数设置为 ，即这 行替换为
 `consumer poll(Duration.ofMillis(0)) ;`
 
 此之后， 会发现 seek（） 方法并未有任何作用。因为当 poll （）方法中 参数为0时，此方法立刻返回，那么 poll （） 方法内部进行分区分配的逻辑就会来不及实施。
-
 
 如果对未分配到的分区执行 seek（） 方法 那么会报出IllegalStateException 的异常。类似在调用 subscrib （） 方法之后直接调用 seek（） 方法
 
@@ -633,11 +567,12 @@ ConsumerRecords<String , String> records = consumer.poll(DurationofMllis(1000));
 consumer.subscribe(Arrays.asList(topic)) ; 
 consumer.seek(new TopicPartition(topic, 0), 10 );
 ```
+
 会报出如下的异常
 java.lang.I llegalStateException: No current assignment for partition topic- demo - 0
 
-
 seek的几个方法定义
+
 ```java
 public Map<Top cPartition Long> endOffsets( Collection<TopicPartition> partitions) 
 public Map<TopicPartition , Long> endOffsets( Collection<Top cPartit on> part tions
@@ -683,12 +618,12 @@ public void onPartitionsAssigned(Collection<TopicPartition partitions) {
 ### 消费者拦截器
 
 消费者拦截器需要自定义实现 org.apache.kafka.clients.consumer.Consumerlnterceptor 接口。
+
 ```java
 public ConsumerRecords<K, V> onConsume(ConsumerRecords<K , V> records);
 public void onCommit(Map<TopicPartition, OffsetAndMetadata> offsets);
 public void close();
 ```
-
 
 Kafkaconsumer 会在 poll （）方法返回之前调用拦截器的 Consume（） 方法来对消息进行相应
 的定制 操作，KafkaConsumer 会在提交完消费位移之后调用拦截器的 onCommit（） 方法
@@ -716,13 +651,13 @@ acquire（）方法和 release （）方法成对出现，表示相应的加锁�
 ```java
 private void release() 
 if (refcount.decrementAndGet () == 0) {
-	currentThread.set(NO CURRENT THREAD);
+    currentThread.set(NO CURRENT THREAD);
 }
 ```
 
 多线程的目的就是为了提高整体的消费能力。多线程的实现方式有多种，第一种也是最常见的方式 线程封闭，即为每个线程实例化一个 KafkaConsumer 对象。
 
-![](../images/kafka-producer-consumer/img-20221030190716.png)
+![](kafka-producer-consumer/img-20221030190716.png)
 
 一个消费线程可消费一个或多个分区中的消息，所有的消费线程都隶属于同一个消费组。这种实现方式的并发度受限于分区的实际个数，当消费线程的个数大于分区数时 就有部分消费线程一直处于空闲的状态。
 
@@ -730,75 +665,74 @@ if (refcount.decrementAndGet () == 0) {
 
 ```java
 public static void main(String[] args) { 
-	Properties props = itConfig (); 
-	int consumerThreadNum = 4 ; 
-	for(int i=O;i<consumerThreadNum;i++) { 
-	new KafkaConsumerThread(props,topic).start();
-	}
+    Properties props = itConfig (); 
+    int consumerThreadNum = 4 ; 
+    for(int i=O;i<consumerThreadNum;i++) { 
+    new KafkaConsumerThread(props,topic).start();
+    }
 }
 
 public static class KafkaConsumerThread extends Thread{
-	private KafkaConsumer<String , String> kafkaConsumer;
-	public KafkaConsumerThread(Properties props, String topic) { 
-	this.kafkaConsumer =new KafkaConsumer<>(props); 
-	this.kafkaConsumer.subscribe(Arrays asList(topic));
+    private KafkaConsumer<String , String> kafkaConsumer;
+    public KafkaConsumerThread(Properties props, String topic) { 
+    this.kafkaConsumer =new KafkaConsumer<>(props); 
+    this.kafkaConsumer.subscribe(Arrays asList(topic));
 }
 
-	@Override 
-	public void run() {
-	try { 
-		while (true) { 
-		ConsumerRecords<String, String> records = 
-		kafkaConsumer.poll (Duration.ofMill (1 00)) ; 
-		for (ConsumerRecord<String, Stri g> record : records) { 
-		// 处理消息模块 ① 
-		}
-	}
-	} catch (Exception e) { 
-		e.printStackTrace(); 
-	} finally { 
-		kafkaConsumer.close();
-	}
-	}
+    @Override 
+    public void run() {
+    try { 
+        while (true) { 
+        ConsumerRecords<String, String> records = 
+        kafkaConsumer.poll (Duration.ofMill (1 00)) ; 
+        for (ConsumerRecord<String, Stri g> record : records) { 
+        // 处理消息模块 ① 
+        }
+    }
+    } catch (Exception e) { 
+        e.printStackTrace(); 
+    } finally { 
+        kafkaConsumer.close();
+    }
+    }
 ```
 
 上面这种多线程的实现方式和开启多个消费进程的方式没有本质上的区别， 优点是每个线程可以按顺序消费各个分区中的消息。缺点也很明显，每个消费线程都要维护一个独立的TCP 连接 如果分区数和 consumerThreadNum 的值都很大，那么会造成不 的系统开销。
 
 这里的处理速度取决于处理消息模块，。一般 言， poll（）拉取消息的速度是相当快的 ，而整体消费的瓶颈是在处理消息这一块， 通过－定的方式来改进这一部分，那么就能带动整体消费性能提升。
 
-![](../images/kafka-producer-consumer/img-20221030193459.png)
+![](kafka-producer-consumer/img-20221030193459.png)
 
 ```java
-	@Override 
-	public void run() {
-	try { 
-		while (true) { 
-		ConsumerRecords<String, String> records = 
-		kafkaConsumer.poll(Duration.ofMill (1 00)) ; 
-		if (!records.isEmpty () ) { 
-			executorService.submit(new RecordsHandler(records));  // 调用各个hander处理消息
-		}
-	}
-	} catch (Exception e) { 
-		e.printStackTrace(); 
-	} finally { 
-		kafkaConsumer.close();
-	}
-	}
+    @Override 
+    public void run() {
+    try { 
+        while (true) { 
+        ConsumerRecords<String, String> records = 
+        kafkaConsumer.poll(Duration.ofMill (1 00)) ; 
+        if (!records.isEmpty () ) { 
+            executorService.submit(new RecordsHandler(records));  // 调用各个hander处理消息
+        }
+    }
+    } catch (Exception e) { 
+        e.printStackTrace(); 
+    } finally { 
+        kafkaConsumer.close();
+    }
+    }
 
-	public static class RecordsHandler extends Thread{ 
-	public final ConsumerRecords<String, String> records;
+    public static class RecordsHandler extends Thread{ 
+    public final ConsumerRecords<String, String> records;
 
-	public RecordsHandl er (ConsumerRecords<String, String> records) ( 
-		this.records =records;
-	}
+    public RecordsHandl er (ConsumerRecords<String, String> records) ( 
+        this.records =records;
+    }
 
-	@Override 
-	public void run() {
-		// 处理records
-	}
-	}
-
+    @Override 
+    public void run() {
+        // 处理records
+    }
+    }
 ```
 
 RecordHandler 类是用来处理消息的，而 KafraConsumerThread 类对应的是一个消费线程，里面通过线程池的方式来调用 RecordHandler 处理一批批的消息。
@@ -806,34 +740,34 @@ RecordHandler 类是用来处理消息的，而 KafraConsumerThread 类对应的
 引入一个共享
 变量 offsets 来参与提交
 
-![](../images/kafka-producer-consumer/img-20221030200350.png)
+![](kafka-producer-consumer/img-20221030200350.png)
 
 每一个处理消息的 RecordHandler 类在处理完消息之后都将对应的消费位移保存到共享变量offsets 中， KafraConsumerThread 在每一次 poll （）方法之后都读取 offsets 中的内容并对其进行位移提交。
 
 ```java
 for (TopicPartition tp : records .partitions()) { 
-	List<ConsumerRecord<String , String> tpRecords = records . records(tp); 
-	// 处 tpRec ords
-	long lastConsumedOffset = tpRecords . get (tpRecords. size() - 1) . offset() ; 
-	synchronized (offsets) { 
-		if offsets.co ta 工口 sKey (tp)) { 
-			offsets.put(tp, new OffsetAndMetadata(lastConsumedOffset + l)) ; 
-		} else { 
-			long position = offsets . get(tp) .offset() ; 
-			if (position < lastConsumedOffset + 1) { 
-			offsets.put(tp, new OffsetAndMetadata(lastConsumedOffset + l))
-			}
-		}
-	}
+    List<ConsumerRecord<String , String> tpRecords = records . records(tp); 
+    // 处 tpRec ords
+    long lastConsumedOffset = tpRecords . get (tpRecords. size() - 1) . offset() ; 
+    synchronized (offsets) { 
+        if offsets.co ta 工口 sKey (tp)) { 
+            offsets.put(tp, new OffsetAndMetadata(lastConsumedOffset + l)) ; 
+        } else { 
+            long position = offsets . get(tp) .offset() ; 
+            if (position < lastConsumedOffset + 1) { 
+            offsets.put(tp, new OffsetAndMetadata(lastConsumedOffset + l))
+            }
+        }
+    }
 }
 ```
 
 ```java
 synchronized (offsets) { 
 if (!offsets. isEmpty () ) { 
-	kafkaConsumer.commitSync(offsets); 
-	offsets.clear();
-	}
+    kafkaConsumer.commitSync(offsets); 
+    offsets.clear();
+    }
 }
 ```
 
@@ -841,7 +775,7 @@ if (!offsets. isEmpty () ) {
 
 通过消费者拉取分批次的消息，然后提交给多线程进行处理，而这里的滑动窗口式的实现方式是将拉取到的消息暂存起来， 多个消费线程可以拉取暂存的消息，这个用于暂存消息的缓存大小即为滑动窗口的大小， 总体上而言没有太多的变化 不同的是对于消费位移的把控。
 
-![](../images/kafka-producer-consumer/img-20221030201350.png)
+![](kafka-producer-consumer/img-20221030201350.png)
 
 startOffset标注的是当前滑动 口的起始位置 endOffset 注的是末尾位置。每当 startOffset 指向的方格中的消息被消 费完成，就可以提交这部分的位移，与此同时，窗 口向 前滑动一格， 除原来startOffset 所指方格中对应的消息 并且拉取新的消息进入窗口。
 
@@ -881,15 +815,6 @@ startOffset标注的是当前滑动 口的起始位置 endOffset 注的是末尾
 `isolation.level`：配置消费者的事务隔离级别。有效值为“read uncommitted ，，和
 “ read committed ＂
 
-![](../images/kafka-producer-consumer/img-20221030202942.png)
+![](kafka-producer-consumer/img-20221030202942.png)
 
-![](../images/kafka-producer-consumer/img-20221030202957.png)
-
-
-
-
-
-
-
-
-
+![](kafka-producer-consumer/img-20221030202957.png)
