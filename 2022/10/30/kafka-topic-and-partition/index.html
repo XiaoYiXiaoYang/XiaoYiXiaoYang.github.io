@@ -422,10 +422,18 @@
 <h2 id="创建主题"><a href="#创建主题" class="headerlink" title="创建主题"></a>创建主题</h2><p>如果 broker 端配置参数 auto.create.topics.enable 设置 true （默认值就是 true) , 那么当生产者向一个尚未创建的主题发送消息时，会自动创建一个分区数为 num.partitions（默认值为1 ）、副本因子为 default.replication.factor （默认值为1 ）的主题。</p>
 <p>例：</p>
 <pre><code>bin/kafka-top cs .sh - zookeeper localhost: 2181/kafka 
---create --topic top create --partitions 4 --replication-factor 2</code></pre><p>在执行完脚本之后， Kafka 会在 log.dir log.dirs 参数所配置的目录下创建相应的主题分区，默认情况下这个目录为／tmp/kafka-logs／<br><img src="../images/kafka-topic-and-partition/img-20221030211533.png" alt></p>
-<p>topic-create-0 topic-create-1对应了主题的两个分区，其余两个分区被创建到了别的节点<br><img src="../images/kafka-topic-and-partition/img-20221030211753.png" alt></p>
-<p>主题、分区、副本和 Log （日志）的关系如下<br><img src="../images/kafka-topic-and-partition/img-20221030211824.png" alt></p>
-<p>我们不仅可以通过日志文件的根目录来查看集群中各个 broker 的分区副本的分配情况，还可以通过 ZooKeeper 客户端来获取。<br>当创建一个主题时会在 zooKeeper 的／ brokers/topics/ 目录下创建一个同名的实节点，该节点记录了该主题的分区副本分配方案。<br><img src="../images/kafka-topic-and-partition/img-20221030212257.png" alt></p>
+--create --topic top create --partitions 4 --replication-factor 2</code></pre><p>在执行完脚本之后， Kafka 会在 log.dir log.dirs 参数所配置的目录下创建相应的主题分区，默认情况下这个目录为／tmp/kafka-logs／</p>
+<img src="/2022/10/30/kafka-topic-and-partition/img-20221030211533.png">
+
+<p>topic-create-0 topic-create-1对应了主题的两个分区，其余两个分区被创建到了别的节点</p>
+<img src="/2022/10/30/kafka-topic-and-partition/img-20221030211753.png">
+
+<p>主题、分区、副本和 Log （日志）的关系如下</p>
+<img src="/2022/10/30/kafka-topic-and-partition/img-20221030211824.png">
+
+<p>我们不仅可以通过日志文件的根目录来查看集群中各个 broker 的分区副本的分配情况，还可以通过 ZooKeeper 客户端来获取。<br>当创建一个主题时会在 zooKeeper 的／ brokers/topics/ 目录下创建一个同名的实节点，该节点记录了该主题的分区副本分配方案。</p>
+<img src="/2022/10/30/kafka-topic-and-partition/img-20221030212257.png">
+
 <p>示例数据中的 “2”：[1, 2] 表示分区2 分配了2个副本，分别在 brokerld 1和 brokerId 2节点中。</p>
 <p>kafka topics脚本中还提供了 replica-assignment 参数来手动指定分区副本的分配方案。<br>replica assignment 参数的用法归纳如下：<br><code>-- replica-assignment &lt;String : broker_id_ for_part1_replica1: broker_id for 
 partl_replica2 , broker_id _for_part2_replica1: broker_ id_ for _part2_replica2 , ... &gt;</code><br>这种方式根据分区号的数值大小按照从小到大的顺序进行排列 分区与分区 逗号 “，”<br>隔开，分区内多个副本用冒号“：”隔开</p>
@@ -477,14 +485,20 @@ partl_replica2 , broker_id _for_part2_replica1: broker_ id_ for _part2_replica2 
 <h2 id="配置管理"><a href="#配置管理" class="headerlink" title="配置管理"></a>配置管理</h2><p>kafka-configs 脚本是专门用来对配置进行操作的，这里的操作是指在运行状态下修改原有的配置，如此可以达到动态变更的目的。</p>
 <p>kafka configs.sh 脚本不仅可以支持操作主题相关的配置，还支持操作broker 、用户和客户端这三个类型 配置。</p>
 <h2 id="主题端参数"><a href="#主题端参数" class="headerlink" title="主题端参数"></a>主题端参数</h2><p>与主题相关的所有配置参数在 broker 层面都有对应参数，<br>比如主题端参数 cleanup.policy 对应 broker 层面的 log.cleanup policy</p>
-<p><img src="../images/kafka-topic-and-partition/img-20221106222237.png" alt></p>
-<p><img src="../images/kafka-topic-and-partition/img-20221106222301.png" alt></p>
-<p><img src="../images/kafka-topic-and-partition/img-20221106222336.png" alt></p>
-<p><img src="../images/kafka-topic-and-partition/img-20221106222348.png" alt></p>
+<img src="/2022/10/30/kafka-topic-and-partition/img-20221106222237.png">
+
+<img src="/2022/10/30/kafka-topic-and-partition/img-20221106222301.png">
+
+<img src="/2022/10/30/kafka-topic-and-partition/img-20221106222336.png">
+
+<img src="/2022/10/30/kafka-topic-and-partition/img-20221106222348.png">
+
 <h2 id="删除主题"><a href="#删除主题" class="headerlink" title="删除主题"></a>删除主题</h2><p>kafka-topics.sh 脚本中的 delete 令就可以用来删除主题</p>
 <p>使用 kafka_topics.sh 脚本删除主题的行为本质上只是在 ZooKeeper 中的 /admin/delete_topics 路径下 建一个与待删除主题同名的节点，以 标记该主题为待删除的状态。与创建主题相同的是，真正删除主题的动作也是由 Kafka 的控制器负责完成的。</p>
-<p><img src="../images/kafka-topic-and-partition/img-20221106222536.png" alt></p>
-<p><img src="../images/kafka-topic-and-partition/img-20221106222544.png" alt></p>
+<img src="/2022/10/30/kafka-topic-and-partition/img-20221106222536.png">
+
+<img src="/2022/10/30/kafka-topic-and-partition/img-20221106222544.png">
+
 <h1 id="初识-KafkaAdminClient"><a href="#初识-KafkaAdminClient" class="headerlink" title="初识 KafkaAdminClient"></a>初识 KafkaAdminClient</h1><h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p>和脚本类似，可以使用Topicommand类创建主题等。</p>
 <ul>
 <li>创建主题 CreateTopicsResult createTopics(Collection<newtopic> newTopics)</newtopic></li>
@@ -496,7 +510,9 @@ partl_replica2 , broker_id _for_part2_replica1: broker_ id_ for _part2_replica2 
 <li>增加分区 CreatePartitionsResult createPartitions(Map&lt;String, NewPartitions&gt; new Partitions)</li>
 </ul>
 <h2 id="主题合法性验证"><a href="#主题合法性验证" class="headerlink" title="主题合法性验证"></a>主题合法性验证</h2><p>Kafka broker 端有－个这样的参数 create.topic.policy.class.name，默认值为null<br>它提供了一个入口用来验证主题创建的合法性。使用方式很简单，只需要自定义实现org.apache.kafka.server.policy.CreateTopicPolicy 接口</p>
-<p>例：<br><img src="../images/kafka-topic-and-partition/img-20221106223639.png" alt></p>
+<p>例：</p>
+<img src="/2022/10/30/kafka-topic-and-partition/img-20221106223639.png">
+
 <h1 id="分区的管理"><a href="#分区的管理" class="headerlink" title="分区的管理"></a>分区的管理</h1><h2 id="优先副本的选举"><a href="#优先副本的选举" class="headerlink" title="优先副本的选举"></a>优先副本的选举</h2><p>分区使用多副本机制来提升可靠性，但只有 leader 副本对外提供读写服务，而 follower本只负责在内部进行消息的同步。</p>
 <p>优先副本选举是指通过一定的方法促使副本选举为 leader ，以此来促进集群负载均衡 行为 可以称为“分区平衡”</p>
 <p>Kafka 中可以提供分区自动平衡的功能，与此对应的 broker 端参数是 auto.leader.rebalance.enable ，此参数的默认值为 true。Kafka 的控制器会启动一个定时任务，默认5分钟执行一次，这个定时任务会轮询所有的 broker节点，计算每个 broker 节点的分区不平衡率是否超过默认值10%</p>
@@ -516,8 +532,10 @@ partl_replica2 , broker_id _for_part2_replica1: broker_ id_ for _part2_replica2 
 <h1 id="如何选择合适的分区数"><a href="#如何选择合适的分区数" class="headerlink" title="如何选择合适的分区数"></a>如何选择合适的分区数</h1><h2 id="性能测试工具"><a href="#性能测试工具" class="headerlink" title="性能测试工具"></a>性能测试工具</h2><p>Kafka 本身提供的用于生产者性能测试 kafka-producer-perf-test.sh 和用于消费者性能测试的kafka-consumer-perf-test.sh</p>
 <h2 id="分区数越多吞吐量就越高吗"><a href="#分区数越多吞吐量就越高吗" class="headerlink" title="分区数越多吞吐量就越高吗"></a>分区数越多吞吐量就越高吗</h2><p>对生产者而言，每一个分区的数据写入是完全可以并行<br>对消费者而言， Kafka 只允许单个分区中的消息被一个消费者线程消费， 一个消费组的消费并行度完全依赖于所消费的分区数</p>
 <p>消息中间件的性能 般是指吞吐量（广义来说还包括延迟）。抛开硬件资源的影响，消息<br>写入的吞吐量还会受到消息大小、消息压缩方式、消息发送方式（同步 异步）、消息确认类型<br>acks、副本因子等参数影 响， 消息消费 吞吐量还会受到应用逻辑、处理速度的影响</p>
-<p><img src="../images/kafka-topic-and-partition/img-20221106230140.png" alt><br>分区数为1时吞吐量最低，随着分区数的增长，相应的吞吐量跟着上涨。一旦分区数超过了某个阔值之后，整体的吞吐量是不升反降的。</p>
-<p><img src="../images/kafka-topic-and-partition/img-20221106230222.png" alt><br>随着分区数的增加，相应的吞吐量也会有所增长。一旦分区数超过了某个阈值之后，整体的吞吐量也是不升反降的</p>
+<img src="/2022/10/30/kafka-topic-and-partition/img-20221106230140.png">
+<p>分区数为1时吞吐量最低，随着分区数的增长，相应的吞吐量跟着上涨。一旦分区数超过了某个阔值之后，整体的吞吐量是不升反降的。</p>
+<img src="/2022/10/30/kafka-topic-and-partition/img-20221106230222.png">
+<p>随着分区数的增加，相应的吞吐量也会有所增长。一旦分区数超过了某个阈值之后，整体的吞吐量也是不升反降的</p>
 <h2 id="分区数的上限"><a href="#分区数的上限" class="headerlink" title="分区数的上限"></a>分区数的上限</h2><p>一味的增加分区数并不能使吞吐量一直得到提升，并且分区数也并不能一直增加，如果超默认配置值，还会引起 Kafka 进程的崩溃</p>
 <p>创建过多分区会有异常，最关键的信息是“Too many open flies ”，这是一种常见的 Linux 系统错误，通常意文件描述符不足，它一般发生在创建线程、创建 Socket 、打开文件这些场景下 Linux系统的默认设置下，这个 件描述符的个数不是很 ，通过 ulimit 命令可以查看。</p>
 <p>ulimit 是在系统允许的情况下，提供对特定 shell 可利用的资源的控制。-H和-S选项指定资源的硬限制和软限制</p>
@@ -1158,7 +1176,7 @@ partl_replica2 , broker_id _for_part2_replica1: broker_ id_ for _part2_replica2 
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">20.5k</span>
+            <span class="white-color">20.3k</span>
             
 
             <br>

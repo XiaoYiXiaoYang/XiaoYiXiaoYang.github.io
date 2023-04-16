@@ -429,14 +429,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1k
+                    826
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    4 分
                 </div>
                 
                 
@@ -518,64 +518,6 @@
     <span class="token keyword">return</span> head<span class="token punctuation">.</span>Next
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="合并-K-个升序链表"><a href="#合并-K-个升序链表" class="headerlink" title="合并 K 个升序链表"></a>合并 K 个升序链表</h3><pre class="line-numbers language-go"><code class="language-go"><span class="token comment" spellcheck="true">/**
- * Definition for singly-linked list.
- * type ListNode struct {
- *     Val int
- *     Next *ListNode
- * }
- */</span>
-<span class="token keyword">func</span> <span class="token function">mergeKLists</span><span class="token punctuation">(</span>lists <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">*</span>ListNode<span class="token punctuation">)</span> <span class="token operator">*</span>ListNode <span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">// 和合并两个有序数组类似，本次使用方法1</span>
-    <span class="token comment" spellcheck="true">// 方法1 类似归并排序，两两合并，最后合并成一个</span>
-    <span class="token comment" spellcheck="true">// 方法2 顺序合并，n-1此合并</span>
-    <span class="token keyword">var</span> merge <span class="token keyword">func</span><span class="token punctuation">(</span>lists <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">*</span>ListNode<span class="token punctuation">,</span> left<span class="token punctuation">,</span> right <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token operator">*</span>ListNode
-    merge <span class="token operator">=</span> <span class="token keyword">func</span><span class="token punctuation">(</span>lists <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">*</span>ListNode<span class="token punctuation">,</span> left<span class="token punctuation">,</span> right <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token operator">*</span>ListNode<span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">// 终止条件</span>
-        <span class="token keyword">if</span> left <span class="token operator">==</span> right <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> lists<span class="token punctuation">[</span>left<span class="token punctuation">]</span>
-        <span class="token punctuation">}</span>
-        <span class="token keyword">if</span> left <span class="token operator">></span> right <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token boolean">nil</span>
-        <span class="token punctuation">}</span>
-
-        mid <span class="token operator">:=</span> <span class="token punctuation">(</span>left <span class="token operator">+</span> right<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">2</span>
-        l1 <span class="token operator">:=</span> <span class="token function">merge</span><span class="token punctuation">(</span>lists<span class="token punctuation">,</span> left<span class="token punctuation">,</span> mid<span class="token punctuation">)</span>
-        l2 <span class="token operator">:=</span> <span class="token function">merge</span><span class="token punctuation">(</span>lists<span class="token punctuation">,</span> mid<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">,</span> right<span class="token punctuation">)</span>
-
-        <span class="token keyword">return</span> <span class="token function">mergeTwoLists</span><span class="token punctuation">(</span>l1<span class="token punctuation">,</span> l2<span class="token punctuation">)</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">return</span> <span class="token function">merge</span><span class="token punctuation">(</span>lists<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token function">len</span><span class="token punctuation">(</span>lists<span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">func</span> <span class="token function">mergeTwoLists</span><span class="token punctuation">(</span>l1<span class="token punctuation">,</span> l2 <span class="token operator">*</span>ListNode<span class="token punctuation">)</span><span class="token operator">*</span>ListNode <span class="token punctuation">{</span>
-    head <span class="token operator">:=</span> <span class="token operator">&amp;</span>ListNode<span class="token punctuation">{</span><span class="token punctuation">}</span>
-    p <span class="token operator">:=</span> head
-    <span class="token keyword">for</span> <span class="token punctuation">;</span>l1 <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token operator">&amp;&amp;</span> l2 <span class="token operator">!=</span> <span class="token boolean">nil</span><span class="token punctuation">;</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> l1<span class="token punctuation">.</span>Val <span class="token operator">&lt;</span> l2<span class="token punctuation">.</span>Val <span class="token punctuation">{</span>
-            p<span class="token punctuation">.</span>Next <span class="token operator">=</span> l1
-            l1 <span class="token operator">=</span> l1<span class="token punctuation">.</span>Next
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            p<span class="token punctuation">.</span>Next <span class="token operator">=</span> l2
-            l2 <span class="token operator">=</span> l2<span class="token punctuation">.</span>Next
-        <span class="token punctuation">}</span>
-
-        <span class="token comment" spellcheck="true">// p向前进</span>
-        p <span class="token operator">=</span> p<span class="token punctuation">.</span>Next
-    <span class="token punctuation">}</span>
-
-    <span class="token comment" spellcheck="true">// 当l1还没结束</span>
-    <span class="token keyword">if</span> l1 <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
-        p<span class="token punctuation">.</span>Next <span class="token operator">=</span> l1
-    <span class="token punctuation">}</span>
-    <span class="token comment" spellcheck="true">// 当l2还没结束</span>
-    <span class="token keyword">if</span> l2 <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
-        p<span class="token punctuation">.</span>Next <span class="token operator">=</span> l2
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">return</span> head<span class="token punctuation">.</span>Next
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-go"><code class="language-go"><span class="token comment" spellcheck="true">/**
  * Definition for singly-linked list.
  * type ListNode struct {
  *     Val int
@@ -1411,7 +1353,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">20.5k</span>
+            <span class="white-color">20.3k</span>
             
 
             <br>
