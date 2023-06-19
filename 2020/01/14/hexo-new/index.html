@@ -391,7 +391,7 @@ Hexo是本次新挖掘出来的搭建网站的快速工具，容易上手，且�
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.1k
+                    1.2k
                 </div>
                 
 
@@ -514,6 +514,13 @@ Hexo是本次新挖掘出来的搭建网站的快速工具，容易上手，且�
 <td>文章转载规则， 可以是 cc_by, cc_by_nd, cc_by_sa, cc_by_nc, cc_by_nc_nd, cc_by_nc_sa, cc0, noreprint 或 pay 中的一个</td>
 </tr>
 </tbody></table>
+<h2 id="2023-04-16"><a href="#2023-04-16" class="headerlink" title="2023.04.16"></a>2023.04.16</h2><p>文章插图问题：当我想在_post目录下创建images文件夹，存放图片</p>
+<pre><code>_posts/images/$filename/$imagename</code></pre><p>然后在md中通过相对路径引用文件</p>
+<pre><code>![](../images/$filename/$imagename</code></pre><p>但是由于hexo-image插件不能正确的将文件路径转换，导致转换后的路径和要引用的文件的路径不一致，也就导致了文章中图片不显示。</p>
+<pre><code>hexo-asset-image 已经过期
+替代品：
+hexo-asset-img
+hexo-asset-link</code></pre><p>注意：上述插件都要求将config.yaml中的post_asset_folder选项置为true</p>
 <script type="text&#x2F;javascript" src="https://unpkg.com/kity@2.0.4/dist/kity.min.js"></script><script type="text&#x2F;javascript" src="https://unpkg.com/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer="true" type="text&#x2F;javascript" src="https://unpkg.com/hexo-simple-mindmap@0.8.0/dist/mindmap.min.js"></script><link rel="stylesheet" type="text&#x2F;css" href="https://unpkg.com/hexo-simple-mindmap@0.8.0/dist/mindmap.min.css">
             </div>
             <hr />
@@ -1135,7 +1142,7 @@ Hexo是本次新挖掘出来的搭建网站的快速工具，容易上手，且�
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">20.3k</span>
+            <span class="white-color">26k</span>
             
 
             <br>
