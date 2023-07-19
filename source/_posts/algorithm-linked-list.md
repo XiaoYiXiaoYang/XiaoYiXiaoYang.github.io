@@ -1,5 +1,5 @@
 ---
-title: 链表相关
+title: 双指针解决部分链表问题
 img: /medias/files/linked-list.png
 summary: 链表算法的技巧
 tags:

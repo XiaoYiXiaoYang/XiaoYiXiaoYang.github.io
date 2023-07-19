@@ -159,7 +159,7 @@ public void close();
 
 - 如果没有指定分区器，就需要分区器根据key字段来计算partition值。Kafka的默认分区器实现了 xx.Partitioner接口，接口中有partition方法和close方法
   默认分区器会判断key不为null，则对key进行哈希，最终根据得到的哈希值来计算分区号，拥有相同key的消息会被写入同一个分区。如果key为null，那么消息会以轮询的方式发往主题内的某一个可用分区
-
+  
   自定义分区器也只需实现上述接口即可
 
 ### 生产者拦截器
